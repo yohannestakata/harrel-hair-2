@@ -1,11 +1,13 @@
 import {defineConfig} from 'vite';
 import {hydrogen} from '@shopify/hydrogen/vite';
 import {oxygen} from '@shopify/mini-oxygen/vite';
+import tailwindcss from '@tailwindcss/vite';
 import {vitePlugin as remix} from '@remix-run/dev';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     hydrogen(),
     oxygen(),
     remix({
@@ -37,7 +39,7 @@ export default defineConfig({
        * Include 'example-dep' in the array below.
        * @see https://vitejs.dev/config/dep-optimization-options
        */
-      include: [],
+      include: ['bezier-easing'],
     },
   },
 });

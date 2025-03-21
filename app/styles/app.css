@@ -1,3 +1,28 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-background: #ffffff; /* Light Theme Background: White */
+  --color-foreground: #09090b; /* Light Theme Primary Text: Black */
+  --color-card: #ffffff; /* Light Theme Card Background: White */
+  --color-card-foreground: #333333; /* Light Theme Card Text: Black */
+  --color-popover: #ffffff; /* Light Theme Popover Background: White */
+  --color-popover-foreground: #333333; /* Light Theme Popover Text: Black */
+  --color-primary: #09090b; /* Light Theme Primary Color: Dark Pink */
+  --color-primary-foreground: #ffffff; /* Light Theme Primary Button Text: White */
+  --color-secondary: #ff0000; /* Light Theme Secondary Color: Dark Pink */
+  --color-secondary-foreground: #ffffff; /* Light Theme Secondary Button Text: White */
+  --color-muted: #f2f1eb; /* Light Theme Muted Color: Light Gray */
+  --color-muted-foreground: #8b7d75; /* Light Theme Muted Text: Dark Gray */
+  --color-accent: #f2f1eb; /* Light Theme Accent Color: Light Gray */
+  --color-accent-foreground: #3d2f2a; /* Light Theme Accent Text: Dark Gray */
+  --color-destructive: #cc3333; /* Light Theme Destructive Color: Red */
+  --color-destructive-foreground: #f7f5f3; /* Light Theme Destructive Text: Very Light Gray */
+  --color-border: #e6e6e6; /* Light Theme Border Color: Light Gray */
+  --color-input: #e6e6e6; /* Light Theme Input Background: Light Gray */
+  --color-ring: #c2b8b0; /* Light Theme Ring Color */
+  --color-radius: 0.5rem;
+}
+
 :root {
   --aside-width: 400px;
   --cart-aside-summary-height-with-discount: 300px;

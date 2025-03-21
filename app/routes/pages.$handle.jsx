@@ -1,4 +1,5 @@
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData, useLocation, useNavigation} from '@remix-run/react';
+import AboutUs from '~/custom-pages/AboutUs';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -61,8 +62,14 @@ function loadDeferredData({context}) {
 export default function Page() {
   /** @type {LoaderReturnData} */
   const {page} = useLoaderData();
+  const location = useLocation();
+  const {state} = useNavigation();
 
-  return (
+  if (state === 'loading') return 'loading';
+
+  return location.pathname === '/pages/about-us' ? (
+    <AboutUs />
+  ) : (
     <div className="page">
       <header>
         <h1>{page.title}</h1>

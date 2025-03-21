@@ -14,6 +14,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import {ParallaxProvider} from 'react-scroll-parallax';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -158,19 +159,21 @@ export function Layout({children}) {
         <Links />
       </head>
       <body>
-        {data ? (
-          <Analytics.Provider
-            cart={data.cart}
-            shop={data.shop}
-            consent={data.consent}
-          >
-            <PageLayout {...data}>{children}</PageLayout>
-          </Analytics.Provider>
-        ) : (
-          children
-        )}
-        <ScrollRestoration nonce={nonce} />
-        <Scripts nonce={nonce} />
+        <ParallaxProvider>
+          {data ? (
+            <Analytics.Provider
+              cart={data.cart}
+              shop={data.shop}
+              consent={data.consent}
+            >
+              <PageLayout {...data}>{children}</PageLayout>
+            </Analytics.Provider>
+          ) : (
+            children
+          )}
+          <ScrollRestoration nonce={nonce} />
+          <Scripts nonce={nonce} />
+        </ParallaxProvider>
       </body>
     </html>
   );
