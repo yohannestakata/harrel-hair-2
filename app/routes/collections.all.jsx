@@ -58,11 +58,16 @@ export default function Collection() {
   const {products} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
+    <div className="p-6 ">
+      <p className="text-2xl font-light font-serif text-zinc-600 italic tracking-tight ">
+        Expertly curated
+      </p>
+      <h2 className="text-3xl font-semibold tracking-tight font-serif">
+        Recommended Products
+      </h2>
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="products-grid"
+        resourcesClassName="grid grid-cols-4 gap-3 mt-8 "
       >
         {({node: product, index}) => (
           <ProductItem
@@ -85,25 +90,23 @@ export default function Collection() {
 function ProductItem({product, loading}) {
   const variantUrl = useVariantUrl(product.handle);
   return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
+    <Link className="group" key={product.id} prefetch="intent" to={variantUrl}>
       {product.featuredImage && (
         <Image
           alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
+          aspectRatio="4/5"
           data={product.featuredImage}
           loading={loading}
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      <h4 className=" mt-2 group-hover:underline underline-offset-4">
+        {product.title}
+      </h4>
+      <Money
+        data={product.priceRange.minVariantPrice}
+        className=" font-semibold mt-1"
+      />
     </Link>
   );
 }

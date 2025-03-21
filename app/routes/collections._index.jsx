@@ -49,12 +49,26 @@ export default function Collections() {
   /** @type {LoaderReturnData} */
   const {collections} = useLoaderData();
 
+  // Get the first collection's image URL
+  const firstCollectionImage = collections.nodes[0]?.image?.url;
+
   return (
-    <div className="collections">
-      <h1>Collections</h1>
+    <div className="p-8 pt-0 max-w-7xl mx-auto">
+      <div className=" pt-8  bg-cover bg-center">
+        <p className="text-center text-xl font-light text-zinc-700 tracking-tight">
+          Discover Your Perfect Style
+        </p>
+        <h2 className="text-center text-6xl text-balance w-2/3 mx-auto font-serif text-zinc-950 mt-1">
+          Explore Our Wig Collections
+        </h2>
+        <p className="text-center text-lg font-sans text-balance text-zinc-700 mt-6 max-w-xl mx-auto">
+          From sleek and sophisticated to bold and vibrant, our collections are
+          designed to help you express your unique beauty. .
+        </p>
+      </div>
       <PaginatedResourceSection
         connection={collections}
-        resourcesClassName="collections-grid"
+        resourcesClassName="grid grid-cols-4 gap-3 py-10"
       >
         {({node: collection, index}) => (
           <CollectionItem
@@ -77,7 +91,7 @@ export default function Collections() {
 function CollectionItem({collection, index}) {
   return (
     <Link
-      className="collection-item"
+      className="group"
       key={collection.id}
       to={`/collections/${collection.handle}`}
       prefetch="intent"
@@ -85,13 +99,16 @@ function CollectionItem({collection, index}) {
       {collection?.image && (
         <Image
           alt={collection.image.altText || collection.title}
-          aspectRatio="1/1"
+          aspectRatio="4/5"
           data={collection.image}
           loading={index < 3 ? 'eager' : undefined}
           sizes="(min-width: 45em) 400px, 100vw"
+          className="object-cover"
         />
       )}
-      <h5>{collection.title}</h5>
+      <h5 className="mt-1 text-xl text-center font-semibold group-hover:underline underline-offset-4">
+        {collection.title}
+      </h5>
     </Link>
   );
 }

@@ -1,13 +1,7 @@
 import {redirect} from '@shopify/remix-oxygen';
 import {useLoaderData, Link} from '@remix-run/react';
-import {
-  getPaginationVariables,
-  Image,
-  Money,
-  Analytics,
-} from '@shopify/hydrogen';
-import {useVariantUrl} from '~/lib/variants';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
+import {useState} from 'react';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -20,21 +14,7 @@ export const meta = ({data}) => {
  * @param {LoaderFunctionArgs} args
  */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
-}
-
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
-async function loadCriticalData({context, params, request}) {
+  const {context, params, request} = args;
   const {handle} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
@@ -48,7 +28,6 @@ async function loadCriticalData({context, params, request}) {
   const [{collection}] = await Promise.all([
     storefront.query(COLLECTION_QUERY, {
       variables: {handle, ...paginationVariables},
-      // Add other queries here, so that they are loaded in parallel
     }),
   ]);
 
@@ -58,49 +37,23 @@ async function loadCriticalData({context, params, request}) {
     });
   }
 
-  return {
-    collection,
-  };
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
-function loadDeferredData({context}) {
-  return {};
+  return {collection};
 }
 
 export default function Collection() {
-  /** @type {LoaderReturnData} */
   const {collection} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection
-        connection={collection.products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
-      <Analytics.CollectionView
-        data={{
-          collection: {
-            id: collection.id,
-            handle: collection.handle,
-          },
-        }}
-      />
+    <div className="collection pt-4 p-8 max-w-7xl mx-auto">
+      <h1 className="text-6xl font-serif">{collection.title}</h1>
+      <p className="collection-description text-zinc-700 mt-4">
+        {collection.description}
+      </p>
+      <div className="grid grid-cols-4 gap-3 mt-8">
+        {collection.products.nodes.map((product) => (
+          <ProductItem key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -108,32 +61,58 @@ export default function Collection() {
 /**
  * @param {{
  *   product: ProductItemFragment;
- *   loading?: 'eager' | 'lazy';
  * }}
  */
-function ProductItem({product, loading}) {
-  const variantUrl = useVariantUrl(product.handle);
+function ProductItem({product}) {
+  const [selectedVariant, setSelectedVariant] = useState(
+    product.variants.nodes[0],
+  );
+
   return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
+    <div className="group">
+      <Link
+        className="product-item"
+        key={product.id}
+        prefetch="intent"
+        to={`/products/${product.handle}`}
+      >
+        {selectedVariant?.image && (
+          <Image
+            alt={selectedVariant.image.altText || product.title}
+            aspectRatio="4/5"
+            data={selectedVariant.image}
+            sizes="(min-width: 45em) 400px, 100vw"
+            className="h-full w-full group-hover:scale-105 duration-200 object-cover"
+          />
+        )}
+        <h4 className="text-center text-balace font-semibold mt-4 group-hover:underline underline-offset-4 text-sm">
+          {product.title}
+        </h4>
+        <Money
+          data={selectedVariant.price}
+          className="mt-1 text-muted-foreground text-sm text-center w-full font-bold"
         />
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
+      </Link>
+      <div className="flex justify-center gap-2">
+        {product.variants.nodes.length > 1 &&
+          product.variants.nodes.map((variant) => (
+            <button
+              key={variant.id}
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedVariant(variant);
+              }}
+              className={`px-2 mt-4 py-1 text-xs border border-border rounded-md cursor-pointer ${
+                selectedVariant.id === variant.id
+                  ? 'bg-black text-white'
+                  : 'bg-white text-black'
+              }`}
+            >
+              {variant.title}
+            </button>
+          ))}
+      </div>
+    </div>
   );
 }
 
@@ -146,12 +125,27 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
+    variants(first: 10) {
+      nodes {
+        id
+        title
+        availableForSale
+        selectedOptions {
+          name
+          value
+        }
+        price {
+          amount
+          currencyCode
+        }
+        image {
+          id
+          url
+          altText
+          width
+          height
+        }
+      }
     }
     priceRange {
       minVariantPrice {
@@ -164,7 +158,6 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
 const COLLECTION_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
   query Collection(
@@ -204,4 +197,3 @@ const COLLECTION_QUERY = `#graphql
 /** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
 /** @template T @typedef {import('@remix-run/react').MetaFunction<T>} MetaFunction */
 /** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
-/** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */

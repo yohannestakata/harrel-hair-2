@@ -79,9 +79,17 @@ function loadDeferredData({context, params}) {
   return {};
 }
 
+import {useState} from 'react';
+import {useEffect} from 'react';
+
 export default function Product() {
-  /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
+
+  // State to track the currently selected image
+  const [selectedImage, setSelectedImage] = useState(
+    product.selectedOrFirstAvailableVariant?.image ||
+      product.images.edges[0]?.node,
+  );
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -89,8 +97,14 @@ export default function Product() {
     getAdjacentAndFirstAvailableVariants(product),
   );
 
+  // Update the selected image when the variant changes
+  useEffect(() => {
+    if (selectedVariant?.image) {
+      setSelectedImage(selectedVariant.image);
+    }
+  }, [selectedVariant]);
+
   // Sets the search param to the selected variant without navigation
-  // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
 
   // Get the product options array
@@ -99,31 +113,69 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
+  const {title, descriptionHtml, images, variants} = product;
+
+  // Filter out variant-specific images
+  const generalImages = images.edges.filter(({node}) => {
+    // Check if the image is used in any variant
+    const isVariantImage = variants.edges.some(({node: variant}) => {
+      return variant.image?.id === node.id;
+    });
+
+    // Exclude the image if it's used in any variant
+    return !isVariantImage;
+  });
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
+    <div className="flex gap-6 p-6">
+      {/* Image Gallery */}
+      <div className="flex-1 flex gap-2">
+        <div className="flex flex-col gap-0.5">
+          {generalImages.map(({node}) => (
+            <button
+              key={node.id}
+              onClick={() => setSelectedImage(node)}
+              className="size-20 overflow-hidden border-3 cursor-pointer border-transparent hover:border-primary focus:border-primary"
+            >
+              <img
+                src={node.url}
+                alt={node.altText || 'Product Image'}
+                className="w-full h-full object-cover"
+              />
+            </button>
+          ))}
+        </div>
+        <div className="flex-1">
+          <ProductImage image={selectedImage} />
+        </div>
+      </div>
+
+      {/* Product Details */}
+      <div className="flex-1 product-main">
+        <h1 className="text-4xl font-serif mb-2 font-semibold">{title}</h1>
         <ProductPrice
           price={selectedVariant?.price}
           compareAtPrice={selectedVariant?.compareAtPrice}
         />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
+
+        <div className="mt-8">
+          <p>
+            <strong>Description</strong>
+          </p>
+          <p className="mt-2 text-zinc-700">
+            <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+          </p>
+        </div>
+
+        <div className="mt-8">
+          <ProductForm
+            productOptions={productOptions}
+            selectedVariant={selectedVariant}
+          />
+        </div>
       </div>
+
+      {/* Analytics */}
       <Analytics.ProductView
         data={{
           products: [
@@ -179,7 +231,6 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
     }
   }
 `;
-
 const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
@@ -203,6 +254,31 @@ const PRODUCT_FRAGMENT = `#graphql
             previewImage {
               url
             }
+          }
+        }
+      }
+    }
+    images(first: 10) { # Fetch up to 10 product images
+      edges {
+        node {
+          id
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
+    variants(first: 10) { # Fetch up to 10 variants
+      edges {
+        node {
+          id
+          image {
+            id
+            url
+            altText
+            width
+            height
           }
         }
       }

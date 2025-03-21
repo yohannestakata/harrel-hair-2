@@ -19,8 +19,8 @@ export function ProductForm({productOptions, selectedVariant}) {
 
         return (
           <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+            <h5 className="font-semibold">{option.name}</h5>
+            <div className="mt-3 grid grid-cols-5 gap-3">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -31,6 +31,7 @@ export function ProductForm({productOptions, selectedVariant}) {
                   exists,
                   isDifferentProduct,
                   swatch,
+                  variant,
                 } = value;
 
                 if (isDifferentProduct) {
@@ -40,7 +41,7 @@ export function ProductForm({productOptions, selectedVariant}) {
                   // as an anchor tag
                   return (
                     <Link
-                      className="product-options-item"
+                      className="product-options-item flex flex-col items-center gap-2"
                       key={option.name + name}
                       prefetch="intent"
                       preventScrollReset
@@ -53,7 +54,11 @@ export function ProductForm({productOptions, selectedVariant}) {
                         opacity: available ? 1 : 0.3,
                       }}
                     >
-                      <ProductOptionSwatch swatch={swatch} name={name} />
+                      <ProductOptionSwatch
+                        variant={variant}
+                        swatch={swatch}
+                        name={name}
+                      />
                     </Link>
                   );
                 } else {
@@ -65,14 +70,12 @@ export function ProductForm({productOptions, selectedVariant}) {
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={`cursor-pointer flex flex-col items-center gap-2`}
                       key={option.name + name}
                       style={{
                         border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                          ? '3px solid'
+                          : '3px solid transparent',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}
@@ -85,35 +88,41 @@ export function ProductForm({productOptions, selectedVariant}) {
                         }
                       }}
                     >
-                      <ProductOptionSwatch swatch={swatch} name={name} />
+                      <ProductOptionSwatch
+                        variant={variant}
+                        swatch={swatch}
+                        name={name}
+                      />
                     </button>
                   );
                 }
               })}
             </div>
-            <br />
           </div>
         );
       })}
-      <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          open('cart');
-        }}
-        lines={
-          selectedVariant
-            ? [
-                {
-                  merchandiseId: selectedVariant.id,
-                  quantity: 1,
-                  selectedVariant,
-                },
-              ]
-            : []
-        }
-      >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-      </AddToCartButton>
+
+      <div className="mt-8">
+        <AddToCartButton
+          disabled={!selectedVariant || !selectedVariant.availableForSale}
+          onClick={() => {
+            open('cart');
+          }}
+          lines={
+            selectedVariant
+              ? [
+                  {
+                    merchandiseId: selectedVariant.id,
+                    quantity: 1,
+                    selectedVariant,
+                  },
+                ]
+              : []
+          }
+        >
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+      </div>
     </div>
   );
 }
@@ -124,21 +133,35 @@ export function ProductForm({productOptions, selectedVariant}) {
  *   name: string;
  * }}
  */
-function ProductOptionSwatch({swatch, name}) {
-  const image = swatch?.image?.previewImage?.url;
+/**
+ * @param {{
+ *   swatch?: Maybe<ProductOptionValueSwatch> | undefined;
+ *   name: string;
+ * }}
+ */
+function ProductOptionSwatch({swatch, name, variant}) {
+  const image = variant.image?.url || '/path/to/placeholder-image.png';
   const color = swatch?.color;
 
-  if (!image && !color) return name;
-
   return (
-    <div
-      aria-label={name}
-      className="product-option-label-swatch"
-      style={{
-        backgroundColor: color || 'transparent',
-      }}
-    >
-      {!!image && <img src={image} alt={name} />}
+    <div className="flex flex-col items-center gap-1 aspect-square">
+      <div
+        aria-label={name}
+        className="flex aspect-square items-center justify-center overflow-hidden"
+        style={{
+          backgroundColor: color || 'transparent',
+        }}
+      >
+        {!!image && (
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        )}
+      </div>
+      <span className="text-sm text-center">{name}</span>
     </div>
   );
 }
