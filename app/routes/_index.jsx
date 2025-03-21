@@ -162,7 +162,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <Truck size={40} strokeWidth={1} />
         <div className="flex flex-col">
-          <span className="text-xl font-serif text-center uppercase">
+          <span className="text-2xl 2xl:text-3xl font-serif text-center">
             Free shipping
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -173,7 +173,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <User2 size={40} strokeWidth={1} />
         <div className="flex flex-col">
-          <span className="text-xl font-serif text-center uppercase">
+          <span className="text-2xl 2xl:text-3xl font-serif text-center">
             Guaranteed Success
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -184,7 +184,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <Boxes size={40} strokeWidth={1} />
         <div className="flex flex-col">
-          <span className="text-xl font-serif text-center uppercase">
+          <span className="text-2xl 2xl:text-3xl font-serif text-center">
             30-Day returns
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -231,7 +231,7 @@ function FeaturedCollection({collection}) {
             <p className="tracking-tight text-center text-sm uppercase font-semibold text-zinc-300 w-1/2 mx-auto">
               Collection
             </p>
-            <h1 className="text-8xl font-medium text-center tracking-tight w-1/2 mx-auto font-serif">
+            <h1 className="text-8xl font-medium text-center tracking-tight w-1/2 mx-auto font-serif 2xl:text-9xl">
               {collection.title}
             </h1>
             <p className="mt-6 font-semibold mx-auto text-zinc-300 text-center w-3xl text-balance">
@@ -249,8 +249,8 @@ function FeaturedCollection({collection}) {
             </div>
           </div>
           {/* Down Arrow */}
-          <div className=" absolute bottom-12 left-1/2 -translate-x-1/2">
-            <ChevronsDown size={48} color="white" strokeWidth={1} />
+          <div className=" absolute animate-ping bottom-12 left-1/2 -translate-x-1/2">
+            <ChevronsDown size={40} color="white" strokeWidth={1} />
           </div>
         </>
       )}
@@ -291,20 +291,19 @@ function SecondFeaturedCollection({collection}) {
       <div className="bg-gradient-to-l from-black/60 to-black/60 absolute inset-0" />
 
       {/* Content */}
-      <div className="text-zinc-50 h-full flex flex-col justify-center relative px-8">
+      <div className="text-zinc-50 h-full flex flex-col justify-center relative px-8 2xl:px-24">
         {/* <h2 className="text-4xl font-serif text-center pb-10">
           See What&apos;s Trending
         </h2> */}
 
-        <div className="grid grid-cols-2 gap-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 gap-10 ">
           {/* Left Side - Product Images */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-5 ">
             {products.slice(0, 2).map((product) => (
-              <div key={product.id} className="aspect-[3/4]">
+              <div key={product.id} className="aspect-[4/5]">
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
-                    sizes="(min-width: 45em) 20vw, 50vw"
                     className="h-full w-full object-cover"
                   />
                 )}
@@ -317,7 +316,7 @@ function SecondFeaturedCollection({collection}) {
             <p className="text-zinc-300 text-sm font-bold uppercase tracking-widest">
               New Arrivals
             </p>
-            <h1 className="text-6xl mt-1 font-serif tracking-tight">
+            <h1 className="text-6xl 2xl:text-8xl mt-1 font-serif tracking-tight">
               {collection.title}
             </h1>
             <p className="mt-3 text-zinc-300">
