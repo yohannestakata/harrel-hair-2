@@ -140,6 +140,21 @@ function loadDeferredData({context}) {
   };
 }
 
+export const meta = () => {
+  return [
+    {title: 'Harrel Hair'},
+
+    {
+      property: 'og:title',
+      content: 'Very cool app',
+    },
+    {
+      name: 'description',
+      content: 'This app is the best',
+    },
+  ];
+};
+
 /**
  * @param {{children?: React.ReactNode}}
  */

@@ -2,12 +2,13 @@ import {useLoaderData, Link} from '@remix-run/react';
 import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {json} from '@shopify/remix-oxygen';
 
 /**
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Products`}];
+  return [{title: `Harrel Hair | Products`}];
 };
 
 /**
@@ -20,7 +21,7 @@ export async function loader(args) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  return json({...deferredData, ...criticalData});
 }
 
 /**
@@ -57,9 +58,51 @@ export default function Collection() {
   /** @type {LoaderReturnData} */
   const {products} = useLoaderData();
 
+  // Generate structured data for the product collection
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: products.nodes.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Product',
+        name: product.title,
+        url: `${
+          typeof window !== 'undefined' ? window.location.origin : ''
+        }/products/${product.handle}`,
+        image: product.featuredImage?.url,
+        description: product.description || `${product.title} from Harrel Hair`,
+        brand: {
+          '@type': 'Brand',
+          name: 'Harrel Hair',
+        },
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          price: product.priceRange.minVariantPrice.amount,
+          availability: 'https://schema.org/InStock',
+          url: `${
+            typeof window !== 'undefined' ? window.location.origin : ''
+          }/products/${product.handle}`,
+          seller: {
+            '@type': 'Organization',
+            name: 'Harrel Hair',
+          },
+        },
+      },
+    })),
+  };
+
   return (
-    <div className="p-6 ">
-      <p className="text-2xl font-light font-serif text-zinc-600 italic tracking-tight ">
+    <div className="p-6">
+      {/* Structured data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(structuredData)}}
+      />
+
+      <p className="text-2xl font-light font-serif text-zinc-600 italic tracking-tight">
         Expertly curated
       </p>
       <h2 className="text-3xl font-semibold tracking-tight font-serif">
@@ -67,7 +110,7 @@ export default function Collection() {
       </h2>
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="grid grid-cols-4 gap-3 mt-8 "
+        resourcesClassName="grid grid-cols-4 gap-3 mt-8"
       >
         {({node: product, index}) => (
           <ProductItem
@@ -100,12 +143,12 @@ function ProductItem({product, loading}) {
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4 className=" mt-2 group-hover:underline underline-offset-4">
+      <h4 className="mt-2 group-hover:underline underline-offset-4">
         {product.title}
       </h4>
       <Money
         data={product.priceRange.minVariantPrice}
-        className=" font-semibold mt-1"
+        className="font-semibold mt-1"
       />
     </Link>
   );
@@ -120,6 +163,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    description
     featuredImage {
       id
       altText

@@ -16,7 +16,7 @@ import {ParallaxBanner, ParallaxBannerLayer} from 'react-scroll-parallax';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'Harrel Hair | Home'}];
 };
 
 /**
