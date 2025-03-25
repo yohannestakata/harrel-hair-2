@@ -28,7 +28,7 @@
 :root {
   --aside-width: 400px;
   --cart-aside-summary-height-with-discount: 300px;
-  --cart-aside-summary-height: 250px;
+  --cart-aside-summary-height: 317px;
   --grid-item-width: 355px;
   --header-height: 64px;
   --color-dark: #000;
@@ -68,7 +68,7 @@ aside {
 
 aside header {
   align-items: center;
-  border-bottom: 1px solid var(--color-dark);
+  border-bottom: 1px solid #ccc;
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
@@ -77,6 +77,7 @@ aside header {
 
 aside header h3 {
   margin: 0;
+  font-size: 24px;
 }
 
 aside header .close {
@@ -85,6 +86,8 @@ aside header .close {
   text-decoration: none;
   transition: all 200ms;
   width: 20px;
+  font-size: 24;
+  cursor: pointer;
 }
 
 aside header .close:hover {
@@ -94,10 +97,6 @@ aside header .close:hover {
 aside header h2 {
   margin-bottom: 0.6rem;
   margin-top: 0;
-}
-
-aside main {
-  margin: 1rem;
 }
 
 aside p {
@@ -113,7 +112,7 @@ aside li {
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
   bottom: 0;
   left: 0;
   opacity: 0;
@@ -259,6 +258,7 @@ button.reset:hover:not(:has(> *)) {
   max-height: calc(100vh - var(--cart-aside-summary-height));
   overflow-y: auto;
   width: auto;
+  padding: 24px;
 }
 
 .cart-main.with-discount {

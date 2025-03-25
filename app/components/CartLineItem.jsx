@@ -30,7 +30,7 @@ export function CartLineItem({layout, line}) {
             height={100}
             loading="lazy"
             width={100}
-            className="rounded-md object-cover w-24 h-24"
+            className="rounded-xl object-cover w-24 h-24"
           />
         </Link>
       )}
@@ -44,12 +44,11 @@ export function CartLineItem({layout, line}) {
               onClick={() => layout === 'aside' && close()}
               className="hover:text-pink-700 transition-colors"
             >
-              <h3 className="font-medium text-lg">{product.title}</h3>
+              <h3 className="font-semibold text-lg">{product.title}</h3>
             </Link>
-            <ProductPrice
-              price={line?.cost?.totalAmount}
-              className="text-gray-700 mt-1"
-            />
+            <div className="text-gray-700 mt-2">
+              <ProductPrice price={line?.cost?.totalAmount} />
+            </div>
           </div>
           <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
@@ -78,14 +77,14 @@ function CartLineQuantity({line}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="flex items-center mt-4">
+    <div className="flex items-center mt-2">
       <small className="mr-3 text-gray-600">Quantity: {quantity}</small>
       <div className="flex items-center space-x-2">
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             aria-label="Decrease quantity"
             disabled={quantity <= 1 || !!isOptimistic}
-            className={`w-8 h-8 flex items-center justify-center border border-black rounded-full ${
+            className={`w-6 h-6 flex items-center justify-center border border-black rounded-full ${
               quantity <= 1 || isOptimistic
                 ? 'opacity-50 cursor-not-allowed'
                 : 'hover:bg-gray-100'
@@ -99,7 +98,7 @@ function CartLineQuantity({line}) {
           <button
             aria-label="Increase quantity"
             disabled={!!isOptimistic}
-            className={`w-8 h-8 flex items-center justify-center border border-black rounded-full ${
+            className={`w-6 h-6 flex items-center justify-center border border-black rounded-full ${
               isOptimistic
                 ? 'opacity-50 cursor-not-allowed'
                 : 'hover:bg-gray-100'

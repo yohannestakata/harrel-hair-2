@@ -1,4 +1,5 @@
 import {CartForm, Money} from '@shopify/hydrogen';
+import {ArrowRight} from 'lucide-react';
 import {useRef} from 'react';
 
 /**
@@ -6,16 +7,21 @@ import {useRef} from 'react';
  */
 export function CartSummary({cart, layout}) {
   const className =
-    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
+    layout === 'page'
+      ? 'cart-summary-page'
+      : 'cart-summary-aside gap-3 flex flex-col';
 
   return (
-    <div aria-labelledby="" className={className}>
-      {/* <h4>Totals</h4> */}
-      <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
+    <div aria-labelledby="cart-summary" className={className}>
+      {/* <h4 className="font-semibold text-2xl">Totals</h4> */}
+      <dl className="mt-2">
+        <dt className="">Subtotal</dt>
         <dd>
           {cart.cost?.subtotalAmount?.amount ? (
-            <Money data={cart.cost?.subtotalAmount} />
+            <Money
+              data={cart.cost?.subtotalAmount}
+              className="font-bold text-2xl"
+            />
           ) : (
             '-'
           )}
@@ -38,9 +44,10 @@ function CartCheckoutActions({checkoutUrl}) {
       <a
         href={checkoutUrl}
         target="_self"
-        className="bg-zinc-950 w-full text-zinc-50 flex items-center justify-center p-3 mt-4"
+        className="flex items-center gap-2 bg-zinc-950 justify-center py-2 font-semibold w-full flex-1 text-zinc-50"
       >
-        <p>Continue to Checkout &rarr;</p>
+        <p>Continue to Checkout </p>
+        <ArrowRight />
       </a>
       <br />
     </div>
@@ -76,10 +83,19 @@ function CartDiscounts({discountCodes}) {
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
-          <input type="text" name="discountCode" placeholder="Discount code" />
-          &nbsp;
-          <button type="submit">Apply</button>
+        <div className="flex items-center justify-start gap-2">
+          <input
+            type="text"
+            name="discountCode"
+            placeholder="Discount code"
+            className="border border-border w-full text-sm py-2 px-4 rounded-lg"
+          />
+          <button
+            type="submit"
+            className="border border-border  hover:bg-zinc-950 hover:text-zinc-50 text-sm px-4 py-2 rounded-lg flex justify-center items-center cursor-pointer duration-200"
+          >
+            Apply
+          </button>
         </div>
       </UpdateDiscountForm>
     </div>
@@ -136,7 +152,7 @@ function CartGiftCard({giftCardCodes}) {
         <div>
           <dt>Applied Gift Card(s)</dt>
           <UpdateGiftCardForm>
-            <div className="cart-discount">
+            <div className="cart-discount ">
               <code>{codes?.join(', ')}</code>
               &nbsp;
               <button onSubmit={() => removeAppliedCode}>Remove</button>
@@ -150,15 +166,20 @@ function CartGiftCard({giftCardCodes}) {
         giftCardCodes={appliedGiftCardCodes.current}
         saveAppliedCode={saveAppliedCode}
       >
-        <div>
+        <div className="flex justify-start items-center gap-2">
           <input
             type="text"
             name="giftCardCode"
             placeholder="Gift card code"
             ref={giftCardCodeInput}
+            className="px-4 py-2 w-full border-border text-sm border rounded-lg"
           />
-          &nbsp;
-          <button type="submit">Apply</button>
+          <button
+            type="submit"
+            className="border border-border  hover:bg-zinc-950 hover:text-zinc-50 text-sm px-4 py-2 rounded-lg flex justify-center items-center cursor-pointer duration-200"
+          >
+            Apply
+          </button>
         </div>
       </UpdateGiftCardForm>
     </div>
