@@ -56,14 +56,20 @@ export default function Collections() {
     name: 'Wig Collections',
     description: 'Explore our premium wig collections for every style',
     url: 'https://www.harrelhair.com/collections',
+    numberOfItems: collections.nodes.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
     itemListElement: collections.nodes.map((collection, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
         '@type': 'CollectionPage',
+        '@id': `https://www.harrelhair.com/collections/${collection.handle}`,
         name: collection.title,
         url: `https://www.harrelhair.com/collections/${collection.handle}`,
         image: collection.image?.url,
+        description:
+          collection.description ||
+          `Browse our ${collection.title} wig collection`, // Add if you have descriptions
       },
     })),
   };
@@ -72,6 +78,7 @@ export default function Collections() {
     <div className="p-8 pt-0 max-w-7xl mx-auto">
       {/* Add the structured data script tag */}
       <script
+        id="collection-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(collectionSchema)}}
       />
