@@ -181,7 +181,7 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className="header-menu-item"
+            className="  hover:scale-105 duration-100 group "
             end
             key={item.id}
             onClick={close}
@@ -189,7 +189,7 @@ export function HeaderMenu({
             style={activeLinkStyle}
             to={url}
           >
-            {item.title}
+            <span className="group-hover:text-pink-800">{item.title}</span>
           </NavLink>
         );
       })}
@@ -251,7 +251,7 @@ function CartBadge({count}) {
       className="relative inline-block"
     >
       <ShoppingBag />
-      <div className="absolute -bottom-2 -right-2 text-sm bg-primary size-5 items-center justify-center  text-zinc-50 flex  rounded-full">
+      <div className="absolute -bottom-2 -right-2 text-sm bg-pink-700 size-5 items-center justify-center text-pink-50 flex  rounded-full">
         {count === null ? <span>&nbsp;</span> : count}
       </div>
     </a>

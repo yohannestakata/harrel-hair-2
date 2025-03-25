@@ -21,6 +21,8 @@
   --color-input: #e6e6e6; /* Light Theme Input Background: Light Gray */
   --color-ring: #c2b8b0; /* Light Theme Ring Color */
   --color-radius: 0.5rem;
+
+  --container-7xl: 1400px;
 }
 
 :root {
