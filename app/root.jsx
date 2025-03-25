@@ -211,7 +211,7 @@ export function Layout({children}) {
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         {/* Structured Data */}
-        <script type="application/ld+json">
+        <script type="application/ld+json" id="organization_schema">
           {JSON.stringify(organizationSchema)}
         </script>
         <Meta />

@@ -126,8 +126,35 @@ export default function Product() {
     return !isVariantImage;
   });
 
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description || product.seo?.description,
+    image: product.images.edges[0]?.node.url,
+    url: `https://your-store.com/products/${product.handle}`,
+    brand: {
+      '@type': 'Brand',
+      name: product.vendor,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: selectedVariant?.price?.amount,
+      priceCurrency: selectedVariant?.price?.currencyCode || 'USD',
+      availability: selectedVariant?.availableForSale
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://your-store.com/products/${product.handle}`,
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  };
+
   return (
     <div className="flex gap-6 p-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
+      />
       {/* Image Gallery */}
       <div className="flex-1 flex gap-2">
         <div className="flex flex-col gap-0.5">
