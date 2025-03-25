@@ -42,4 +42,8 @@ export default defineConfig({
       include: ['bezier-easing'],
     },
   },
+  server: {
+    host: '0.0.0.0', // Allow external access
+    port: 3000,
+  },
 });

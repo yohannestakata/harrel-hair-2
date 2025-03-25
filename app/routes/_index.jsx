@@ -228,7 +228,7 @@ function FeaturedCollection({collection}) {
           <div className="bg-gradient-to-l from-black/60 to-black/60 absolute inset-0" />
           {/* Content */}
           <div className="text-zinc-50 h-full flex flex-col justify-center relative">
-            <p className="tracking-tight text-center text-sm uppercase font-semibold text-zinc-300 w-1/2 mx-auto">
+            <p className="tracking-wider text-center text-sm uppercase font-semibold text-zinc-300 w-1/2 mx-auto">
               Collection
             </p>
             <h1 className="text-8xl font-medium text-center tracking-tight w-1/2 mx-auto font-serif 2xl:text-9xl">
@@ -269,17 +269,18 @@ function SecondFeaturedCollection({collection}) {
   const products = collection?.products?.nodes || [];
 
   return (
-    <div className="mt-20 relative h-screen overflow-hidden">
+    <div className="relative py-16 mt-20 overflow-hidden">
       {/* Parallax Background Image */}
       {image && (
         <div className="absolute inset-0">
-          <ParallaxBanner style={{width: '120%', height: '120%'}}>
+          <ParallaxBanner className="w-full h-full">
             <ParallaxBannerLayer speed={-30}>
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage: `url(${image.url})`,
                   height: '120%',
+                  width: '120%',
                 }}
               />
             </ParallaxBannerLayer>
@@ -287,48 +288,41 @@ function SecondFeaturedCollection({collection}) {
         </div>
       )}
 
-      {/* Gradient Overlay */}
-      <div className="bg-gradient-to-l from-black/60 to-black/60 absolute inset-0" />
+      {/* Gradient Overlay - stronger on the left side */}
+      <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/40 to-transparent" />
 
-      {/* Content */}
-      <div className="text-zinc-50 h-full flex flex-col justify-center relative px-8 2xl:px-24">
-        {/* <h2 className="text-4xl font-serif text-center pb-10">
-          See What&apos;s Trending
-        </h2> */}
-
-        <div className="grid grid-cols-2 gap-10 ">
-          {/* Left Side - Product Images */}
-          <div className="grid grid-cols-2 gap-5 ">
-            {products.slice(0, 2).map((product) => (
-              <div key={product.id} className="aspect-[4/5]">
+      {/* Content Container - aligned to right but centered internally */}
+      <div className="relative h-full flex items-center justify-end">
+        <div className="w-full max-w-md xl:max-w-lg mr-8 2xl:mr-24 px-4">
+          {/* Centered column within the right-aligned container */}
+          <div className="flex flex-col items-center gap-4">
+            {/* Product Image - centered relative to text */}
+            {products.slice(0, 1).map((product) => (
+              <div key={product.id} className="w-full aspect-[4/5] max-w-xs">
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover shadow-xl"
+                    aspectRatio="4/5"
                   />
                 )}
               </div>
             ))}
-          </div>
 
-          {/* Right Side - Text Content */}
-          <div className="flex flex-col justify-center">
-            <p className="text-zinc-300 text-sm font-bold uppercase tracking-widest">
-              New Arrivals
-            </p>
-            <h1 className="text-6xl 2xl:text-8xl mt-1 font-serif tracking-tight">
-              {collection.title}
-            </h1>
-            <p className="mt-3 text-zinc-300">
-              Discover the latest trends and styles in our new arrivals
-              collection.
-            </p>
-            <Link
-              className="px-6 py-3 bg-transparent border border-zinc-50 text-sm uppercase tracking-widest mt-6 inline-block hover:bg-background font-semibold hover:text-foreground ease-in-out duration-200 w-fit "
-              to={`/collections/${collection.handle}`}
-            >
-              Shop the Collection
-            </Link>
+            {/* Text Content - centered */}
+            <div className="text-zinc-50 text-center w-full">
+              <h1 className="text-4xl md:text-5xl xl:text-6xl font-serif tracking-tight">
+                {collection.title}
+              </h1>
+
+              {/* Button - centered */}
+              <Link
+                className="mt-6 px-8 py-3 bg-transparent border-2 border-zinc-50 text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
+                to={`/collections/${collection.handle}`}
+              >
+                Shop the Collection
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -470,10 +464,10 @@ function ProductCard({product}) {
 
   return (
     <Link className="group" to={`/products/${product.handle}`}>
-      <div className="rounded-none aspect-[5/6] overflow-hidden">
+      <div className="rounded-none aspect-[3/4] overflow-hidden">
         <Image
           data={selectedVariant.image || product.images.nodes[0]}
-          aspectRatio="4/5"
+          aspectRatio="3/4"
           sizes="(min-width: 45em) 20vw, 50vw"
           className="h-full w-full group-hover:scale-105 duration-200 object-cover"
         />
@@ -485,7 +479,7 @@ function ProductCard({product}) {
         data={selectedVariant.price}
         className="text-center  text-sm text-muted-foreground font-bold mt-1"
       />
-      <div className=" flex justify-center gap-2">
+      <div className=" grid grid-cols-3 justify-center gap-2 mt-4 px-10">
         {product.variants.nodes.length > 1 &&
           product.variants.nodes.map((variant) => (
             <button
@@ -494,9 +488,9 @@ function ProductCard({product}) {
                 e.preventDefault();
                 setSelectedVariant(variant);
               }}
-              className={`px-2 mt-4 py-1 text-xs border border-border rounded-md cursor-pointer ${
+              className={`w-full flex justify-center items-center py-1 text-xs border border-border rounded-full cursor-pointer ${
                 selectedVariant.id === variant.id
-                  ? 'bg-black text-white'
+                  ? 'bg-pink-700 text-white '
                   : 'bg-white text-black'
               }`}
             >

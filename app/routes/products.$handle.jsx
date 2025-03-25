@@ -150,7 +150,7 @@ export default function Product() {
   };
 
   return (
-    <div className="flex gap-6 p-6">
+    <div className="flex gap-6 p-6 max-w-7xl mx-auto">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}

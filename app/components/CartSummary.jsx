@@ -9,8 +9,8 @@ export function CartSummary({cart, layout}) {
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   return (
-    <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
+    <div aria-labelledby="" className={className}>
+      {/* <h4>Totals</h4> */}
       <dl className="cart-subtotal">
         <dt>Subtotal</dt>
         <dd>
@@ -35,7 +35,11 @@ function CartCheckoutActions({checkoutUrl}) {
 
   return (
     <div>
-      <a href={checkoutUrl} target="_self">
+      <a
+        href={checkoutUrl}
+        target="_self"
+        className="bg-zinc-950 w-full text-zinc-50 flex items-center justify-center p-3 mt-4"
+      >
         <p>Continue to Checkout &rarr;</p>
       </a>
       <br />
