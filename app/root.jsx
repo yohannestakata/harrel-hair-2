@@ -170,23 +170,36 @@ export function Layout({children}) {
     name: 'Harrel Hair',
     description: 'Premium hair care products and accessories',
     url: 'https://www.harrelhair.com', // Update with your actual domain
-    logo: 'https://www.harrelhair.com/logo.png', // Update with your logo path
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://cdn.shopify.com/oxygen-v2/40587/34103/71521/1560057/assets/Logo-43-BYsKvbT7.svg',
+      width: 301,
+      height: 63,
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '8504 16th Street',
+      addressLocality: 'Silver Spring',
+      addressRegion: 'MD',
+      postalCode: '20910',
+      addressCountry: 'US',
+    },
+    keywords: ['hair care', 'hair accessories', 'beauty products'],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'contact@harrelhair.com', // Update with your contact email
-      telephone: '+1234567890', // Update with your phone number
+      email: 'contact@harrelhair.com',
+      telephone: '+12024129495',
       contactType: 'Customer Support',
-      availableLanguage: 'English',
+      availableLanguage: ['English', 'Amharic'],
+      servedArea: 'US',
     },
     sameAs: [
       'https://www.facebook.com/harrelhair',
       'https://www.instagram.com/harrelhair',
       'https://www.pinterest.com/harrelhair',
     ],
-    serviceArea: {
-      '@type': 'Place',
-      name: 'Global', // Or specify your service area
-    },
+    serviceArea: 'United States',
+    foundingDate: '2025',
     makesOffer: [
       {
         '@type': 'Offer',

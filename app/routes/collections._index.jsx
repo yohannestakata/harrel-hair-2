@@ -49,41 +49,12 @@ export default function Collections() {
   /** @type {LoaderReturnData} */
   const {collections} = useLoaderData();
 
-  // Schema.org markup for collections
-  const collectionSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Wig Collections',
-    description: 'Explore our premium wig collections for every style',
-    url: 'https://www.harrelhair.com/collections',
-    numberOfItems: collections.nodes.length,
-    itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    itemListElement: collections.nodes.map((collection, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@type': 'CollectionPage',
-        '@id': `https://www.harrelhair.com/collections/${collection.handle}`,
-        name: collection.title,
-        url: `https://www.harrelhair.com/collections/${collection.handle}`,
-        image: collection.image?.url,
-        description:
-          collection.description ||
-          `Browse our ${collection.title} wig collection`, // Add if you have descriptions
-      },
-    })),
-  };
+  // Get the first collection's image URL
+  const firstCollectionImage = collections.nodes[0]?.image?.url;
 
   return (
     <div className="p-8 pt-0 max-w-7xl mx-auto">
-      {/* Add the structured data script tag */}
-      <script
-        id="collection-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(collectionSchema)}}
-      />
-
-      <div className="pt-8 bg-cover bg-center">
+      <div className=" pt-8  bg-cover bg-center">
         <p className="text-center text-xl font-light text-zinc-700 tracking-tight">
           Discover Your Perfect Style
         </p>
@@ -92,10 +63,9 @@ export default function Collections() {
         </h2>
         <p className="text-center text-lg font-sans text-balance text-zinc-700 mt-6 max-w-xl mx-auto">
           From sleek and sophisticated to bold and vibrant, our collections are
-          designed to help you express your unique beauty.
+          designed to help you express your unique beauty. .
         </p>
       </div>
-
       <PaginatedResourceSection
         connection={collections}
         resourcesClassName="grid grid-cols-4 gap-3 py-10"
