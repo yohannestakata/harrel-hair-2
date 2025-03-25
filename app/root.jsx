@@ -163,6 +163,46 @@ export function Layout({children}) {
   /** @type {RootLoader} */
   const data = useRouteLoaderData('root');
 
+  // Organization structured data
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Harrel Hair',
+    description: 'Premium hair care products and accessories',
+    url: 'https://www.harrelhair.com', // Update with your actual domain
+    logo: 'https://www.harrelhair.com/logo.png', // Update with your logo path
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'contact@harrelhair.com', // Update with your contact email
+      telephone: '+1234567890', // Update with your phone number
+      contactType: 'Customer Support',
+      availableLanguage: 'English',
+    },
+    sameAs: [
+      'https://www.facebook.com/harrelhair',
+      'https://www.instagram.com/harrelhair',
+      'https://www.pinterest.com/harrelhair',
+    ],
+    serviceArea: {
+      '@type': 'Place',
+      name: 'Global', // Or specify your service area
+    },
+    makesOffer: [
+      {
+        '@type': 'Offer',
+        name: 'Hair Care Products',
+        description: 'Premium quality hair care products for all hair types',
+        category: 'Beauty Products',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Hair Accessories',
+        description: 'Stylish and functional hair accessories',
+        category: 'Fashion Accessories',
+      },
+    ],
+  };
+
   return (
     <html lang="en">
       <head>
@@ -170,6 +210,10 @@ export function Layout({children}) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
         <Meta />
         <Links />
       </head>
