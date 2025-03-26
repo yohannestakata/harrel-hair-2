@@ -85,11 +85,11 @@ export default function Homepage() {
   return (
     <div className="home text-foreground">
       <FeaturedCollection collection={data.featuredCollection} />
-      <PromoBar />
       <PopularProducts products={data.recommendedProducts} />
       <SecondFeaturedCollection collection={data.secondFeaturedCollection} />
       <RecommendedProducts products={data.recommendedProducts} />
       <ThirdFeaturedCollection collection={data.thirdFeaturedCollection} />
+      <PromoBar />
       <FAQ />
     </div>
   );
@@ -300,7 +300,7 @@ function SecondFeaturedCollection({collection}) {
           <div className="flex flex-col items-center gap-4">
             {/* Product Image - centered relative to text */}
             {products.slice(0, 1).map((product) => (
-              <div key={product.id} className="w-full aspect-[4/5] max-w-xs">
+              <div key={product.id} className="w-full aspect-[4/5] max-w-md">
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
@@ -343,53 +343,60 @@ function ThirdFeaturedCollection({collection}) {
   const products = collection?.products?.nodes || [];
 
   return (
-    <div className="mt-20 ">
-      <h2 className="text-4xl md:text-5xl font-serif text-center  px-8 pb-10">
-        Explore More Styles
-      </h2>
-      <div className="grid grid-cols-2  px-8 gap-5 max-w-7xl mx-auto">
-        {image && (
-          <div className="flex-1 w-full">
-            <div className="h-full w-full  relative overflow-hidden">
-              <div className="absolute inset-0">
-                <Image
-                  data={image}
-                  sizes="100vw"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        )}
+    <div className="relative py-16 mt-20 overflow-hidden">
+      {/* Parallax Background Image */}
+      {image && (
+        <div className="absolute inset-0">
+          <ParallaxBanner className="w-full h-full">
+            <ParallaxBannerLayer speed={-30}>
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${image.url})`,
+                  height: '120%',
+                  width: '120%',
+                }}
+              />
+            </ParallaxBannerLayer>
+          </ParallaxBanner>
+        </div>
+      )}
 
-        <div className="grid grid-cols-2 gap-3 flex-1">
-          {products.map((product) => (
-            <div key={product.id} className="aspect-[3/4] relative">
-              {product.images.nodes[0] && (
-                <Image
-                  data={product.images.nodes[0]}
-                  sizes="(min-width: 45em) 20vw, 50vw"
-                  className="h-full w-full object-cover"
-                />
-              )}
+      {/* Gradient Overlay - stronger on the right side this time */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+
+      {/* Content Container - aligned to left but centered internally */}
+      <div className="relative h-full flex items-center justify-start">
+        <div className="w-full max-w-md xl:max-w-lg ml-8 2xl:ml-24 px-4">
+          {/* Centered column within the left-aligned container */}
+          <div className="flex flex-col items-center gap-4">
+            {/* Product Image - centered relative to text */}
+            {products.slice(0, 1).map((product) => (
+              <div key={product.id} className="w-full aspect-[4/5] max-w-lg">
+                {product.images.nodes[0] && (
+                  <Image
+                    data={product.images.nodes[0]}
+                    className="h-full w-full object-cover shadow-xl"
+                    aspectRatio="4/5"
+                  />
+                )}
+              </div>
+            ))}
+
+            {/* Text Content - centered */}
+            <div className="text-zinc-50 text-center w-full">
+              <h1 className="text-4xl md:text-5xl xl:text-6xl font-serif tracking-tight">
+                {collection.title}
+              </h1>
+
+              {/* Button - centered */}
+              <Link
+                className="mt-6 px-8 py-3 bg-transparent border-2 border-zinc-50 text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
+                to={`/collections/${collection.handle}`}
+              >
+                Explore More Styles
+              </Link>
             </div>
-          ))}
-          <div className="mt-6 col-span-2">
-            <p className="text-zinc-600 text-sm font-bold uppercase tracking-widest ">
-              More Styles
-            </p>
-            <h1 className="text-5xl mt-1 font-serif tracking-tight">
-              {collection.title}
-            </h1>
-            <p className="mt-3 text-zinc-600">
-              Discover even more styles and trends in our collection.
-            </p>
-            <Link
-              className="px-6 py-3 bg-background border border-zinc-950 text-sm uppercase tracking-widest mt-6 inline-block hover:bg-zinc-950/90 font-semibold hover:text-background ease-in-out duration-200"
-              to={`/collections/${collection.handle}`}
-            >
-              Shop the Collection
-            </Link>
           </div>
         </div>
       </div>
@@ -474,14 +481,11 @@ function ProductCard({product}) {
           className="h-full w-full group-hover:scale-105 duration-200 object-cover"
         />
       </div>
-      <h4 className="mt-4 text-center text-sm font-bold group-hover:underline underline-offset-4 text-balance">
+      <h4 className="mt-4 text-sm group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase text-zinc-600">
         {product.title}
       </h4>
-      <Money
-        data={selectedVariant.price}
-        className="text-center  text-sm text-muted-foreground font-bold mt-1"
-      />
-      <div className=" grid grid-cols-3 justify-center gap-2 mt-4 px-10">
+      <Money data={selectedVariant.price} className="text-lg italic mt-1" />
+      <div className=" grid grid-cols-4 justify-start gap-2 mt-4">
         {product.variants.nodes.length > 1 &&
           product.variants.nodes.map((variant) => (
             <button
