@@ -304,7 +304,7 @@ function SecondFeaturedCollection({collection}) {
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
-                    className="h-full w-full object-cover shadow-xl"
+                    className="h-full w-full object-cover shadow-xl rounded-2xl"
                     aspectRatio="4/5"
                   />
                 )}
@@ -473,7 +473,7 @@ function ProductCard({product}) {
 
   return (
     <Link className="group" to={`/products/${product.handle}`}>
-      <div className="rounded-none aspect-[3/4] overflow-hidden">
+      <div className="rounded-2xl aspect-[3/4] overflow-hidden">
         <Image
           data={selectedVariant.image || product.images.nodes[0]}
           aspectRatio="3/4"
