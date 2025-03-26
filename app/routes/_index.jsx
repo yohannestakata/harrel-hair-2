@@ -139,7 +139,7 @@ function FAQ() {
         {faqs.map((faq) => (
           <div key={faq.question} className="border-b border-zinc-200 py-6">
             <button
-              className="text-lg font-semibold cursor-pointer w-full text-left flex items-center"
+              className="text-lg font-medium cursor-pointer w-full text-left flex items-center"
               onClick={() =>
                 setSelectedFaq((prev) =>
                   prev === faq.question ? null : faq.question,
@@ -162,9 +162,9 @@ function PromoBar() {
   return (
     <section className="flex md:flex-row gap-10 md:gap-0 flex-col items-center justify-around mt-20 px-8  2xl:px-24">
       <div className="flex items-center gap-3 flex-col justify-center">
-        <Truck size={40} strokeWidth={1} />
+        <Truck size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-2xl 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
             Free shipping
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -173,9 +173,9 @@ function PromoBar() {
         </div>
       </div>
       <div className="flex items-center gap-3 flex-col justify-center">
-        <User2 size={40} strokeWidth={1} />
+        <User2 size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-2xl 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
             Guaranteed Success
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -184,9 +184,9 @@ function PromoBar() {
         </div>
       </div>
       <div className="flex items-center gap-3 flex-col justify-center">
-        <Boxes size={40} strokeWidth={1} />
+        <Boxes size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-2xl 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
             30-Day returns
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -251,8 +251,8 @@ function FeaturedCollection({collection}) {
             </div>
           </div>
           {/* Down Arrow */}
-          <div className=" absolute animate-ping bottom-12 left-1/2 -translate-x-1/2">
-            <ChevronsDown size={40} color="white" strokeWidth={1} />
+          <div className=" absolute animate-ping bottom-10 left-1/2 -translate-x-1/2">
+            <ChevronsDown size={24} color="white" strokeWidth={1} />
           </div>
         </>
       )}
