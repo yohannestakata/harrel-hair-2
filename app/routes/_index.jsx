@@ -132,7 +132,9 @@ function FAQ() {
 
   return (
     <section className="py-20 px-8 mx-auto max-w-7xl">
-      <h2 className="text-5xl font-serif tracking-tight text-center ">FAQs</h2>
+      <h2 className="text-4xl md:text-5xl font-serif tracking-tight text-center ">
+        FAQs
+      </h2>
       <div className="mt-10">
         {faqs.map((faq) => (
           <div key={faq.question} className="border-b border-zinc-200 py-6">
@@ -148,7 +150,7 @@ function FAQ() {
               {selectedFaq === faq.question ? <ChevronUp /> : <ChevronDown />}
             </button>
             {selectedFaq === faq.question && (
-              <p className="text-zinc-700 mt-4 w-2/3">{faq.answer}</p>
+              <p className="text-zinc-700 mt-4 md:w-2/3">{faq.answer}</p>
             )}
           </div>
         ))}
@@ -158,7 +160,7 @@ function FAQ() {
 }
 function PromoBar() {
   return (
-    <section className="flex items-center justify-around mt-20 px-8  2xl:px-24">
+    <section className="flex md:flex-row gap-10 md:gap-0 flex-col items-center justify-around mt-20 px-8  2xl:px-24">
       <div className="flex items-center gap-3 flex-col justify-center">
         <Truck size={40} strokeWidth={1} />
         <div className="flex flex-col">
@@ -207,7 +209,7 @@ function FeaturedCollection({collection}) {
   const image = collection?.image;
 
   return (
-    <div className="relative h-[calc(100vh-64px)] overflow-hidden">
+    <div className="relative h-[calc(75vh)] md:h-[calc(100vh-64px)] overflow-hidden">
       {image && (
         <>
           {/* Parallax Background Image */}
@@ -231,10 +233,10 @@ function FeaturedCollection({collection}) {
             <p className="tracking-wider text-center text-sm uppercase font-semibold text-zinc-300 w-1/2 mx-auto">
               Collection
             </p>
-            <h1 className="text-8xl font-medium text-center tracking-tight w-1/2 mx-auto font-serif 2xl:text-9xl">
+            <h1 className="text-6xl px-4 md:text-8xl font-medium text-center tracking-tight md:w-1/2 mx-auto font-serif 2xl:text-9xl">
               {collection.title}
             </h1>
-            <p className="mt-6 font-semibold mx-auto text-zinc-300 text-center w-3xl text-balance">
+            <p className="mt-6 font-semibold mx-auto text-zinc-300 text-center md:w-3xl text-balance px-4">
               Whether you&apos;re looking for a natural everyday look or a bold
               transformation, our wigs are designed to complement your unique
               beauty.
@@ -342,7 +344,7 @@ function ThirdFeaturedCollection({collection}) {
 
   return (
     <div className="mt-20 ">
-      <h2 className="text-5xl font-serif text-center  px-8 pb-10">
+      <h2 className="text-4xl md:text-5xl font-serif text-center  px-8 pb-10">
         Explore More Styles
       </h2>
       <div className="grid grid-cols-2  px-8 gap-5 max-w-7xl mx-auto">
@@ -413,10 +415,10 @@ function RecommendedProducts({products}) {
         <Await resolve={products}>
           {(response) => (
             <>
-              <h2 className="text-center text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-4xl md:text-5xl font-serif tracking-tight">
                 Newest Products
               </h2>
-              <div className="grid grid-cols-4 gap-x-5 gap-y-8 mt-10">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-8 mt-10">
                 {response
                   ? response.recommendedProducts.nodes.map((product) => (
                       <ProductCard key={product.id} product={product} />
@@ -439,10 +441,10 @@ function PopularProducts({products}) {
           {(response) => (
             <>
               {/* Best Selling Products Section */}
-              <h2 className="text-center text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-4xl md:text-5xl font-serif tracking-tight">
                 Most Popular
               </h2>
-              <div className="grid grid-cols-4 gap-x-5 gap-y-8 mt-10">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-8 mt-10">
                 {response
                   ? response.bestSellingProducts.nodes.map((product) => (
                       <ProductCard key={product.id} product={product} />
