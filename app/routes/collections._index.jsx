@@ -2,6 +2,20 @@ import {useLoaderData, Link} from '@remix-run/react';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
+export const meta = () => {
+  return [
+    {title: 'Collections | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Collections | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Collections | Harrel Hair',
+    },
+  ];
+};
+
 /**
  * @param {LoaderFunctionArgs} args
  */

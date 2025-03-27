@@ -1,9 +1,25 @@
 {
-  "name": "hydrogen-quickstart",
+  "name": "harrel-hair",
+  "description": "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
   "private": true,
   "sideEffects": false,
   "version": "2025.1.2",
+  "keywords": [
+    "Human hair extensions",
+    "Virgin hair bundles",
+    "Remy human hair",
+    "Brazilian hair extensions",
+    "Human hair wigs",
+    " Clip-in hair extensions",
+    "Straight human hair",
+    "Curly human hair"
+  ],
   "type": "module",
+  "author": {
+    "name": "Ras-Tech",
+    "email": "rasinnovate@gmail.com",
+    "url": "https://www.rasinnovate.com/"
+  },
   "scripts": {
     "build": "shopify hydrogen build --codegen",
     "dev": "shopify hydrogen dev --codegen",

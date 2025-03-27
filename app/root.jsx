@@ -15,6 +15,7 @@ import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {ParallaxProvider} from 'react-scroll-parallax';
+import {getServerSideURL} from './utils/getUrls';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -46,6 +47,8 @@ export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
  * https://github.com/remix-run/remix/issues/9242
  */
 export function links() {
+  const baseUrl = getServerSideURL();
+
   return [
     {
       rel: 'preconnect',
@@ -56,6 +59,9 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+
+    {rel: 'apple-touch-icon', href: '/apple-icon-x3.png', sizes: '180x180'},
+    {rel: 'manifest', href: `${baseUrl}/manifest.json`},
   ];
 }
 
@@ -141,16 +147,63 @@ function loadDeferredData({context}) {
 }
 
 export const meta = () => {
-  return [
-    {title: 'Harrel Hair'},
+  const baseUrl = getServerSideURL();
 
+  return [
+    // General
     {
-      property: 'og:title',
-      content: 'Very cool app',
+      title:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
     },
     {
       name: 'description',
-      content: 'This app is the best',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    {
+      name: 'keywords',
+      content:
+        'Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair',
+    },
+    // Open Graph
+    {
+      property: 'og:title',
+      content:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
+    },
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    {property: 'og:type', content: 'website'},
+    {
+      property: 'og:siteName',
+      content: 'Harrel Hair',
+    },
+    {property: 'og:url', content: baseUrl},
+    {property: 'og:image', content: `${baseUrl}/og-image.jpg`},
+    {
+      property: 'og:locale',
+      content: 'en_US',
+    },
+
+    // Twitter Card
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {
+      name: 'twitter:title',
+      content:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
+    },
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.jpg`,
     },
   ];
 };
@@ -168,7 +221,8 @@ export function Layout({children}) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Harrel Hair',
-    description: 'Premium hair care products and accessories',
+    description:
+      "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
     url: 'https://www.harrelhair.com', // Update with your actual domain
     logo: {
       '@type': 'ImageObject',
@@ -200,20 +254,6 @@ export function Layout({children}) {
     ],
     serviceArea: 'United States',
     foundingDate: '2025',
-    makesOffer: [
-      {
-        '@type': 'Offer',
-        name: 'Hair Care Products',
-        description: 'Premium quality hair care products for all hair types',
-        category: 'Beauty Products',
-      },
-      {
-        '@type': 'Offer',
-        name: 'Hair Accessories',
-        description: 'Stylish and functional hair accessories',
-        category: 'Fashion Accessories',
-      },
-    ],
   };
 
   return (

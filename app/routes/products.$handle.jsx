@@ -15,8 +15,32 @@ import {ProductForm} from '~/components/ProductForm';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = ({data}) => {
+  const description =
+    "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!";
+
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    {title: `${data?.product.title ?? 'Product' | 'Harrel Hair'}`},
+    {
+      name: 'description',
+      content: `${data?.product.description ?? description}`,
+    },
+    {
+      name: 'og:title',
+      content: `${data?.product.title ?? 'Product'} | Harrel Hair`,
+    },
+    {
+      name: 'og:description',
+      content: `${data?.product.description ?? description}`,
+    },
+    {
+      name: 'twitter:title',
+      content: `${data?.product.title ?? 'Product'} | Harrel Hair`,
+    },
+    {
+      name: 'twitter:description',
+      content: `${data?.product.description ?? description}`,
+    },
+
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -132,7 +156,7 @@ export default function Product() {
     name: product.title,
     description: product.description || product.seo?.description,
     image: product.images.edges[0]?.node.url,
-    url: `https://your-store.com/products/${product.handle}`,
+    url: `https://harrelhair.com/products/${product.handle}`,
     brand: {
       '@type': 'Brand',
       name: product.vendor,
@@ -144,7 +168,7 @@ export default function Product() {
       availability: selectedVariant?.availableForSale
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
-      url: `https://your-store.com/products/${product.handle}`,
+      url: `https://harrelhair.com/products/${product.handle}`,
       itemCondition: 'https://schema.org/NewCondition',
     },
   };
