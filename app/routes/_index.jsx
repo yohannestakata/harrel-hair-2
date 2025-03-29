@@ -127,6 +127,21 @@ function FAQ() {
       answer:
         'Yes, you can style your wig with heat tools like curling irons or flat irons. However, avoid using hot tools directly on the wig to prevent damage.',
     },
+    {
+      question: 'How do I care for my wig?',
+      answer:
+        'To care for your wig, follow these steps: Wash it with a wig shampoo, brush it gently, and store it in a cool, dry place when not in use.',
+    },
+    {
+      question: 'How do I apply my wig?',
+      answer:
+        'To apply your wig, follow these steps: Wash your hair with a wig shampoo, wrap it in a towel, and gently pull the wig over your head.',
+    },
+    {
+      question: 'Can I style my wig with heat tools?',
+      answer:
+        'Yes, you can style your wig with heat tools like curling irons or flat irons. However, avoid using hot tools directly on the wig to prevent damage.',
+    },
   ];
   const [selectedFaq, setSelectedFaq] = useState(faqs[0].question);
 
@@ -135,25 +150,36 @@ function FAQ() {
       <h2 className="text-4xl md:text-5xl font-serif tracking-tight text-center ">
         FAQs
       </h2>
-      <div className="mt-10">
-        {faqs.map((faq) => (
-          <div key={faq.question} className="border-b border-zinc-200 py-6">
-            <button
-              className="text-lg font-medium cursor-pointer w-full text-left flex items-center"
-              onClick={() =>
-                setSelectedFaq((prev) =>
-                  prev === faq.question ? null : faq.question,
-                )
-              }
-            >
-              <span className="flex-1">{faq.question}</span>
-              {selectedFaq === faq.question ? <ChevronUp /> : <ChevronDown />}
-            </button>
-            {selectedFaq === faq.question && (
-              <p className="text-zinc-700 mt-4 md:w-2/3">{faq.answer}</p>
-            )}
+      <div className="flex mt-10 gap-5">
+        <div className="flex-1 bg-zinc-200 rounded-2xl overflow-hidden aspect-square flex items-center justify-center">
+          <Image src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Tabsophie.webp?v=1741084454" />
+        </div>
+        <div className="flex-1">
+          <div className="">
+            {faqs.map((faq) => (
+              <div key={faq.question} className="border-b border-zinc-200 py-6">
+                <button
+                  className="text-lg font-medium cursor-pointer w-full text-left flex items-center"
+                  onClick={() =>
+                    setSelectedFaq((prev) =>
+                      prev === faq.question ? null : faq.question,
+                    )
+                  }
+                >
+                  <span className="flex-1">{faq.question}</span>
+                  {selectedFaq === faq.question ? (
+                    <ChevronUp />
+                  ) : (
+                    <ChevronDown />
+                  )}
+                </button>
+                {selectedFaq === faq.question && (
+                  <p className="text-zinc-700 mt-4 md:w-2/3">{faq.answer}</p>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
@@ -164,7 +190,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <Truck size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase font-serif text-center">
             Free shipping
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -175,7 +201,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <User2 size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase font-serif text-center">
             Guaranteed Success
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -186,7 +212,7 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center">
         <Boxes size={40} strokeWidth={1} color="#c6005c" />
         <div className="flex flex-col">
-          <span className="text-xl uppercase 2xl:text-3xl font-serif text-center">
+          <span className="text-xl uppercase font-serif text-center">
             30-Day returns
           </span>
           <span className="text-muted-foreground text-base mt-2 text-center">
@@ -294,13 +320,16 @@ function SecondFeaturedCollection({collection}) {
       <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/40 to-transparent" />
 
       {/* Content Container - aligned to right but centered internally */}
-      <div className="relative h-full flex items-center justify-end">
-        <div className="w-full max-w-md xl:max-w-lg mr-8 2xl:mr-24 px-4">
+      <div className="relative h-full flex items-center justify-end 2xl:max-w-7xl mx-auto">
+        <div className="w-full max-w-md 2xl:mr-0">
           {/* Centered column within the right-aligned container */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 pr-8">
             {/* Product Image - centered relative to text */}
             {products.slice(0, 1).map((product) => (
-              <div key={product.id} className="w-full aspect-[4/5] max-w-md">
+              <div
+                key={product.id}
+                className="w-full aspect-[4/5] rounded-2xl overflow-hidden"
+              >
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
@@ -366,13 +395,16 @@ function ThirdFeaturedCollection({collection}) {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
 
       {/* Content Container - aligned to left but centered internally */}
-      <div className="relative h-full flex items-center justify-start">
-        <div className="w-full max-w-md xl:max-w-lg ml-8 2xl:ml-24 px-4">
+      <div className="relative h-full flex items-center justify-start mx-auto 2xl:max-w-7xl">
+        <div className="w-full max-w-md xl:max-w-lg ml-0 2xl:ml-0">
           {/* Centered column within the left-aligned container */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 ml-8">
             {/* Product Image - centered relative to text */}
             {products.slice(0, 1).map((product) => (
-              <div key={product.id} className="w-full aspect-[4/5] max-w-lg">
+              <div
+                key={product.id}
+                className="w-full aspect-[4/5] rounded-2xl overflow-hidden"
+              >
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
@@ -471,6 +503,18 @@ function ProductCard({product}) {
     product.variants.nodes[0],
   );
 
+  // Extract color options from variants
+  const colorOptions = product.variants.nodes.map((variant) => {
+    const colorOption = variant.selectedOptions.find(
+      (option) => option.name.toLowerCase() === 'color',
+    );
+    return {
+      id: variant.id,
+      color: colorOption ? colorOption.value : variant.title,
+      variant,
+    };
+  });
+
   return (
     <Link className="group" to={`/products/${product.handle}`}>
       <div className="rounded-2xl aspect-[3/4] overflow-hidden">
@@ -481,28 +525,59 @@ function ProductCard({product}) {
           className="h-full w-full group-hover:scale-105 duration-200 object-cover"
         />
       </div>
-      <h4 className="mt-4 text-sm group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase text-zinc-600">
+      <h4 className="mt-4 group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase">
         {product.title}
       </h4>
-      <Money data={selectedVariant.price} className="text-lg italic mt-1" />
-      <div className=" grid grid-cols-4 justify-start gap-2 mt-4">
-        {product.variants.nodes.length > 1 &&
-          product.variants.nodes.map((variant) => (
+      <Money
+        data={selectedVariant.price}
+        className="text-lg italic mt-1 text-zinc-700"
+      />
+      <div className="grid grid-cols-9 justify-start gap-2 mt-4">
+        {colorOptions.map(({id, color, variant}) => {
+          // Try to match common color names to CSS colors
+          const getColorValue = (colorName) => {
+            const colorMap = {
+              black: '#000000',
+              white: '#ffffff',
+              red: '#ff0000',
+              blue: '#0000ff',
+              green: '#008000',
+              yellow: '#ffff00',
+              purple: '#800080',
+              pink: '#ffc0cb',
+              brown: '#a52a2a',
+              gray: '#808080',
+              blonde: '#faf0be',
+              brunette: '#3a1f04',
+              auburn: '#a52a2a',
+              platinum: '#e5e4e2',
+              // Add more color mappings as needed
+            };
+
+            const lowerColor = color.toLowerCase();
+            return colorMap[lowerColor] || '#cccccc'; // Default to light gray if no match
+          };
+
+          const colorValue = getColorValue(color);
+
+          return (
             <button
-              key={variant.id}
+              key={id}
               onClick={(e) => {
                 e.preventDefault();
                 setSelectedVariant(variant);
               }}
-              className={`w-full flex justify-center items-center py-1 text-xs border border-border rounded-full cursor-pointer ${
-                selectedVariant.id === variant.id
-                  ? 'bg-pink-700 text-white '
-                  : 'bg-white text-black'
+              className={`w-full aspect-square rounded-full cursor-pointer border border-border ${
+                selectedVariant.id === id
+                  ? 'ring-2 ring-offset-2 ring-pink-700'
+                  : ''
               }`}
-            >
-              {variant.title}
-            </button>
-          ))}
+              style={{backgroundColor: colorValue}}
+              title={color}
+              aria-label={`Color option: ${color}`}
+            />
+          );
+        })}
       </div>
     </Link>
   );
