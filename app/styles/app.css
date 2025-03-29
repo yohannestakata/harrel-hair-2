@@ -240,7 +240,7 @@ button.reset:hover:not(:has(> *)) {
   align-items: center;
   display: flex;
   grid-gap: 1rem;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .footer-menu a {

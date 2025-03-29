@@ -11,8 +11,8 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="bg-zinc-900 text-zinc-100 pt-16 pb-8 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
+          <footer className="bg-zinc-900 text-zinc-100 pt-16 pb-8 px-4 sm:px-6 lg:px-8 ">
+            <div className="max-w-7xl mx-auto 2xl:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                 {/* Brand Column */}
                 <div className="space-y-6">
