@@ -1,8 +1,13 @@
-import {useLoaderData} from '@remix-run/react';
-import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
+import {useLoaderData, useNavigation} from '@remix-run/react';
+import {
+  getPaginationVariables,
+  Analytics,
+  Image,
+  Money,
+} from '@shopify/hydrogen';
+import {useState, useMemo, useEffect} from 'react';
 import {SearchForm} from '~/components/SearchForm';
-import {SearchResults} from '~/components/SearchResults';
-import {getEmptyPredictiveSearchResult} from '~/lib/search';
+import {Link} from '@remix-run/react';
 
 /**
  * @type {MetaFunction}
@@ -29,54 +34,425 @@ export async function loader({request, context}) {
   return await searchPromise;
 }
 
-/**
- * Renders the /search route
- */
 export default function SearchPage() {
   /** @type {LoaderReturnData} */
   const {type, term, result, error} = useLoaderData();
+  const navigation = useNavigation();
+
+  // Calculate max price for range slider
+  const maxPrice = useMemo(() => {
+    if (!result?.items?.products?.nodes) return 1000;
+    return Math.ceil(
+      Math.max(
+        ...result.items.products.nodes.map((product) =>
+          parseFloat(
+            product.selectedOrFirstAvailableVariant?.price?.amount || '0',
+          ),
+        ),
+      ),
+    );
+  }, [result]);
+
+  const [filters, setFilters] = useState({
+    priceRange: [0, maxPrice], // Initialize with maxPrice
+    availableOnly: false,
+    vendors: [],
+  });
+  const [selectedVendors, setSelectedVendors] = useState([]);
+
+  // Update price range when max price changes
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: [prev.priceRange[0], maxPrice], // Always set max to calculated maxPrice
+    }));
+  }, [maxPrice]);
+
   if (type === 'predictive') return null;
 
+  // Extract all unique vendors for filter options
+  const allVendors = useMemo(() => {
+    if (!result?.items?.products?.nodes) return [];
+    const vendors = new Set();
+    result.items.products.nodes.forEach((product) => {
+      if (product.vendor) vendors.add(product.vendor);
+    });
+    return Array.from(vendors).sort();
+  }, [result]);
+
+  // Apply filters to products
+  const filteredProducts = useMemo(() => {
+    if (!result?.items?.products?.nodes) return [];
+
+    return result.items.products.nodes.filter((product) => {
+      // Price filter
+      const price = parseFloat(
+        product.selectedOrFirstAvailableVariant?.price?.amount || '0',
+      );
+      if (price < filters.priceRange[0] || price > filters.priceRange[1]) {
+        return false;
+      }
+
+      // Vendor filter
+      if (
+        selectedVendors.length > 0 &&
+        !selectedVendors.includes(product.vendor)
+      ) {
+        return false;
+      }
+
+      // Availability filter
+      if (
+        filters.availableOnly &&
+        !product.selectedOrFirstAvailableVariant?.availableForSale
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [result, filters, selectedVendors]);
+
+  const handlePriceChange = (index, value) => {
+    const newRange = [...filters.priceRange];
+    newRange[index] = parseInt(value);
+    setFilters({...filters, priceRange: newRange});
+  };
+
+  const toggleVendor = (vendor) => {
+    setSelectedVendors((prev) =>
+      prev.includes(vendor)
+        ? prev.filter((v) => v !== vendor)
+        : [...prev, vendor],
+    );
+  };
+
+  const isLoading = navigation.state === 'loading';
+
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm>
-        {({inputRef}) => (
-          <>
-            <input
-              defaultValue={term}
-              name="q"
-              placeholder="Search…"
-              ref={inputRef}
-              type="search"
-            />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
-        )}
-      </SearchForm>
-      {error && <p style={{color: 'red'}}>{error}</p>}
-      {!term || !result?.total ? (
-        <SearchResults.Empty />
-      ) : (
-        <SearchResults result={result} term={term}>
-          {({articles, pages, products, term}) => (
-            <div>
-              <SearchResults.Products products={products} term={term} />
-              <SearchResults.Pages pages={pages} term={term} />
-              <SearchResults.Articles articles={articles} term={term} />
-            </div>
-          )}
-        </SearchResults>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">
+        {term ? `Search results for "${term}"` : 'Search'}
+      </h1>
+
+      {error && (
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+          <p>{error}</p>
+        </div>
       )}
+
+      {!term || !result?.total ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">
+            {!term ? 'Enter a search term above' : 'No results found'}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Filters sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-white p-6 rounded-lg shadow-sm sticky top-4">
+              <h2 className="text-xl font-semibold mb-4">Filters</h2>
+
+              {/* Price Range Filter */}
+              <div className="mb-6">
+                <h3 className="font-medium mb-2">Price Range</h3>
+                <div className="px-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max={maxPrice}
+                    value={filters.priceRange[0]}
+                    onChange={(e) => handlePriceChange(0, e.target.value)}
+                    className="w-full mb-2"
+                  />
+                  <input
+                    type="range"
+                    min="0"
+                    max={maxPrice}
+                    value={filters.priceRange[1]}
+                    onChange={(e) => handlePriceChange(1, e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="flex justify-between mt-2 text-sm text-gray-600">
+                  <span>${filters.priceRange[0]}</span>
+                  <span>${filters.priceRange[1]}</span>
+                </div>
+              </div>
+
+              {/* Availability Filter */}
+              <div className="mb-6">
+                <h3 className="font-medium mb-2">Availability</h3>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={filters.availableOnly}
+                    onChange={() =>
+                      setFilters({
+                        ...filters,
+                        availableOnly: !filters.availableOnly,
+                      })
+                    }
+                    className="mr-2"
+                  />
+                  In stock only
+                </label>
+              </div>
+
+              {/* Vendor Filter */}
+              {allVendors.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="font-medium mb-2">Brands</h3>
+                  <div className="max-h-60 overflow-y-auto">
+                    {allVendors.map((vendor) => (
+                      <label key={vendor} className="flex items-center mb-1">
+                        <input
+                          type="checkbox"
+                          checked={selectedVendors.includes(vendor)}
+                          onChange={() => toggleVendor(vendor)}
+                          className="mr-2"
+                        />
+                        {vendor}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={() => {
+                  setFilters({
+                    priceRange: [0, maxPrice],
+                    availableOnly: false,
+                  });
+                  setSelectedVendors([]);
+                }}
+                className="text-pink-700 hover:text-pink-800 text-sm"
+              >
+                Reset all filters
+              </button>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="lg:col-span-3">
+            <div className="mb-8">
+              <SearchForm>
+                {({inputRef}) => (
+                  <div className="flex gap-2">
+                    <input
+                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-700"
+                      defaultValue={term}
+                      name="q"
+                      placeholder="Search products, articles, and more..."
+                      ref={inputRef}
+                      type="search"
+                    />
+                    <button
+                      className="px-6 py-2 bg-pink-700 text-white rounded-lg hover:bg-pink-800 transition-colors"
+                      type="submit"
+                    >
+                      {isLoading ? 'Searching...' : 'Search'}
+                    </button>
+                  </div>
+                )}
+              </SearchForm>
+            </div>
+            <div className="mb-4 flex justify-between items-center">
+              <p className="text-gray-600">
+                Showing {filteredProducts.length} of{' '}
+                {result.items.products.nodes.length} products
+              </p>
+              {/* Sorting could be added here */}
+            </div>
+
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No products match your filters</p>
+                <button
+                  onClick={() => {
+                    setFilters({
+                      priceRange: [0, maxPrice],
+                      availableOnly: false,
+                    });
+                    setSelectedVendors([]);
+                  }}
+                  className="mt-2 text-pink-700 hover:text-pink-800"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+
+            {/* Display articles and pages if they exist */}
+            {(result.items.articles.nodes.length > 0 ||
+              result.items.pages.nodes.length > 0) && (
+              <div className="mt-12">
+                <h2 className="text-2xl font-semibold mb-6">Other Results</h2>
+
+                {result.items.articles.nodes.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-xl font-medium mb-4">Articles</h3>
+                    <div className="grid gap-4">
+                      {result.items.articles.nodes.map((article) => (
+                        <ArticleCard key={article.id} article={article} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {result.items.pages.nodes.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-medium mb-4">Pages</h3>
+                    <div className="grid gap-4">
+                      {result.items.pages.nodes.map((page) => (
+                        <PageCard key={page.id} page={page} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <Analytics.SearchView data={{searchTerm: term, searchResults: result}} />
     </div>
   );
 }
 
+function ProductCard({product}) {
+  const [selectedVariant, setSelectedVariant] = useState(
+    product.variants?.nodes?.[0] || product.selectedOrFirstAvailableVariant,
+  );
+
+  // Extract color options from variants
+  const colorOptions = (
+    product.variants?.nodes || [product.selectedOrFirstAvailableVariant]
+  ).map((variant) => {
+    const colorOption = variant.selectedOptions?.find(
+      (option) => option.name.toLowerCase() === 'color',
+    );
+    return {
+      id: variant.id,
+      color: colorOption ? colorOption.value : variant.title,
+      variant,
+    };
+  });
+
+  return (
+    <Link className="group" to={`/products/${product.handle}`}>
+      <div className="rounded-2xl aspect-[3/4] overflow-hidden">
+        <Image
+          data={
+            selectedVariant?.image ||
+            product.images?.nodes?.[0] ||
+            product.selectedOrFirstAvailableVariant?.image
+          }
+          aspectRatio="3/4"
+          sizes="(min-width: 45em) 20vw, 50vw"
+          className="h-full w-full group-hover:scale-105 duration-200 object-cover"
+        />
+        {/* {!selectedVariant?.availableForSale && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <span className="text-white font-medium">Sold Out</span>
+          </div>
+        )} */}
+      </div>
+      <h4 className="mt-4 group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase">
+        {product.title}
+      </h4>
+      <p className="text-gray-600 text-sm mb-2">{product.vendor}</p>
+      <Money
+        data={selectedVariant?.price}
+        className="text-lg italic mt-1 text-zinc-700"
+      />
+      {colorOptions.length > 1 && (
+        <div className="grid grid-cols-9 justify-start gap-2 mt-4">
+          {colorOptions.map(({id, color, variant}) => {
+            // Try to match common color names to CSS colors
+            const getColorValue = (colorName) => {
+              const colorMap = {
+                black: '#000000',
+                white: '#ffffff',
+                red: '#ff0000',
+                blue: '#0000ff',
+                green: '#008000',
+                yellow: '#ffff00',
+                purple: '#800080',
+                pink: '#ffc0cb',
+                brown: '#a52a2a',
+                gray: '#808080',
+                blonde: '#faf0be',
+                brunette: '#3a1f04',
+                auburn: '#a52a2a',
+                platinum: '#e5e4e2',
+              };
+
+              const lowerColor = color.toLowerCase();
+              return colorMap[lowerColor] || '#cccccc';
+            };
+
+            const colorValue = getColorValue(color);
+
+            return (
+              <button
+                key={id}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedVariant(variant);
+                }}
+                className={`w-full aspect-square rounded-full cursor-pointer border border-border ${
+                  selectedVariant?.id === id
+                    ? 'ring-2 ring-offset-2 ring-pink-700'
+                    : ''
+                }`}
+                style={{backgroundColor: colorValue}}
+                title={color}
+                aria-label={`Color option: ${color}`}
+              />
+            );
+          })}
+        </div>
+      )}
+    </Link>
+  );
+}
+
+function ArticleCard({article}) {
+  return (
+    <Link
+      to={`/blogs/${article.blog?.handle}/${article.handle}`}
+      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow block"
+    >
+      <h3 className="font-medium mb-2">{article.title}</h3>
+      <p className="text-gray-600 text-sm">From the blog</p>
+    </Link>
+  );
+}
+
+function PageCard({page}) {
+  return (
+    <Link
+      to={`/pages/${page.handle}`}
+      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow block"
+    >
+      <h3 className="font-medium mb-2">{page.title}</h3>
+      <p className="text-gray-600 text-sm">Information page</p>
+    </Link>
+  );
+}
+
 /**
  * Regular search query and fragments
- * (adjust as needed)
  */
 const SEARCH_PRODUCT_FRAGMENT = `#graphql
   fragment SearchProduct on Product {
@@ -87,12 +463,42 @@ const SEARCH_PRODUCT_FRAGMENT = `#graphql
     title
     trackingParameters
     vendor
-    selectedOrFirstAvailableVariant(
-      selectedOptions: []
-      ignoreUnknownOptions: true
-      caseInsensitiveMatch: true
-    ) {
+    availableForSale
+    variants(first: 100) {
+      nodes {
+        id
+        availableForSale
+        selectedOptions {
+          name
+          value
+        }
+        image {
+          url
+          altText
+          width
+          height
+        }
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+      }
+    }
+    images(first: 1) {
+      nodes {
+        url
+        altText
+        width
+        height
+      }
+    }
+    selectedOrFirstAvailableVariant {
       id
+      availableForSale
       image {
         url
         altText
@@ -121,8 +527,8 @@ const SEARCH_PRODUCT_FRAGMENT = `#graphql
 
 const SEARCH_PAGE_FRAGMENT = `#graphql
   fragment SearchPage on Page {
-     __typename
-     handle
+    __typename
+    handle
     id
     title
     trackingParameters
@@ -136,6 +542,9 @@ const SEARCH_ARTICLE_FRAGMENT = `#graphql
     id
     title
     trackingParameters
+    blog {
+      handle
+    }
   }
 `;
 
@@ -148,7 +557,6 @@ const PAGE_INFO_FRAGMENT = `#graphql
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/queries/search
 export const SEARCH_QUERY = `#graphql
   query RegularSearch(
     $country: CountryCode
@@ -207,21 +615,12 @@ export const SEARCH_QUERY = `#graphql
   ${PAGE_INFO_FRAGMENT}
 `;
 
-/**
- * Regular search fetcher
- * @param {Pick<
- *   LoaderFunctionArgs,
- *   'request' | 'context'
- * >}
- * @return {Promise<RegularSearchReturn>}
- */
 async function regularSearch({request, context}) {
   const {storefront} = context;
   const url = new URL(request.url);
   const variables = getPaginationVariables(request, {pageBy: 8});
   const term = String(url.searchParams.get('q') || '');
 
-  // Search articles, pages, and products for the `q` term
   const {errors, ...items} = await storefront.query(SEARCH_QUERY, {
     variables: {...variables, term},
   });
@@ -244,7 +643,6 @@ async function regularSearch({request, context}) {
 
 /**
  * Predictive search query and fragments
- * (adjust as needed)
  */
 const PREDICTIVE_SEARCH_ARTICLE_FRAGMENT = `#graphql
   fragment PredictiveArticle on Article {
@@ -298,6 +696,21 @@ const PREDICTIVE_SEARCH_PRODUCT_FRAGMENT = `#graphql
     title
     handle
     trackingParameters
+    variants(first: 1) {
+      nodes {
+        id
+        image {
+          url
+          altText
+          width
+          height
+        }
+        price {
+          amount
+          currencyCode
+        }
+      }
+    }
     selectedOrFirstAvailableVariant(
       selectedOptions: []
       ignoreUnknownOptions: true
@@ -327,7 +740,6 @@ const PREDICTIVE_SEARCH_QUERY_FRAGMENT = `#graphql
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/queries/predictiveSearch
 const PREDICTIVE_SEARCH_QUERY = `#graphql
   query PredictiveSearch(
     $country: CountryCode
@@ -367,14 +779,6 @@ const PREDICTIVE_SEARCH_QUERY = `#graphql
   ${PREDICTIVE_SEARCH_QUERY_FRAGMENT}
 `;
 
-/**
- * Predictive search fetcher
- * @param {Pick<
- *   ActionFunctionArgs,
- *   'request' | 'context'
- * >}
- * @return {Promise<PredictiveSearchReturn>}
- */
 async function predictiveSearch({request, context}) {
   const {storefront} = context;
   const url = new URL(request.url);
@@ -384,12 +788,10 @@ async function predictiveSearch({request, context}) {
 
   if (!term) return {type, term, result: getEmptyPredictiveSearchResult()};
 
-  // Predictively search articles, collections, pages, products, and queries (suggestions)
   const {predictiveSearch: items, errors} = await storefront.query(
     PREDICTIVE_SEARCH_QUERY,
     {
       variables: {
-        // customize search options as needed
         limit,
         limitScope: 'EACH',
         term,
