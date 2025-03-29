@@ -8,7 +8,17 @@ import {json} from '@shopify/remix-oxygen';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = () => {
-  return [{title: `Harrel Hair | Products`}];
+  return [
+    {title: 'Collections | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Collections | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Collections | Harrel Hair',
+    },
+  ];
 };
 
 /**
