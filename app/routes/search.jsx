@@ -13,7 +13,17 @@ import {Link} from '@remix-run/react';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [
+    {title: 'Search | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Search | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Search | Harrel Hair',
+    },
+  ];
 };
 
 /**
