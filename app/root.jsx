@@ -141,16 +141,63 @@ function loadDeferredData({context}) {
 }
 
 export const meta = () => {
-  return [
-    {title: 'Harrel Hair'},
+  const baseUrl = getServerSideURL();
 
+  return [
+    // General
     {
-      property: 'og:title',
-      content: 'Very cool app',
+      title:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
     },
     {
       name: 'description',
-      content: 'This app is the best',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    {
+      name: 'keywords',
+      content:
+        'Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair',
+    },
+    // Open Graph
+    {
+      property: 'og:title',
+      content:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
+    },
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    {property: 'og:type', content: 'website'},
+    {
+      property: 'og:siteName',
+      content: 'Harrel Hair',
+    },
+    {property: 'og:url', content: baseUrl},
+    {property: 'og:image', content: `${baseUrl}/og-image.jpg`},
+    {
+      property: 'og:locale',
+      content: 'en_US',
+    },
+
+    // Twitter Card
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {
+      name: 'twitter:title',
+      content:
+        'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
+    },
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    {
+      name: 'twitter:image',
+      content: `${baseUrl}/og-image.jpg`,
     },
   ];
 };
