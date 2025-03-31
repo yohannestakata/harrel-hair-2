@@ -1,21 +1,6 @@
 import {X} from 'lucide-react';
 import {createContext, useContext, useEffect, useState} from 'react';
 
-/**
- * A side bar component with Overlay
- * @example
- * ```jsx
- * <Aside type="search" heading="SEARCH">
- *  <input type="search" />
- *  ...
- * </Aside>
- * ```
- * @param {{
- *   children?: React.ReactNode;
- *   type: AsideType;
- *   heading: React.ReactNode;
- * }}
- */
 export function Aside({children, heading, type}) {
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
@@ -40,19 +25,37 @@ export function Aside({children, heading, type}) {
   return (
     <div
       aria-modal
-      className={`overlay ${expanded ? 'expanded' : ''}`}
+      className={`fixed inset-0 z-50 transition-opacity duration-200 ${
+        expanded ? 'opacity-100 visible' : 'opacity-0 invisible'
+      }`}
       role="dialog"
     >
-      <button className="close-outside" onClick={close} />
-      <aside>
-        <header>
-          <h3>{heading}</h3>
-          <button className="close reset" onClick={close} aria-label="Close">
-            <X />
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        onClick={close}
+      />
+
+      {/* Sidebar */}
+      <div
+        className={`absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl transition-transform duration-200 ease-in-out ${
+          expanded ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <header className="flex h-16 items-center justify-between border-b border-gray-200 px-5">
+          <h3 className="text-xl font-medium">{heading}</h3>
+          <button
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+            onClick={close}
+            aria-label="Close"
+          >
+            <X size={24} />
           </button>
         </header>
-        <main>{children}</main>
-      </aside>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-5">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

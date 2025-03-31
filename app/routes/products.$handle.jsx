@@ -174,19 +174,21 @@ export default function Product() {
   };
 
   return (
-    <div className="flex gap-6 p-6 max-w-7xl mx-auto">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-6 p-4 md:p-6 max-w-7xl mx-auto">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
       />
-      {/* Image Gallery */}
-      <div className="flex-1 flex gap-2">
-        <div className="flex flex-col gap-0.5">
+
+      {/* Image Gallery - Mobile: Stacked, Desktop: Side by side */}
+      <div className="flex-1 flex flex-col md:flex-row gap-2 md:gap-4">
+        {/* Thumbnails - Mobile: Horizontal scroll, Desktop: Vertical */}
+        <div className="flex flex-row md:flex-col gap-2 md:gap-1 overflow-x-auto md:overflow-x-visible md:w-20 pb-2 md:pb-0">
           {generalImages.map(({node}) => (
             <button
               key={node.id}
               onClick={() => setSelectedImage(node)}
-              className="size-20 overflow-hidden border-3 cursor-pointer border-transparent hover:border-primary focus:border-primary"
+              className="size-16 md:size-20 overflow-hidden border-2 rounded-md cursor-pointer border-transparent hover:border-primary focus:border-primary flex-shrink-0"
             >
               <img
                 src={node.url}
@@ -196,29 +198,32 @@ export default function Product() {
             </button>
           ))}
         </div>
-        <div className="flex-1">
+
+        {/* Main Image */}
+        <div className="flex-1 aspect-square md:aspect-auto">
           <ProductImage image={selectedImage} />
         </div>
       </div>
 
       {/* Product Details */}
-      <div className="flex-1 product-main">
-        <h1 className="text-4xl font-serif mb-2 font-semibold">{title}</h1>
+      <div className="flex-1 product-main md:sticky md:top-4 md:self-start">
+        <h1 className="text-2xl md:text-4xl font-serif mb-2 font-semibold">
+          {title}
+        </h1>
         <ProductPrice
           price={selectedVariant?.price}
           compareAtPrice={selectedVariant?.compareAtPrice}
+          className="text-lg md:text-xl"
         />
 
-        <div className="mt-8">
-          <p>
-            <strong>Description</strong>
-          </p>
-          <p className="mt-2 text-zinc-700">
+        <div className="mt-4 md:mt-8">
+          <p className="font-medium">Description</p>
+          <div className="mt-2 text-zinc-700 text-sm md:text-base">
             <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-          </p>
+          </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6 md:mt-8">
           <ProductForm
             productOptions={productOptions}
             selectedVariant={selectedVariant}

@@ -45,16 +45,16 @@ async function loadCriticalData({context}) {
   // Fallback if there are fewer than three collections
   if (collections.nodes.length < 3) {
     return {
-      featuredCollection: collections.nodes[0] || null, // Latest collection (or null if none exist)
-      secondFeaturedCollection: collections.nodes[1] || null, // Second latest collection (or null if none exist)
-      thirdFeaturedCollection: null, // No third collection
+      featuredCollection: collections.nodes[0] || null,
+      secondFeaturedCollection: collections.nodes[1] || null,
+      thirdFeaturedCollection: null,
     };
   }
 
   return {
-    featuredCollection: collections.nodes[0], // Latest collection
-    secondFeaturedCollection: collections.nodes[1], // Second latest collection
-    thirdFeaturedCollection: collections.nodes[2], // Third latest collection
+    featuredCollection: collections.nodes[0],
+    secondFeaturedCollection: collections.nodes[1],
+    thirdFeaturedCollection: collections.nodes[2],
   };
 }
 
@@ -68,7 +68,6 @@ function loadDeferredData({context}) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
       console.error(error);
       return null;
     });
@@ -117,49 +116,31 @@ function FAQ() {
       answer:
         'To care for your wig, follow these steps: Wash it with a wig shampoo, brush it gently, and store it in a cool, dry place when not in use.',
     },
-    {
-      question: 'How do I apply my wig?',
-      answer:
-        'To apply your wig, follow these steps: Wash your hair with a wig shampoo, wrap it in a towel, and gently pull the wig over your head.',
-    },
-    {
-      question: 'Can I style my wig with heat tools?',
-      answer:
-        'Yes, you can style your wig with heat tools like curling irons or flat irons. However, avoid using hot tools directly on the wig to prevent damage.',
-    },
-    {
-      question: 'How do I care for my wig?',
-      answer:
-        'To care for your wig, follow these steps: Wash it with a wig shampoo, brush it gently, and store it in a cool, dry place when not in use.',
-    },
-    {
-      question: 'How do I apply my wig?',
-      answer:
-        'To apply your wig, follow these steps: Wash your hair with a wig shampoo, wrap it in a towel, and gently pull the wig over your head.',
-    },
-    {
-      question: 'Can I style my wig with heat tools?',
-      answer:
-        'Yes, you can style your wig with heat tools like curling irons or flat irons. However, avoid using hot tools directly on the wig to prevent damage.',
-    },
   ];
   const [selectedFaq, setSelectedFaq] = useState(faqs[0].question);
 
   return (
-    <section className="py-20 px-8 mx-auto max-w-7xl">
-      <h2 className="text-4xl md:text-5xl font-serif tracking-tight text-center ">
+    <section className="py-12 md:py-20 px-4 md:px-8 mx-auto max-w-7xl">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight text-center">
         FAQs
       </h2>
-      <div className="flex mt-10 gap-5">
-        <div className="flex-1 bg-zinc-200 rounded-2xl overflow-hidden aspect-square flex items-center justify-center">
-          <Image src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Tabsophie.webp?v=1741084454" />
+      <div className="flex flex-col lg:flex-row mt-8 md:mt-10 gap-5 md:gap-8">
+        <div className="lg:flex-1 bg-zinc-200 rounded-2xl overflow-hidden aspect-square flex items-center justify-center order-2 lg:order-1">
+          <Image
+            src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Tabsophie.webp?v=1741084454"
+            className="w-full h-full object-cover"
+            alt="FAQ illustration"
+          />
         </div>
-        <div className="flex-1">
+        <div className="lg:flex-1 order-1 lg:order-2">
           <div className="">
             {faqs.map((faq) => (
-              <div key={faq.question} className="border-b border-zinc-200 py-6">
+              <div
+                key={faq.question}
+                className="border-b border-zinc-200 py-4 md:py-6"
+              >
                 <button
-                  className="text-lg font-medium cursor-pointer w-full text-left flex items-center"
+                  className="text-base md:text-lg font-medium cursor-pointer w-full text-left flex items-center"
                   onClick={() =>
                     setSelectedFaq((prev) =>
                       prev === faq.question ? null : faq.question,
@@ -168,13 +149,15 @@ function FAQ() {
                 >
                   <span className="flex-1">{faq.question}</span>
                   {selectedFaq === faq.question ? (
-                    <ChevronUp />
+                    <ChevronUp className="ml-2" />
                   ) : (
-                    <ChevronDown />
+                    <ChevronDown className="ml-2" />
                   )}
                 </button>
                 {selectedFaq === faq.question && (
-                  <p className="text-zinc-700 mt-4 md:w-2/3">{faq.answer}</p>
+                  <p className="text-zinc-700 mt-2 md:mt-4 text-sm md:text-base">
+                    {faq.answer}
+                  </p>
                 )}
               </div>
             ))}
@@ -184,38 +167,54 @@ function FAQ() {
     </section>
   );
 }
+
 function PromoBar() {
   return (
-    <section className="flex md:flex-row gap-10 md:gap-0 flex-col items-center justify-around mt-20 px-8  2xl:px-24">
-      <div className="flex items-center gap-3 flex-col justify-center">
-        <Truck size={40} strokeWidth={1} color="#c6005c" />
-        <div className="flex flex-col">
-          <span className="text-xl uppercase font-serif text-center">
+    <section className="flex flex-col sm:flex-row gap-8 md:gap-12 items-center justify-around my-12 md:my-20 px-4 md:px-8 2xl:px-24">
+      <div className="flex items-center gap-3 flex-col justify-center w-full sm:w-auto">
+        <Truck
+          size={32}
+          className="md:h-10 md:w-10"
+          strokeWidth={1}
+          color="#c6005c"
+        />
+        <div className="flex flex-col text-center">
+          <span className="text-lg md:text-xl uppercase font-serif">
             Free shipping
           </span>
-          <span className="text-muted-foreground text-base mt-2 text-center">
+          <span className="text-muted-foreground text-sm md:text-base mt-1 md:mt-2">
             On U.S. Orders Over $99
           </span>
         </div>
       </div>
-      <div className="flex items-center gap-3 flex-col justify-center">
-        <User2 size={40} strokeWidth={1} color="#c6005c" />
-        <div className="flex flex-col">
-          <span className="text-xl uppercase font-serif text-center">
+      <div className="flex items-center gap-3 flex-col justify-center w-full sm:w-auto">
+        <User2
+          size={32}
+          className="md:h-10 md:w-10"
+          strokeWidth={1}
+          color="#c6005c"
+        />
+        <div className="flex flex-col text-center">
+          <span className="text-lg md:text-xl uppercase font-serif">
             Guaranteed Success
           </span>
-          <span className="text-muted-foreground text-base mt-2 text-center">
+          <span className="text-muted-foreground text-sm md:text-base mt-1 md:mt-2">
             Refreshed, Inspected, Perfected
           </span>
         </div>
       </div>
-      <div className="flex items-center gap-3 flex-col justify-center">
-        <Boxes size={40} strokeWidth={1} color="#c6005c" />
-        <div className="flex flex-col">
-          <span className="text-xl uppercase font-serif text-center">
+      <div className="flex items-center gap-3 flex-col justify-center w-full sm:w-auto">
+        <Boxes
+          size={32}
+          className="md:h-10 md:w-10"
+          strokeWidth={1}
+          color="#c6005c"
+        />
+        <div className="flex flex-col text-center">
+          <span className="text-lg md:text-xl uppercase font-serif">
             30-Day returns
           </span>
-          <span className="text-muted-foreground text-base mt-2 text-center">
+          <span className="text-muted-foreground text-sm md:text-base mt-1 md:mt-2">
             Easy &amp; No Restocking fees
           </span>
         </div>
@@ -224,26 +223,19 @@ function PromoBar() {
   );
 }
 
-/**
- * @param {{
- *   collection: FeaturedCollectionFragment;
- * }}
- */
-
 function FeaturedCollection({collection}) {
   if (!collection) return null;
   const image = collection?.image;
 
   return (
-    <div className="relative h-[calc(75vh)] md:h-[calc(100vh-64px)] overflow-hidden">
+    <div className="relative h-[75vh] md:h-[calc(100vh-64px)] overflow-hidden">
       {image && (
         <>
-          {/* Parallax Background Image */}
           <div className="absolute inset-0">
-            <ParallaxBanner style={{width: '120%', height: '120%'}}>
+            <ParallaxBanner style={{width: '100%', height: '100%'}}>
               <ParallaxBannerLayer speed={-30}>
                 <div
-                  className="absolute inset-0 bg-cover bg-center "
+                  className="absolute inset-0 bg-cover bg-center"
                   style={{
                     backgroundImage: `url(${image.url})`,
                     height: '120%',
@@ -252,33 +244,35 @@ function FeaturedCollection({collection}) {
               </ParallaxBannerLayer>
             </ParallaxBanner>
           </div>
-          {/* Gradient Overlay */}
           <div className="bg-gradient-to-l from-black/60 to-black/60 absolute inset-0" />
-          {/* Content */}
-          <div className="text-zinc-50 h-full flex flex-col justify-center relative">
-            <p className="tracking-wider text-center text-sm uppercase font-semibold text-zinc-300 w-1/2 mx-auto">
+          <div className="text-zinc-50 h-full flex flex-col justify-center relative px-4">
+            <p className="tracking-wider text-center text-xs sm:text-sm uppercase font-semibold text-zinc-300 w-full md:w-1/2 mx-auto">
               Collection
             </p>
-            <h1 className="text-6xl px-4 md:text-8xl font-medium text-center tracking-tight md:w-1/2 mx-auto font-serif 2xl:text-9xl">
+            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-8xl font-medium text-center tracking-tight w-full md:w-1/2 mx-auto font-serif">
               {collection.title}
             </h1>
-            <p className="mt-6 font-semibold mx-auto text-zinc-300 text-center md:w-3xl text-balance px-4">
-              Whether you&apos;re looking for a natural everyday look or a bold
+            <p className="mt-4 md:mt-6 font-semibold mx-auto text-zinc-300 text-center text-sm sm:text-base md:text-lg w-full md:w-3/4 lg:w-1/2 px-4">
+              Whether you're looking for a natural everyday look or a bold
               transformation, our wigs are designed to complement your unique
               beauty.
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-4 md:mt-6">
               <Link
-                className="px-6 py-3 mx-auto text-background border border-background mt-6 inline-block  font-semibold hover:bg-background hover:text-foreground duration-200 ease-in-out tracking-widest text-sm"
+                className="px-4 py-2 sm:px-6 sm:py-3 mx-auto text-background border border-background font-semibold hover:bg-background hover:text-foreground duration-200 ease-in-out tracking-widest text-xs sm:text-sm"
                 to={`/collections/${collection.handle}`}
               >
                 VIEW COLLECTION
               </Link>
             </div>
           </div>
-          {/* Down Arrow */}
-          <div className=" absolute animate-ping bottom-10 left-1/2 -translate-x-1/2">
-            <ChevronsDown size={24} color="white" strokeWidth={1} />
+          <div className="absolute animate-ping bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2">
+            <ChevronsDown
+              size={20}
+              className="sm:w-6 sm:h-6"
+              color="white"
+              strokeWidth={1}
+            />
           </div>
         </>
       )}
@@ -286,19 +280,13 @@ function FeaturedCollection({collection}) {
   );
 }
 
-/**
- * @param {{
- *   collection: SecondFeaturedCollectionFragment;
- * }}
- */
 function SecondFeaturedCollection({collection}) {
   if (!collection) return null;
   const image = collection?.image;
   const products = collection?.products?.nodes || [];
 
   return (
-    <div className="relative py-16 mt-20 overflow-hidden">
-      {/* Parallax Background Image */}
+    <div className="relative py-12 md:py-16 mt-12 md:mt-20 overflow-hidden">
       {image && (
         <div className="absolute inset-0">
           <ParallaxBanner className="w-full h-full">
@@ -316,15 +304,10 @@ function SecondFeaturedCollection({collection}) {
         </div>
       )}
 
-      {/* Gradient Overlay - stronger on the left side */}
       <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/40 to-transparent" />
-
-      {/* Content Container - aligned to right but centered internally */}
-      <div className="relative h-full flex items-center justify-end 2xl:max-w-7xl mx-auto">
+      <div className="relative h-full flex items-center justify-center lg:justify-end 2xl:max-w-7xl mx-auto px-4 md:px-8">
         <div className="w-full max-w-md 2xl:mr-0">
-          {/* Centered column within the right-aligned container */}
-          <div className="flex flex-col items-center gap-4 pr-8">
-            {/* Product Image - centered relative to text */}
+          <div className="flex flex-col items-center gap-4 lg:pr-8">
             {products.slice(0, 1).map((product) => (
               <div
                 key={product.id}
@@ -340,15 +323,12 @@ function SecondFeaturedCollection({collection}) {
               </div>
             ))}
 
-            {/* Text Content - centered */}
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-serif tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
                 {collection.title}
               </h1>
-
-              {/* Button - centered */}
               <Link
-                className="mt-6 px-8 py-3 bg-transparent border-2 border-zinc-50 text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
+                className="mt-4 md:mt-6 px-6 py-2 md:px-8 md:py-3 bg-transparent border-2 border-zinc-50 text-xs sm:text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
                 to={`/collections/${collection.handle}`}
               >
                 Shop the Collection
@@ -361,19 +341,13 @@ function SecondFeaturedCollection({collection}) {
   );
 }
 
-/**
- * @param {{
- *   collection: ThirdFeaturedCollectionFragment;
- * }}
- */
 function ThirdFeaturedCollection({collection}) {
   if (!collection) return null;
   const image = collection?.image;
   const products = collection?.products?.nodes || [];
 
   return (
-    <div className="relative py-16 mt-20 overflow-hidden">
-      {/* Parallax Background Image */}
+    <div className="relative py-12 md:py-16 mt-12 md:mt-20 overflow-hidden">
       {image && (
         <div className="absolute inset-0">
           <ParallaxBanner className="w-full h-full">
@@ -391,15 +365,10 @@ function ThirdFeaturedCollection({collection}) {
         </div>
       )}
 
-      {/* Gradient Overlay - stronger on the right side this time */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-
-      {/* Content Container - aligned to left but centered internally */}
-      <div className="relative h-full flex items-center justify-start mx-auto 2xl:max-w-7xl">
-        <div className="w-full max-w-md xl:max-w-lg ml-0 2xl:ml-0">
-          {/* Centered column within the left-aligned container */}
-          <div className="flex flex-col items-center gap-4 ml-8">
-            {/* Product Image - centered relative to text */}
+      <div className="relative h-full flex items-center justify-center lg:justify-start mx-auto 2xl:max-w-7xl px-4 md:px-8">
+        <div className="w-full max-w-md xl:max-w-lg 2xl:ml-0">
+          <div className="flex flex-col items-center gap-4 lg:ml-8">
             {products.slice(0, 1).map((product) => (
               <div
                 key={product.id}
@@ -408,22 +377,19 @@ function ThirdFeaturedCollection({collection}) {
                 {product.images.nodes[0] && (
                   <Image
                     data={product.images.nodes[0]}
-                    className="h-full w-full object-cover shadow-xl"
+                    className="h-full w-full object-cover shadow-xl rounded-2xl"
                     aspectRatio="4/5"
                   />
                 )}
               </div>
             ))}
 
-            {/* Text Content - centered */}
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-serif tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
                 {collection.title}
               </h1>
-
-              {/* Button - centered */}
               <Link
-                className="mt-6 px-8 py-3 bg-transparent border-2 border-zinc-50 text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
+                className="mt-4 md:mt-6 px-6 py-2 md:px-8 md:py-3 bg-transparent border-2 border-zinc-50 text-xs sm:text-sm uppercase tracking-widest inline-block hover:bg-white hover:text-black transition-all duration-300 font-semibold"
                 to={`/collections/${collection.handle}`}
               >
                 Explore More Styles
@@ -436,28 +402,17 @@ function ThirdFeaturedCollection({collection}) {
   );
 }
 
-/**
- * @param {{
- *   products: Promise<RecommendedProductsQuery | null>;
- * }}
- */
-
-/**
- * @param {{
- *   products: Promise<RecommendedProductsQuery | null>;
- * }}
- */
 function RecommendedProducts({products}) {
   return (
-    <div className="px-8 max-w-7xl mx-auto pt-20 ">
-      <Suspense fallback={<div>Loading...</div>}>
+    <div className="px-4 md:px-8 max-w-7xl mx-auto pt-12 md:pt-20">
+      <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
             <>
-              <h2 className="text-center text-4xl md:text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
                 Newest Products
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-8 mt-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-5 md:gap-y-8 mt-8 md:mt-10">
                 {response
                   ? response.recommendedProducts.nodes.map((product) => (
                       <ProductCard key={product.id} product={product} />
@@ -474,16 +429,15 @@ function RecommendedProducts({products}) {
 
 function PopularProducts({products}) {
   return (
-    <div className="px-8 max-w-7xl mx-auto pt-20">
-      <Suspense fallback={<div>Loading...</div>}>
+    <div className="px-4 md:px-8 max-w-7xl mx-auto pt-12 md:pt-20">
+      <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
             <>
-              {/* Best Selling Products Section */}
-              <h2 className="text-center text-4xl md:text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
                 Most Popular
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-8 mt-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-5 md:gap-y-8 mt-8 md:mt-10">
                 {response
                   ? response.bestSellingProducts.nodes.map((product) => (
                       <ProductCard key={product.id} product={product} />
@@ -503,7 +457,6 @@ function ProductCard({product}) {
     product.variants.nodes[0],
   );
 
-  // Extract color options from variants
   const colorOptions = product.variants.nodes.map((variant) => {
     const colorOption = variant.selectedOptions.find(
       (option) => option.name.toLowerCase() === 'color',
@@ -525,16 +478,15 @@ function ProductCard({product}) {
           className="h-full w-full group-hover:scale-105 duration-200 object-cover"
         />
       </div>
-      <h4 className="mt-4 group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase">
+      <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase">
         {product.title}
       </h4>
       <Money
         data={selectedVariant.price}
-        className="text-lg italic mt-1 text-zinc-700"
+        className="text-base md:text-lg italic mt-1 text-zinc-700"
       />
-      <div className="grid grid-cols-9 justify-start gap-2 mt-4">
-        {colorOptions.map(({id, color, variant}) => {
-          // Try to match common color names to CSS colors
+      <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
+        {colorOptions.slice(0, 9).map(({id, color, variant}) => {
           const getColorValue = (colorName) => {
             const colorMap = {
               black: '#000000',
@@ -551,11 +503,10 @@ function ProductCard({product}) {
               brunette: '#3a1f04',
               auburn: '#a52a2a',
               platinum: '#e5e4e2',
-              // Add more color mappings as needed
             };
 
             const lowerColor = color.toLowerCase();
-            return colorMap[lowerColor] || '#cccccc'; // Default to light gray if no match
+            return colorMap[lowerColor] || '#cccccc';
           };
 
           const colorValue = getColorValue(color);
@@ -567,9 +518,9 @@ function ProductCard({product}) {
                 e.preventDefault();
                 setSelectedVariant(variant);
               }}
-              className={`w-full aspect-square rounded-full cursor-pointer border border-border ${
+              className={`w-6 h-6 md:w-7 md:h-7 rounded-full cursor-pointer border border-border ${
                 selectedVariant.id === id
-                  ? 'ring-2 ring-offset-2 ring-pink-700'
+                  ? 'ring-2 ring-offset-1 ring-pink-700'
                   : ''
               }`}
               style={{backgroundColor: colorValue}}
