@@ -14,17 +14,20 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   const queriesDatalistId = useId();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const {open} = useAside();
 
   return (
     <header className="header sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 w-full">
-        {/* Mobile menu button */}
-        <div className="lg:hidden">
-          <HeaderMenuMobileToggle />
-        </div>
-
-        {/* Logo */}
-        <div className="flex ">
+        {/* Mobile menu button and logo */}
+        <div className="flex items-center gap-4 lg:hidden">
+          <button
+            onClick={() => open('mobile')}
+            className="p-2 rounded-full text-zinc-700 hover:text-pink-700 hover:bg-pink-50 transition-colors duration-200"
+            aria-label="Open menu"
+          >
+            <Menu size={24} />
+          </button>
           <NavLink
             prefetch="intent"
             to="/"
@@ -35,7 +38,24 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             <img
               src={logo}
               alt="Harrel Hair"
-              className="w-28 md:w-32 hover:opacity-80 transition-opacity duration-200"
+              className="w-28 hover:opacity-80 transition-opacity duration-200"
+            />
+          </NavLink>
+        </div>
+
+        {/* Desktop Logo */}
+        <div className="hidden lg:flex">
+          <NavLink
+            prefetch="intent"
+            to="/"
+            style={activeLinkStyle}
+            end
+            className="flex-shrink-0"
+          >
+            <img
+              src={logo}
+              alt="Harrel Hair"
+              className="w-32 hover:opacity-80 transition-opacity duration-200"
             />
           </NavLink>
         </div>
@@ -52,7 +72,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
         {/* Search and CTAs */}
         <div className="flex items-center gap-4 md:gap-6">
-          {/* Search Bar */}
+          {/* Desktop Search Bar - hidden on mobile */}
           <div className="hidden md:block relative">
             <SearchFormPredictive>
               {({fetchResults, goToSearch, inputRef}) => (
@@ -80,7 +100,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
               )}
             </SearchFormPredictive>
 
-            {/* Search Results Dropdown */}
+            {/* Desktop Search Results Dropdown */}
             {isSearchOpen && (
               <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-zinc-200 rounded-xl shadow-xl overflow-hidden z-20">
                 <SearchResultsPredictive>
@@ -181,37 +201,17 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             )}
           </div>
 
-          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
-        </div>
-      </div>
+          {/* Mobile Search Button - opens aside with search */}
+          <button
+            className="md:hidden p-2 rounded-full text-zinc-700 hover:text-pink-700 hover:bg-pink-50 transition-colors"
+            onClick={() => open('search')}
+            aria-label="Search"
+          >
+            <Search size={20} />
+          </button>
 
-      {/* Mobile Search (shown only on mobile) */}
-      <div className="md:hidden px-4 pb-3">
-        <SearchFormPredictive>
-          {({fetchResults, goToSearch, inputRef}) => (
-            <div className="relative">
-              <input
-                autoComplete="off"
-                name="q"
-                onChange={fetchResults}
-                onFocus={() => setIsSearchOpen(true)}
-                onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
-                placeholder="Search..."
-                ref={inputRef}
-                type="text"
-                list={queriesDatalistId}
-                className="border border-zinc-200 px-4 w-full rounded-full h-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              />
-              <button
-                onClick={goToSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-pink-700 transition-colors"
-                aria-label="Search"
-              >
-                <Search size={20} />
-              </button>
-            </div>
-          )}
-        </SearchFormPredictive>
+          {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
+        </div>
       </div>
     </header>
   );
@@ -307,19 +307,6 @@ function HeaderCtas({isLoggedIn, cart}) {
 
       <CartToggle cart={cart} />
     </nav>
-  );
-}
-
-function HeaderMenuMobileToggle() {
-  const {open} = useAside();
-  return (
-    <button
-      onClick={() => open('mobile')}
-      className="p-2 rounded-full text-zinc-700 hover:text-pink-700 hover:bg-pink-50 transition-colors duration-200"
-      aria-label="Open menu"
-    >
-      <Menu size={24} />
-    </button>
   );
 }
 
