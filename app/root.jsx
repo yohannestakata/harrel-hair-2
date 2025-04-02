@@ -147,7 +147,8 @@ function loadDeferredData({context}) {
 }
 
 export const meta = () => {
-  const baseUrl = getServerSideURL();
+  // const baseUrl = getServerSideURL();
+  const baseUrl = 'https://www.harrelhair.com';
 
   return [
     // General

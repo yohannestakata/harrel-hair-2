@@ -127,7 +127,7 @@ export function ProductForm({productOptions, selectedVariant}) {
         <button
           onClick={handleWhatsAppClick}
           disabled={!selectedVariant || !selectedVariant.availableForSale}
-          className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ export function ProductForm({productOptions, selectedVariant}) {
         <button
           onClick={handleInstagramClick}
           disabled={!selectedVariant || !selectedVariant.availableForSale}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-purple-700 to-pink-700 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:from-purple-800 hover:to-pink-800"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -10,6 +10,7 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {useState, useEffect, useRef} from 'react';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -52,20 +53,11 @@ export const meta = ({data}) => {
  * @param {LoaderFunctionArgs} args
  */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return {...deferredData, ...criticalData};
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
@@ -78,7 +70,6 @@ async function loadCriticalData({context, params, request}) {
     storefront.query(PRODUCT_QUERY, {
       variables: {handle, selectedOptions: getSelectedProductOptions(request)},
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
   if (!product?.id) {
@@ -90,48 +81,114 @@ async function loadCriticalData({context, params, request}) {
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
 function loadDeferredData({context, params}) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
-
   return {};
 }
 
-import {useState} from 'react';
-import {useEffect} from 'react';
+function ProductZoomImage({image, className}) {
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({x: 0, y: 0});
+  const [isLoadingHiRes, setIsLoadingHiRes] = useState(false);
+  const [hiResLoaded, setHiResLoaded] = useState(false);
+  const imageRef = useRef(null);
+  const zoomTimeoutRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!imageRef.current) return;
+
+    const {left, top, width, height} = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPosition({x, y});
+
+    // Load hi-res image when mouse moves to new position
+    if (isZoomed && !hiResLoaded && !isLoadingHiRes) {
+      setIsLoadingHiRes(true);
+      const hiResImg = new Image();
+      hiResImg.src = `${image.url}&width=2000`;
+      hiResImg.onload = () => {
+        setHiResLoaded(true);
+        setIsLoadingHiRes(false);
+      };
+    }
+  };
+
+  const handleMouseEnter = () => {
+    zoomTimeoutRef.current = setTimeout(() => {
+      setIsZoomed(true);
+    }, 300); // Small delay before zooming
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(zoomTimeoutRef.current);
+    setIsZoomed(false);
+    setIsLoadingHiRes(false);
+  };
+
+  return (
+    <div
+      className={`relative overflow-hidden ${className}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      ref={imageRef}
+    >
+      <img
+        src={`${image.url}&width=800`} // Medium resolution for initial load
+        alt={image.altText || 'Product Image'}
+        className={`w-full h-full object-contain transition-transform duration-300 ${
+          isZoomed ? 'scale-150' : 'scale-100'
+        }`}
+        style={{
+          transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+        }}
+      />
+      {hiResLoaded && isZoomed && (
+        <img
+          src={`${image.url}&width=2000`} // High resolution when zoomed
+          alt={image.altText || 'Product Image (Zoomed)'}
+          className="absolute inset-0 w-full h-full object-contain scale-150"
+          style={{
+            transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+          }}
+        />
+      )}
+      {isZoomed && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute w-16 h-16 border-2 border-white rounded-full shadow-lg"
+            style={{
+              left: `${zoomPosition.x}%`,
+              top: `${zoomPosition.y}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Product() {
   const {product} = useLoaderData();
-
-  // State to track the currently selected image
   const [selectedImage, setSelectedImage] = useState(
     product.selectedOrFirstAvailableVariant?.image ||
       product.images.edges[0]?.node,
   );
+  const [hoveredThumbnail, setHoveredThumbnail] = useState(null);
 
-  // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product),
   );
 
-  // Update the selected image when the variant changes
   useEffect(() => {
     if (selectedVariant?.image) {
       setSelectedImage(selectedVariant.image);
     }
   }, [selectedVariant]);
 
-  // Sets the search param to the selected variant without navigation
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
-
-  // Get the product options array
   const productOptions = getProductOptions({
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
@@ -139,14 +196,10 @@ export default function Product() {
 
   const {title, descriptionHtml, images, variants} = product;
 
-  // Filter out variant-specific images
   const generalImages = images.edges.filter(({node}) => {
-    // Check if the image is used in any variant
     const isVariantImage = variants.edges.some(({node: variant}) => {
       return variant.image?.id === node.id;
     });
-
-    // Exclude the image if it's used in any variant
     return !isVariantImage;
   });
 
@@ -174,21 +227,49 @@ export default function Product() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-6 p-4 md:p-6 max-w-7xl mx-auto">
+    <div className="flex flex-col lg:flex-row gap-4 md:gap-6 p-4 md:p-6 max-w-7xl mx-auto">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
       />
 
-      {/* Image Gallery - Mobile: Stacked, Desktop: Side by side */}
-      <div className="flex-1 flex flex-col md:flex-row gap-2 md:gap-4">
-        {/* Thumbnails - Mobile: Horizontal scroll, Desktop: Vertical */}
-        <div className="flex flex-row md:flex-col gap-2 md:gap-1 overflow-x-auto md:overflow-x-visible md:w-20 pb-2 md:pb-0">
+      {/* Image Gallery */}
+      <div className="flex-1 flex flex-col md:flex-row-reverse gap-4">
+        {/* Main Image */}
+        <div className="flex-1 aspect-square relative overflow-hidden rounded-lg">
+          <ProductZoomImage image={selectedImage} className="w-full h-full" />
+        </div>
+
+        {/* Thumbnails */}
+        <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:w-20 pb-2 md:pb-0 scrollbar-hide">
           {generalImages.map(({node}) => (
             <button
               key={node.id}
-              onClick={() => setSelectedImage(node)}
-              className="size-16 md:size-20 overflow-hidden border-2 rounded-md cursor-pointer border-transparent hover:border-primary focus:border-primary flex-shrink-0"
+              onClick={() => {
+                setSelectedImage(node);
+                setHoveredThumbnail(null);
+              }}
+              onMouseEnter={() => {
+                setHoveredThumbnail(node.id);
+                setSelectedImage(node);
+              }}
+              onMouseLeave={() => {
+                if (hoveredThumbnail === node.id) {
+                  setHoveredThumbnail(null);
+                  if (selectedVariant?.image) {
+                    setSelectedImage(selectedVariant.image);
+                  } else {
+                    setSelectedImage(product.images.edges[0]?.node);
+                  }
+                }
+              }}
+              className={`size-16 md:size-20 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
+                hoveredThumbnail === node.id
+                  ? 'border-primary shadow-md'
+                  : selectedImage?.id === node.id
+                  ? 'border-gray-300'
+                  : 'border-transparent hover:border-gray-200'
+              }`}
             >
               <img
                 src={node.url}
@@ -198,15 +279,10 @@ export default function Product() {
             </button>
           ))}
         </div>
-
-        {/* Main Image */}
-        <div className="flex-1 aspect-square md:aspect-auto">
-          <ProductImage image={selectedImage} />
-        </div>
       </div>
 
       {/* Product Details */}
-      <div className="flex-1 product-main md:sticky md:top-4 md:self-start">
+      <div className="flex-1 md:sticky md:top-4 md:self-start">
         <h1 className="text-2xl md:text-4xl font-serif mb-2 font-semibold">
           {title}
         </h1>
@@ -287,6 +363,7 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
     }
   }
 `;
+
 const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
@@ -314,7 +391,7 @@ const PRODUCT_FRAGMENT = `#graphql
         }
       }
     }
-    images(first: 10) { # Fetch up to 10 product images
+    images(first: 10) {
       edges {
         node {
           id
@@ -325,7 +402,7 @@ const PRODUCT_FRAGMENT = `#graphql
         }
       }
     }
-    variants(first: 10) { # Fetch up to 10 variants
+    variants(first: 10) {
       edges {
         node {
           id
