@@ -3,32 +3,18 @@ import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {json} from '@shopify/remix-oxygen';
+import {useState} from 'react';
 
-/**
- * @type {MetaFunction<typeof loader>}
- */
 export const meta = () => {
   return [{title: `Harrel Hair | Products`}];
 };
 
-/**
- * @param {LoaderFunctionArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return json({...deferredData, ...criticalData});
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context, request}) {
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
@@ -39,26 +25,17 @@ async function loadCriticalData({context, request}) {
     storefront.query(CATALOG_QUERY, {
       variables: {...paginationVariables},
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
   return {products};
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
 function loadDeferredData({context}) {
   return {};
 }
 
 export default function Collection() {
-  /** @type {LoaderReturnData} */
   const {products} = useLoaderData();
 
-  // Generate structured data for the product collection
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -95,22 +72,31 @@ export default function Collection() {
   };
 
   return (
-    <div className="p-6">
+    <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto">
       {/* Structured data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(structuredData)}}
       />
 
-      <p className="text-2xl font-light font-serif text-zinc-600 italic tracking-tight">
-        Expertly curated
-      </p>
-      <h2 className="text-3xl font-semibold tracking-tight font-serif">
-        Recommended Products
-      </h2>
+      {/* Hero Section - Inspired by collections page */}
+      <div className="text-center mb-12 md:mb-16 lg:mb-20">
+        <p className="text-sm md:text-base uppercase tracking-widest text-pink-600 mb-2">
+          Premium Quality
+        </p>
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium text-gray-900 mb-4 tracking-tight">
+          Our Wig Collection
+        </h1>
+        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+          Discover premium wigs for every style and occasion, crafted to enhance
+          your natural beauty.
+        </p>
+      </div>
+
+      {/* Products Grid - Inspired by product cards from second example */}
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="grid grid-cols-4 gap-3 mt-8"
+        resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-x-5 md:gap-y-10"
       >
         {({node: product, index}) => (
           <ProductItem
@@ -124,32 +110,92 @@ export default function Collection() {
   );
 }
 
-/**
- * @param {{
- *   product: ProductItemFragment;
- *   loading?: 'eager' | 'lazy';
- * }}
- */
 function ProductItem({product, loading}) {
-  const variantUrl = useVariantUrl(product.handle);
+  const [selectedVariant, setSelectedVariant] = useState(
+    product.variants?.nodes[0] || null,
+  );
+
+  const colorOptions =
+    product.variants?.nodes.map((variant) => {
+      const colorOption = variant.selectedOptions.find(
+        (option) => option.name.toLowerCase() === 'color',
+      );
+      return {
+        id: variant.id,
+        color: colorOption ? colorOption.value : variant.title,
+        variant,
+      };
+    }) || [];
+
   return (
-    <Link className="group" key={product.id} prefetch="intent" to={variantUrl}>
-      {product.featuredImage && (
+    <Link className="group" to={`/products/${product.handle}`}>
+      <div className="rounded-2xl aspect-[3/4] overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
         <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="4/5"
-          data={product.featuredImage}
+          data={selectedVariant?.image || product.featuredImage}
+          aspectRatio="3/4"
+          sizes="(min-width: 45em) 20vw, 50vw"
+          className="h-full w-full group-hover:scale-105 duration-500 object-cover"
           loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
         />
+      </div>
+
+      <div className="mt-3 md:mt-4">
+        <h4 className="text-sm md:text-base group-hover:text-pink-700 group-hover:underline underline-offset-4 uppercase">
+          {product.title}
+        </h4>
+        <Money
+          data={selectedVariant?.price || product.priceRange.minVariantPrice}
+          className="text-base md:text-lg italic mt-1 text-zinc-700"
+        />
+      </div>
+
+      {colorOptions.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4 justify-start">
+          {colorOptions.slice(0, 9).map(({id, color, variant}) => {
+            const getColorValue = (colorName) => {
+              const colorMap = {
+                black: '#000000',
+                white: '#ffffff',
+                red: '#ff0000',
+                blue: '#0000ff',
+                green: '#008000',
+                yellow: '#ffff00',
+                purple: '#800080',
+                pink: '#ffc0cb',
+                brown: '#a52a2a',
+                gray: '#808080',
+                blonde: '#faf0be',
+                brunette: '#3a1f04',
+                auburn: '#a52a2a',
+                platinum: '#e5e4e2',
+              };
+
+              const lowerColor = color.toLowerCase();
+              return colorMap[lowerColor] || '#cccccc';
+            };
+
+            const colorValue = getColorValue(color);
+
+            return (
+              <button
+                key={id}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedVariant(variant);
+                }}
+                className={`w-6 h-6 md:w-7 md:h-7 rounded-full cursor-pointer border border-zinc-200 ${
+                  selectedVariant?.id === id
+                    ? 'ring-2 ring-offset-1 ring-pink-700'
+                    : ''
+                }`}
+                style={{backgroundColor: colorValue}}
+                title={color}
+                aria-label={`Color option: ${color}`}
+              />
+            );
+          })}
+        </div>
       )}
-      <h4 className="mt-2 group-hover:underline underline-offset-4">
-        {product.title}
-      </h4>
-      <Money
-        data={product.priceRange.minVariantPrice}
-        className="font-semibold mt-1"
-      />
     </Link>
   );
 }
@@ -179,10 +225,31 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
+    variants(first: 10) {
+      nodes {
+        id
+        title
+        availableForSale
+        selectedOptions {
+          name
+          value
+        }
+        price {
+          amount
+          currencyCode
+        }
+        image {
+          id
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
   }
 `;
 
-// NOTE: https://shopify.dev/docs/api/storefront/2024-01/objects/product
 const CATALOG_QUERY = `#graphql
   query Catalog(
     $country: CountryCode
@@ -206,8 +273,3 @@ const CATALOG_QUERY = `#graphql
   }
   ${PRODUCT_ITEM_FRAGMENT}
 `;
-
-/** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
-/** @template T @typedef {import('@remix-run/react').MetaFunction<T>} MetaFunction */
-/** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
-/** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */

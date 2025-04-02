@@ -59,7 +59,7 @@ export default function Collections() {
         <p className="text-sm md:text-base uppercase tracking-widest text-pink-600 mb-2">
           Curated Selections
         </p>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium text-gray-900 mb-4">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium text-gray-900 mb-4 tracking-tight">
           Explore Our Collections
         </h1>
         <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -71,7 +71,7 @@ export default function Collections() {
       {/* Collections Grid */}
       <PaginatedResourceSection
         connection={collections}
-        resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
+        resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5 md:gap-8"
       >
         {({node: collection, index}) => (
           <CollectionItem

@@ -47,7 +47,7 @@ const AboutUs = () => {
   return (
     <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-foreground">
       {/* Hero Header */}
-      <div className="pb-8 md:pb-12 lg:pb-16">
+      <div className="pb-8 md:pb-12 lg:pb-16 mt-8">
         <header className="aspect-[16/9] md:aspect-[21/9] bg-foreground relative rounded-lg overflow-hidden">
           <img
             src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/tim-mossholder-ArQIWcmOlA8-unsplash.jpg?v=1740118267"
@@ -55,9 +55,9 @@ const AboutUs = () => {
             className="h-full w-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/90" />
           <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 lg:bottom-12 lg:left-12 w-full max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-medium text-white leading-none">
               Your Destination for Premium Wigs and Unmatched Style
             </h1>
           </div>

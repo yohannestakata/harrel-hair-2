@@ -45,74 +45,104 @@ export default function Collection() {
 
   return (
     <div className="collection pt-4 p-8 max-w-7xl mx-auto">
-      <h1 className="text-6xl font-serif">{collection.title}</h1>
-      <p className="collection-description text-zinc-700 mt-4">
-        {collection.description}
-      </p>
-      <div className="grid grid-cols-4 gap-3 mt-8">
+      <h1 className="text-4xl md:text-6xl font-serif text-center">
+        {collection.title}
+      </h1>
+      {collection.description && (
+        <p className="collection-description text-zinc-700 mt-4 text-center max-w-2xl mx-auto">
+          {collection.description}
+        </p>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
         {collection.products.nodes.map((product) => (
-          <ProductItem key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>
   );
 }
 
-/**
- * @param {{
- *   product: ProductItemFragment;
- * }}
- */
-function ProductItem({product}) {
+function ProductCard({product}) {
   const [selectedVariant, setSelectedVariant] = useState(
     product.variants.nodes[0],
   );
 
+  const colorOptions = product.variants.nodes.map((variant) => {
+    const colorOption = variant.selectedOptions.find(
+      (option) => option.name.toLowerCase() === 'color',
+    );
+    return {
+      id: variant.id,
+      color: colorOption ? colorOption.value : variant.title,
+      variant,
+    };
+  });
+
   return (
-    <div className="group">
-      <Link
-        className="product-item"
-        key={product.id}
-        prefetch="intent"
-        to={`/products/${product.handle}`}
-      >
-        {selectedVariant?.image && (
-          <Image
-            alt={selectedVariant.image.altText || product.title}
-            aspectRatio="4/5"
-            data={selectedVariant.image}
-            sizes="(min-width: 45em) 400px, 100vw"
-            className="h-full w-full group-hover:scale-105 duration-200 object-cover"
-          />
-        )}
-        <h4 className="text-center text-balace font-semibold mt-4 group-hover:underline underline-offset-4 text-sm">
-          {product.title}
-        </h4>
-        <Money
-          data={selectedVariant.price}
-          className="mt-1 text-muted-foreground text-sm text-center w-full font-bold"
+    <Link className="group" to={`/products/${product.handle}`}>
+      <div className="rounded-2xl aspect-[3/4] overflow-hidden">
+        <Image
+          data={selectedVariant.image || product.images.nodes[0]}
+          aspectRatio="3/4"
+          sizes="(min-width: 45em) 20vw, 50vw"
+          className="h-full w-full group-hover:scale-105 duration-200 object-cover"
         />
-      </Link>
-      <div className="flex justify-center gap-2">
-        {product.variants.nodes.length > 1 &&
-          product.variants.nodes.map((variant) => (
-            <button
-              key={variant.id}
-              onClick={(e) => {
-                e.preventDefault();
-                setSelectedVariant(variant);
-              }}
-              className={`px-2 mt-4 py-1 text-xs border border-border rounded-md cursor-pointer ${
-                selectedVariant.id === variant.id
-                  ? 'bg-black text-white'
-                  : 'bg-white text-black'
-              }`}
-            >
-              {variant.title}
-            </button>
-          ))}
       </div>
-    </div>
+      <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-zinc-950 group-hover:underline underline-offset-4 uppercase ">
+        {product.title}
+      </h4>
+      <Money
+        data={selectedVariant.price}
+        className="text-base md:text-lg italic mt-1 text-zinc-700 block"
+      />
+      {colorOptions.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4 justify-start">
+          {colorOptions.slice(0, 9).map(({id, color, variant}) => {
+            const getColorValue = (colorName) => {
+              const colorMap = {
+                black: '#000000',
+                white: '#ffffff',
+                red: '#ff0000',
+                blue: '#0000ff',
+                green: '#008000',
+                yellow: '#ffff00',
+                purple: '#800080',
+                pink: '#ffc0cb',
+                brown: '#a52a2a',
+                gray: '#808080',
+                blonde: '#faf0be',
+                brunette: '#3a1f04',
+                auburn: '#a52a2a',
+                platinum: '#e5e4e2',
+              };
+
+              const lowerColor = color.toLowerCase();
+              return colorMap[lowerColor] || '#cccccc';
+            };
+
+            const colorValue = getColorValue(color);
+
+            return (
+              <button
+                key={id}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedVariant(variant);
+                }}
+                className={`w-6 h-6 md:w-7 md:h-7 rounded-full cursor-pointer border border-border ${
+                  selectedVariant.id === id
+                    ? 'ring-2 ring-offset-1 ring-pink-700'
+                    : ''
+                }`}
+                style={{backgroundColor: colorValue}}
+                title={color}
+                aria-label={`Color option: ${color}`}
+              />
+            );
+          })}
+        </div>
+      )}
+    </Link>
   );
 }
 
@@ -125,6 +155,15 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    images(first: 1) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     variants(first: 10) {
       nodes {
         id

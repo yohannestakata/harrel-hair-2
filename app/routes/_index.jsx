@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import {useState} from 'react';
 import {ParallaxBanner, ParallaxBannerLayer} from 'react-scroll-parallax';
+import {motion} from 'motion/react';
 
 /**
  * @type {MetaFunction}
@@ -140,7 +141,7 @@ function FAQ() {
                 className="border-b border-zinc-200 py-4 md:py-6"
               >
                 <button
-                  className="text-base md:text-lg font-medium cursor-pointer w-full text-left flex items-center"
+                  className="text-base md:text-lg font-medium cursor-pointer w-full text-left flex items-center hover:text-primary transition-colors duration-200"
                   onClick={() =>
                     setSelectedFaq((prev) =>
                       prev === faq.question ? null : faq.question,
@@ -148,17 +149,30 @@ function FAQ() {
                   }
                 >
                   <span className="flex-1">{faq.question}</span>
-                  {selectedFaq === faq.question ? (
-                    <ChevronUp className="ml-2" />
-                  ) : (
-                    <ChevronDown className="ml-2" />
-                  )}
+                  <span className="ml-2 transition-transform duration-300">
+                    {selectedFaq === faq.question ? (
+                      <ChevronUp className="w-5 h-5" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" />
+                    )}
+                  </span>
                 </button>
-                {selectedFaq === faq.question && (
-                  <p className="text-zinc-700 mt-2 md:mt-4 text-sm md:text-base">
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: selectedFaq === faq.question ? 'auto' : 0,
+                    opacity: selectedFaq === faq.question ? 1 : 0,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.04, 0.62, 0.23, 0.98],
+                  }}
+                  className="overflow-hidden"
+                >
+                  <p className="text-zinc-700 pt-2 md:pt-4 text-sm md:text-base">
                     {faq.answer}
                   </p>
-                )}
+                </motion.div>
               </div>
             ))}
           </div>
@@ -485,7 +499,7 @@ function ProductCard({product}) {
         data={selectedVariant.price}
         className="text-base md:text-lg italic mt-1 text-zinc-700"
       />
-      <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
+      <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4 justify-start">
         {colorOptions.slice(0, 9).map(({id, color, variant}) => {
           const getColorValue = (colorName) => {
             const colorMap = {
