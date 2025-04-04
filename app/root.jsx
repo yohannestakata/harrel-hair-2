@@ -15,7 +15,6 @@ import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {ParallaxProvider} from 'react-scroll-parallax';
-import {getServerSideURL} from './utils/getUrls';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -47,7 +46,7 @@ export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
  * https://github.com/remix-run/remix/issues/9242
  */
 export function links() {
-  const baseUrl = getServerSideURL();
+  const baseUrl = 'https://www.harrelhair.com/';
 
   return [
     {
