@@ -69,7 +69,10 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
   return (
     <>
-      <header className="header bg-zinc-900 text-zinc-50 sticky top-0 z-50 backdrop-blur-md border-b border-zinc-700 shadow-sm">
+      <header
+        className="header bg-zinc-900 text-zinc-50 sticky top-0 z-50 backdrop-blur-md border-b border-zinc-700 shadow-sm"
+        style={{zIndex: 100}}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 w-full">
           {/* Mobile menu button and logo */}
           <div className="flex items-center gap-4 lg:hidden">
