@@ -31,19 +31,19 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                   <div className="flex space-x-4">
                     <a
                       href="#"
-                      className="text-zinc-400 hover:text-pink-400 transition-colors"
+                      className="text-zinc-400 hover:text-pink-600 transition-colors"
                     >
                       <Instagram size={20} />
                     </a>
                     <a
                       href="#"
-                      className="text-zinc-400 hover:text-pink-400 transition-colors"
+                      className="text-zinc-400 hover:text-pink-600 transition-colors"
                     >
                       <Facebook size={20} />
                     </a>
                     <a
                       href="#"
-                      className="text-zinc-400 hover:text-pink-400 transition-colors"
+                      className="text-zinc-400 hover:text-pink-600 transition-colors"
                     >
                       <Twitter size={20} />
                     </a>
@@ -67,7 +67,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
                       <Mail
-                        className="flex-shrink-0 mt-1 text-pink-400"
+                        className="flex-shrink-0 mt-1 text-pink-600"
                         size={18}
                       />
                       <a
@@ -79,7 +79,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                     </div>
                     <div className="flex items-start space-x-3">
                       <Phone
-                        className="flex-shrink-0 mt-1 text-pink-400"
+                        className="flex-shrink-0 mt-1 text-pink-600"
                         size={18}
                       />
                       <a
@@ -90,7 +90,9 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                       </a>
                     </div>
                   </div>
-                  <div className="pt-4">
+
+                  {/* Uncomment when newsletter ready */}
+                  {/* <div className="pt-4">
                     <h4 className="text-sm font-medium text-white mb-2">
                       Newsletter
                     </h4>
@@ -107,7 +109,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                         Join
                       </button>
                     </form>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Quick Links */}
@@ -227,7 +229,7 @@ function FooterMenu({menu, primaryDomainUrl, publicStoreDomain}) {
               className={({isActive}) =>
                 `transition-colors ${
                   isActive
-                    ? 'text-pink-400 font-medium'
+                    ? 'text-pink-600 font-medium'
                     : 'text-zinc-400 hover:text-white'
                 }`
               }
