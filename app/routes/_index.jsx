@@ -1,10 +1,19 @@
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-import {ChevronDown, ChevronUp, RefreshCw, Truck, User2} from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronUp,
+  ChevronRight,
+  RefreshCw,
+  Truck,
+  User2,
+} from 'lucide-react';
 import {useState} from 'react';
 import {ParallaxBanner, ParallaxBannerLayer} from 'react-scroll-parallax';
 import {motion} from 'motion/react';
+import {useRef} from 'react';
 
 /**
  * @param {LoaderFunctionArgs} args
@@ -117,7 +126,7 @@ function FAQ() {
           />
         </div>
         <div className="lg:flex-1 order-1 lg:order-2 py-12 md:py-20 px-5 md:px-8 2xl:px-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif  text-center">
             FAQs
           </h2>
           <div className="mt-8">
@@ -178,7 +187,7 @@ function PromoBar() {
           strokeWidth={1}
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             Free shipping
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -194,7 +203,7 @@ function PromoBar() {
           color="#c6005c"
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             Guaranteed Success
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -210,7 +219,7 @@ function PromoBar() {
           color="#c6005c"
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             30-Day returns
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -289,14 +298,15 @@ function FirstFeaturedCollection({collection}) {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 md:via-black/40 md:to-transparent to-black/60" />
       <div className="relative h-full flex items-center justify-center lg:justify-end 2xl:max-w-7xl mx-auto px-4 md:px-8">
         <div className="w-full max-w-md 2xl:mr-0">
           <div className="flex flex-col items-center gap-4 lg:pr-8">
+            {/* Hide on mobile, show on md and up */}
             {products.slice(0, 1).map((product) => (
               <div
                 key={product.id}
-                className="w-full aspect-[4/5] rounded-2xl overflow-hidden"
+                className="hidden md:block w-full aspect-[4/5] rounded-2xl overflow-hidden"
               >
                 {product.images.nodes[0] && (
                   <Image
@@ -309,7 +319,7 @@ function FirstFeaturedCollection({collection}) {
             ))}
 
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl font-serif ">
                 {collection.title}
               </h1>
               {collection.description && (
@@ -355,14 +365,15 @@ function SecondFeaturedCollection({collection}) {
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 md:via-black/40 md:to-transparent to-black/60" />
       <div className="relative h-full flex items-center justify-center lg:justify-start mx-auto 2xl:max-w-7xl px-4 md:px-8">
         <div className="w-full max-w-md xl:max-w-lg 2xl:ml-0">
           <div className="flex flex-col items-center gap-4 lg:ml-8">
+            {/* Hide on mobile, show on md and up */}
             {products.slice(0, 1).map((product) => (
               <div
                 key={product.id}
-                className="w-full aspect-[4/5] rounded-2xl overflow-hidden"
+                className="hidden md:block w-full aspect-[4/5] rounded-2xl overflow-hidden"
               >
                 {product.images.nodes[0] && (
                   <Image
@@ -375,7 +386,7 @@ function SecondFeaturedCollection({collection}) {
             ))}
 
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl font-serif ">
                 {collection.title}
               </h1>
               {collection.description && (
@@ -400,51 +411,31 @@ function SecondFeaturedCollection({collection}) {
 
 function RecommendedProducts({products}) {
   return (
-    <div className="px-4 md:px-8 max-w-7xl mx-auto pt-12 md:pt-20">
-      <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <>
-              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
-                Newest Products
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8 mt-8 md:mt-10">
-                {response
-                  ? response.recommendedProducts.nodes.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))
-                  : null}
-              </div>
-            </>
-          )}
-        </Await>
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+      <Await resolve={products}>
+        {(response) => (
+          <ProductCarousel
+            products={response?.recommendedProducts?.nodes || []}
+            title="Newest Products"
+          />
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
 function PopularProducts({products}) {
   return (
-    <div className="px-4 md:px-8 max-w-7xl mx-auto pt-12 md:pt-20">
-      <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <>
-              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
-                Most Popular
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8 mt-8 md:mt-10">
-                {response
-                  ? response.bestSellingProducts.nodes.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))
-                  : null}
-              </div>
-            </>
-          )}
-        </Await>
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+      <Await resolve={products}>
+        {(response) => (
+          <ProductCarousel
+            products={response?.bestSellingProducts?.nodes || []}
+            title="Most Popular"
+          />
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
@@ -482,6 +473,84 @@ function ProductCard({product}) {
         className="text-base md:text-lg italic mt-1 text-pink-600"
       />
     </Link>
+  );
+}
+
+function ProductCarousel({products, title}) {
+  const carouselRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({
+        left: -300,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({
+        left: 300,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  return (
+    <div className="px-4 md:px-8 max-w-7xl mx-auto pt-12 md:pt-20">
+      <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif">
+        {title}
+      </h2>
+
+      <div className="relative mt-8 md:mt-10">
+        {/* Mobile carousel */}
+        <div className="md:hidden relative">
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <div
+            ref={carouselRef}
+            className="flex overflow-x-auto scroll-snap-x-mandatory scrollbar-hide space-x-4 py-2"
+            style={{
+              scrollSnapType: 'x mandatory',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+            }}
+          >
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="flex-shrink-0 w-3/4 scroll-snap-align-start"
+                style={{flex: '0 0 75%'}}
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Desktop grid */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
