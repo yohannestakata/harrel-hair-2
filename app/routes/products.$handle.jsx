@@ -227,102 +227,104 @@ export default function Product() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 md:gap-6 p-4 md:p-6 max-w-7xl mx-auto">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
-      />
-
-      {/* Image Gallery */}
-      <div className="flex-1 flex flex-col md:flex-row-reverse gap-4">
-        {/* Main Image */}
-        <div className="flex-1 aspect-square relative overflow-hidden rounded-lg">
-          <ProductZoomImage image={selectedImage} className="w-full h-full" />
-        </div>
-
-        {/* Thumbnails */}
-        <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:w-20 pb-2 md:pb-0 scrollbar-hide">
-          {generalImages.map(({node}) => (
-            <button
-              key={node.id}
-              onClick={() => {
-                setSelectedImage(node);
-                setHoveredThumbnail(null);
-              }}
-              onMouseEnter={() => {
-                setHoveredThumbnail(node.id);
-                setSelectedImage(node);
-              }}
-              onMouseLeave={() => {
-                if (hoveredThumbnail === node.id) {
-                  setHoveredThumbnail(null);
-                  if (selectedVariant?.image) {
-                    setSelectedImage(selectedVariant.image);
-                  } else {
-                    setSelectedImage(product.images.edges[0]?.node);
-                  }
-                }
-              }}
-              className={`size-16 md:size-20 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
-                hoveredThumbnail === node.id
-                  ? 'border-primary shadow-md'
-                  : selectedImage?.id === node.id
-                  ? 'border-gray-300'
-                  : 'border-transparent hover:border-gray-200'
-              }`}
-            >
-              <img
-                src={node.url}
-                alt={node.altText || 'Product Image'}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Product Details */}
-      <div className="flex-1 md:sticky md:top-4 md:self-start">
-        <h1 className="text-2xl md:text-4xl font-serif mb-2 font-semibold">
-          {title}
-        </h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-          className="text-lg md:text-xl"
+    <div className="bg-zinc-900 min-h-screen">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-8 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
         />
 
-        <div className="mt-4 md:mt-8">
-          <p className="font-medium">Description</p>
-          <div className="mt-2 text-zinc-700 text-sm md:text-base">
-            <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+        {/* Image Gallery */}
+        <div className="flex-1 flex flex-col md:flex-row-reverse gap-4 md:gap-6">
+          {/* Main Image */}
+          <div className="flex-1 aspect-square relative overflow-hidden rounded-lg bg-zinc-800">
+            <ProductZoomImage image={selectedImage} className="w-full h-full" />
+          </div>
+
+          {/* Thumbnails */}
+          <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-x-visible md:w-24 pb-2 md:pb-0 scrollbar-hide">
+            {generalImages.map(({node}) => (
+              <button
+                key={node.id}
+                onClick={() => {
+                  setSelectedImage(node);
+                  setHoveredThumbnail(null);
+                }}
+                onMouseEnter={() => {
+                  setHoveredThumbnail(node.id);
+                  setSelectedImage(node);
+                }}
+                onMouseLeave={() => {
+                  if (hoveredThumbnail === node.id) {
+                    setHoveredThumbnail(null);
+                    if (selectedVariant?.image) {
+                      setSelectedImage(selectedVariant.image);
+                    } else {
+                      setSelectedImage(product.images.edges[0]?.node);
+                    }
+                  }
+                }}
+                className={`size-20 md:size-24 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
+                  hoveredThumbnail === node.id
+                    ? 'border-pink-600 shadow-md'
+                    : selectedImage?.id === node.id
+                    ? 'border-zinc-500'
+                    : 'border-transparent hover:border-zinc-600'
+                }`}
+              >
+                <img
+                  src={node.url}
+                  alt={node.altText || 'Product Image'}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="mt-6 md:mt-8">
-          <ProductForm
-            productOptions={productOptions}
-            selectedVariant={selectedVariant}
+        {/* Product Details */}
+        <div className="flex-1 md:sticky md:top-8 md:self-start text-zinc-50">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4 font-medium">
+            {title}
+          </h1>
+          <ProductPrice
+            price={selectedVariant?.price}
+            compareAtPrice={selectedVariant?.compareAtPrice}
+            className="text-xl md:text-2xl text-pink-600"
           />
-        </div>
-      </div>
 
-      {/* Analytics */}
-      <Analytics.ProductView
-        data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: selectedVariant?.price.amount || '0',
-              vendor: product.vendor,
-              variantId: selectedVariant?.id || '',
-              variantTitle: selectedVariant?.title || '',
-              quantity: 1,
-            },
-          ],
-        }}
-      />
+          <div className="mt-6 md:mt-8">
+            <p className="font-medium text-lg">Description</p>
+            <div className="mt-3 text-zinc-300 text-base md:text-lg">
+              <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+            </div>
+          </div>
+
+          <div className="mt-8 md:mt-10">
+            <ProductForm
+              productOptions={productOptions}
+              selectedVariant={selectedVariant}
+            />
+          </div>
+        </div>
+
+        {/* Analytics */}
+        <Analytics.ProductView
+          data={{
+            products: [
+              {
+                id: product.id,
+                title: product.title,
+                price: selectedVariant?.price.amount || '0',
+                vendor: product.vendor,
+                variantId: selectedVariant?.id || '',
+                variantTitle: selectedVariant?.title || '',
+                quantity: 1,
+              },
+            ],
+          }}
+        />
+      </div>
     </div>
   );
 }

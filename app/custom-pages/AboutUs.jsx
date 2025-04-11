@@ -59,10 +59,10 @@ const AboutUs = () => {
   const [selectedFaq, setSelectedFaq] = useState(null);
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-foreground">
+    <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-zinc-900 text-zinc-50 min-h-screen">
       {/* Hero Header */}
-      <div className="pb-8 md:pb-12 lg:pb-16 mt-8">
-        <header className="aspect-[16/9] md:aspect-[21/9] bg-foreground relative rounded-lg overflow-hidden">
+      <div className="pb-8 md:pb-12 lg:pb-16 pt-8">
+        <header className="aspect-[16/9] md:aspect-[21/9] relative rounded-lg overflow-hidden">
           <img
             src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/tim-mossholder-ArQIWcmOlA8-unsplash.jpg?v=1740118267"
             alt="Harrel Hair premium wigs"
@@ -80,7 +80,7 @@ const AboutUs = () => {
 
       {/* About Section */}
       <section className="py-8 md:py-12 lg:py-16">
-        <p className="text-center text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
+        <p className="text-center text-lg md:text-xl lg:text-2xl text-zinc-300 leading-relaxed max-w-4xl mx-auto">
           At Harrel Hair, we believe that everyone deserves to feel confident
           and beautiful. Our journey began with a passion for helping people
           express their unique style and regain their confidence through
@@ -114,7 +114,7 @@ const AboutUs = () => {
               <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-medium mt-2 mb-4">
                 Quality You Can Trust
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-zinc-400 leading-relaxed">
                 We handpick every wig in our collection to ensure the highest
                 quality. From 100% human hair to lightweight synthetic options,
                 our wigs are designed to look and feel natural. Each piece is
@@ -141,7 +141,7 @@ const AboutUs = () => {
               <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-medium mt-2 mb-4">
                 Personalized Support
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-zinc-400 leading-relaxed">
                 Choosing the perfect wig can be overwhelming, but we're here to
                 help. Our team of wig experts is dedicated to guiding you every
                 step of the way. From selecting the right style to providing
@@ -168,7 +168,7 @@ const AboutUs = () => {
               <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-medium mt-2 mb-4">
                 Empowering Confidence
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-zinc-400 leading-relaxed">
                 Our mission is to empower individuals to express their unique
                 style and regain their confidence. We offer a diverse range of
                 wigs that cater to all hair types, textures, and lifestyles.
@@ -189,7 +189,7 @@ const AboutUs = () => {
           {galleryImages.map((image) => (
             <div
               key={image}
-              className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 hover:ring-2 hover:ring-pink-600"
             >
               <img
                 src={image}
@@ -204,11 +204,11 @@ const AboutUs = () => {
 
       {/* CTA Section */}
       <section className="py-8 md:py-12 lg:py-16">
-        <div className="bg-gradient-to-r from-pink-50 to-pink-100 rounded-2xl p-8 md:p-12 lg:p-16 text-center">
+        <div className="bg-gradient-to-r from-zinc-800 to-zinc-700 rounded-2xl p-8 md:p-12 lg:p-16 text-center border border-zinc-700">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-medium mb-4 md:mb-6">
             Find Your Perfect Wig Today
           </h2>
-          <p className="text-gray-700 max-w-2xl mx-auto mb-6 md:mb-8">
+          <p className="text-zinc-300 max-w-2xl mx-auto mb-6 md:mb-8">
             Ready to transform your look? Explore our collection of premium wigs
             and discover the perfect style for you. With fast shipping,
             hassle-free returns, and exceptional customer service, your journey
@@ -232,10 +232,10 @@ const AboutUs = () => {
           {faqs.map((faq) => (
             <div
               key={faq.question}
-              className="border-b border-gray-200 py-4 md:py-6"
+              className="border-b border-zinc-700 py-4 md:py-6"
             >
               <button
-                className="w-full flex justify-between items-center text-left text-lg md:text-xl font-medium text-gray-900 hover:text-pink-600 transition-colors duration-200"
+                className="w-full flex justify-between items-center text-left text-lg md:text-xl font-medium text-zinc-50 hover:text-pink-600 transition-colors duration-200"
                 onClick={() =>
                   setSelectedFaq(
                     selectedFaq === faq.question ? null : faq.question,
@@ -246,11 +246,11 @@ const AboutUs = () => {
                 {selectedFaq === faq.question ? (
                   <ChevronUp className="h-5 w-5 text-pink-600" />
                 ) : (
-                  <ChevronDown className="h-5 w-5 text-gray-500" />
+                  <ChevronDown className="h-5 w-5 text-zinc-400" />
                 )}
               </button>
               {selectedFaq === faq.question && (
-                <p className="mt-3 text-gray-600 leading-relaxed">
+                <p className="mt-3 text-zinc-400 leading-relaxed">
                   {faq.answer}
                 </p>
               )}

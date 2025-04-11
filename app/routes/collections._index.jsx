@@ -85,16 +85,16 @@ export default function Collections() {
   const {collections} = useLoaderData();
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto">
+    <div className="px-4 sm:px-6 lg:px-8 py-12 max-w-7xl mx-auto bg-zinc-900 min-h-screen">
       {/* Hero Section */}
       <div className="text-center mb-12 md:mb-16 lg:mb-20">
         <p className="text-sm md:text-base uppercase tracking-widest text-pink-600 mb-2">
           Curated Selections
         </p>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium text-gray-900 mb-4 tracking-tight">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium text-zinc-50 mb-4 tracking-tight">
           Explore Our Collections
         </h1>
-        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto">
           Discover premium wigs for every style and occasion, crafted to enhance
           your natural beauty.
         </p>
@@ -126,7 +126,7 @@ export default function Collections() {
 function CollectionItem({collection, index}) {
   return (
     <Link
-      className="group relative block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+      className="group relative block overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:ring-2 hover:ring-pink-600"
       to={`/collections/${collection.handle}`}
       prefetch="intent"
     >
@@ -145,18 +145,18 @@ function CollectionItem({collection, index}) {
       )}
 
       {/* Overlay with collection title */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end p-4">
         <div>
           <h3 className="text-white text-2xl md:text-3xl font-medium group-hover:underline underline-offset-4">
             {collection.title}
           </h3>
-          <p className="text-pink-200 text-sm mt-1">Shop Now →</p>
+          <p className="text-pink-300 text-sm mt-1">Shop Now →</p>
         </div>
       </div>
 
       {/* Optional: Display product count or price range if available */}
       {collection.productsCount && (
-        <span className="absolute top-3 right-3 bg-white/90 text-xs px-2 py-1 rounded-full">
+        <span className="absolute top-3 right-3 bg-zinc-800/90 text-zinc-50 text-xs px-2 py-1 rounded-full">
           {collection.productsCount} styles
         </span>
       )}
