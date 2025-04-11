@@ -16,9 +16,9 @@ import {motion} from 'motion/react';
 /**
  * @type {MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Harrel Hair | Home'}];
-};
+// export const meta = () => {
+//   return [{title: 'Harrel Hair | Home'}];
+// };
 
 /**
  * @param {LoaderFunctionArgs} args

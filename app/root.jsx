@@ -151,9 +151,6 @@ function loadDeferredData({context}) {
 }
 
 export const meta = () => {
-  // const baseUrl = getServerSideURL();
-  const baseUrl = 'https://www.harrelhair.com';
-
   return [
     // General
     {
@@ -164,11 +161,6 @@ export const meta = () => {
       name: 'description',
       content:
         "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
-    },
-    {
-      name: 'keywords',
-      content:
-        'Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair',
     },
     // Open Graph
     {
@@ -182,20 +174,7 @@ export const meta = () => {
         "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
     },
 
-    {property: 'og:type', content: 'website'},
-    {
-      property: 'og:siteName',
-      content: 'Harrel Hair',
-    },
-    {property: 'og:url', content: baseUrl},
-    {property: 'og:image', content: `${baseUrl}/og-image.jpg`},
-    {
-      property: 'og:locale',
-      content: 'en_US',
-    },
-
     // Twitter Card
-    {name: 'twitter:card', content: 'summary_large_image'},
     {
       name: 'twitter:title',
       content:
@@ -206,13 +185,8 @@ export const meta = () => {
       content:
         "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
     },
-    {
-      name: 'twitter:image',
-      content: `${baseUrl}/og-image.jpg`,
-    },
   ];
 };
-
 /**
  * @param {{children?: React.ReactNode}}
  */
@@ -261,18 +235,35 @@ export function Layout({children}) {
     foundingDate: '2025',
   };
 
+  const baseUrl = 'https://www.harrelhair.com';
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <Meta />
+        <meta
+          name="keywords"
+          content="Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair"
+        />
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Harrel Hair" />
+        <meta property="og:url" content={baseUrl} />
+        <meta property="og:image" content={`${baseUrl}/og-image.jpg`} />
+        <meta property="og:locale" content="en_US" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={`${baseUrl}/og-image.jpg`} />
+
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         {/* Structured Data */}
         <script type="application/ld+json" id="organization_schema">
           {JSON.stringify(organizationSchema)}
         </script>
-        <Meta />
         <Links />
       </head>
       <body>
