@@ -71,13 +71,13 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   }, []);
 
   return (
-    <header className="header sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-sm">
+    <header className="header bg-zinc-900 text-zinc-50 sticky top-0 z-50 backdrop-blur-md border-b border-zinc-700 shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 w-full">
         {/* Mobile menu button and logo */}
         <div className="flex items-center gap-4 lg:hidden">
           <button
             onClick={() => open('mobile')}
-            className="p-2 rounded-full text-zinc-700 hover:text-pink-700 hover:bg-pink-50 transition-colors duration-200"
+            className="p-2 rounded-full text-zinc-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200"
             aria-label="Open menu"
           >
             <Menu size={24} />
@@ -125,9 +125,9 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         </div>
 
         {/* Search and CTAs */}
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-4 md:gap-6 rounded-full">
           {/* Search Bar - both mobile and desktop */}
-          <div className="relative">
+          <div className="relative rounded-full ">
             <SearchFormPredictive>
               {({fetchResults, goToSearch, inputRef}) => (
                 <div className="relative">
@@ -142,11 +142,11 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                     type="text"
                     value={searchTerm}
                     list={queriesDatalistId}
-                    className="border border-zinc-200 pl-4 pr-10 w-40 lg:w-64 rounded-full h-9 lg:h-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-sm lg:text-base"
+                    className="border border-zinc-200 pl-4 pr-10 w-40 lg:w-64 rounded-full h-9 lg:h-10 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-sm lg:text-base bg-zinc-900"
                   />
                   <button
                     onClick={goToSearch}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-pink-700 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-pink-600 cursor-pointer transition-colors"
                     aria-label="Search"
                   >
                     <Search size={18} />
@@ -158,7 +158,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             {/* Search Results Dropdown */}
             {isSearchOpen && searchTerm.trim() && (
               <div
-                className={`absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 lg:w-80 xl:w-96 bg-white border border-zinc-200 rounded-xl shadow-xl overflow-hidden z-20`}
+                className={`absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 lg:w-80 xl:w-96 bg-zinc-900 border border-zinc-200 rounded-xl shadow-xl overflow-hidden z-20 `}
               >
                 <SearchResultsPredictive>
                   {({items, total, term, state, closeSearch}) => {
@@ -313,8 +313,8 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
         className={({isActive}) =>
           `flex items-center gap-1 px-3 h-full justify-center font-medium rounded-md transition-colors duration-200 ${
             isActive
-              ? 'text-pink-700 bg-pink-50'
-              : 'text-zinc-700 hover:text-pink-700 hover:bg-pink-50'
+              ? 'text-zinc-950 bg-pink-600'
+              : 'text-zinc-50 hover:text-zinc-950 hover:bg-pink-600'
           }`
         }
         prefetch="intent"
@@ -330,7 +330,7 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
 
       {isOpen && (
         <div
-          className="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg z-10 border border-zinc-100"
+          className="absolute left-0 mt-2 w-56  rounded-md shadow-lg z-10 border border-zinc-700 bg-zinc-900"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -344,7 +344,7 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
                 <Link
                   key={collection.id}
                   to={`/collections/${collection.handle}`}
-                  className="block px-4 py-2 text-sm text-zinc-700 hover:bg-pink-50 hover:text-pink-700 transition-colors duration-200"
+                  className="block px-4 py-2 text-sm hover:bg-pink-600 hover:text-zinc-950 transition-colors duration-200"
                   prefetch="intent"
                   onClick={close}
                 >
@@ -401,8 +401,8 @@ export function HeaderMenu({
                   : 'px-3 h-full justify-center items-center flex'
               } font-medium rounded-md transition-colors duration-200 ${
                 isActive
-                  ? 'text-pink-700 bg-pink-50'
-                  : 'text-zinc-700 hover:text-pink-700 hover:bg-pink-50'
+                  ? 'text-zinc-950 bg-pink-600'
+                  : 'text-zinc-50 hover:text-zinc-950 hover:bg-pink-600'
               }`
             }
             end

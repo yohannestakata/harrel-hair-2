@@ -53,7 +53,11 @@ export function SearchFormPredictive({
   }
 
   return (
-    <fetcher.Form {...props} className={className} onSubmit={resetInput}>
+    <fetcher.Form
+      {...props}
+      className={`${className} rounded-full p-0`}
+      onSubmit={resetInput}
+    >
       {children({inputRef, fetcher, fetchResults, goToSearch})}
     </fetcher.Form>
   );
