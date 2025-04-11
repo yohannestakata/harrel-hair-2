@@ -117,7 +117,7 @@ function FAQ() {
           />
         </div>
         <div className="lg:flex-1 order-1 lg:order-2 py-12 md:py-20 px-5 md:px-8 2xl:px-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif  text-center">
             FAQs
           </h2>
           <div className="mt-8">
@@ -178,7 +178,7 @@ function PromoBar() {
           strokeWidth={1}
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             Free shipping
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -194,7 +194,7 @@ function PromoBar() {
           color="#c6005c"
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             Guaranteed Success
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -210,7 +210,7 @@ function PromoBar() {
           color="#c6005c"
         />
         <div className="flex flex-col text-center">
-          <span className="text-lg md:text-xl uppercase font-serif">
+          <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
             30-Day returns
           </span>
           <span className="text-zinc-400 text-sm md:text-base mt-1 md:mt-2">
@@ -309,7 +309,7 @@ function FirstFeaturedCollection({collection}) {
             ))}
 
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif ">
                 {collection.title}
               </h1>
               {collection.description && (
@@ -375,7 +375,7 @@ function SecondFeaturedCollection({collection}) {
             ))}
 
             <div className="text-zinc-50 text-center w-full">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif ">
                 {collection.title}
               </h1>
               {collection.description && (
@@ -405,7 +405,7 @@ function RecommendedProducts({products}) {
         <Await resolve={products}>
           {(response) => (
             <>
-              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif ">
                 Newest Products
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8 mt-8 md:mt-10">
@@ -430,7 +430,7 @@ function PopularProducts({products}) {
         <Await resolve={products}>
           {(response) => (
             <>
-              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight">
+              <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-serif ">
                 Most Popular
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8 mt-8 md:mt-10">
