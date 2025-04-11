@@ -7,7 +7,32 @@ import {useState} from 'react';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+  const description =
+    "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!";
+
+  return [
+    {title: `${data?.collection.title ?? ''} Collection | Harrel Hair`},
+    {
+      name: 'description',
+      content: `${data?.collection.description ?? description}`,
+    },
+    {
+      name: 'og:title',
+      content: `${data?.collection.title ?? ''} Collection | Harrel Hair`,
+    },
+    {
+      name: 'og:description',
+      content: `${data?.collection.description ?? description}`,
+    },
+    {
+      name: 'twitter:title',
+      content: `${data?.collection.title ?? ''} Collection | Harrel Hair`,
+    },
+    {
+      name: 'twitter:description',
+      content: `${data?.collection.description ?? description}`,
+    },
+  ];
 };
 
 /**

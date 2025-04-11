@@ -2,6 +2,38 @@ import {useLoaderData, Link} from '@remix-run/react';
 import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
+export const meta = () => {
+  return [
+    {title: 'Collections | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Collections | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Collections | Harrel Hair',
+    },
+    {
+      name: 'description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    // Open Graph
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    // Twitter Card
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+  ];
+};
+
 /**
  * @param {LoaderFunctionArgs} args
  */

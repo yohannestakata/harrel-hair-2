@@ -5,7 +5,36 @@ import AboutUs from '~/custom-pages/AboutUs';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
+  return [
+    {title: `Hydrogen | ${data?.page.title ?? ''}`},
+    {
+      name: 'og:title',
+      content: `Hydrogen | ${data?.page.title ?? ''}`,
+    },
+    {
+      name: 'twitter:title',
+      content: `Hydrogen | ${data?.page.title ?? ''}`,
+    },
+
+    {
+      name: 'description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    // Open Graph
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    // Twitter Card
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+  ];
 };
 
 /**

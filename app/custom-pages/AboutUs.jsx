@@ -2,6 +2,20 @@ import {Link} from '@remix-run/react';
 import {ChevronDown, ChevronUp} from 'lucide-react';
 import {useState} from 'react';
 
+export const meta = () => {
+  return [
+    {title: 'About | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'About | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'About | Harrel Hair',
+    },
+  ];
+};
+
 const galleryImages = [
   'https://cdn.shopify.com/s/files/1/0694/3395/0377/files/beauty-natural-5-top.jpg?v=1739558899',
   'https://cdn.shopify.com/s/files/1/0694/3395/0377/files/beauty-natural-2-middle.jpg?v=1739558898',
