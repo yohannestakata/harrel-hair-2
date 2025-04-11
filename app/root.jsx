@@ -157,7 +157,7 @@ export const meta = () => {
       title:
         'Harrel Hair | Premium Human Hair Extensions & Virgin Hair Bundles | 100% Remy Hair | USA Shop',
     },
-    {name: 'color-scheme', content: 'dark  '},
+
     {
       name: 'description',
       content:
@@ -244,6 +244,7 @@ export function Layout({children}) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
+        <meta name="color-scheme" content="dark" />
         <meta
           name="keywords"
           content="Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair"
