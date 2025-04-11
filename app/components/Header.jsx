@@ -258,7 +258,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             )}
           </div>
 
-          {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
+          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
         </div>
       </div>
     </header>
@@ -465,7 +465,7 @@ function CartBadge({count}) {
       aria-label="Cart"
     >
       <ShoppingBag className="text-zinc-700 group-hover:text-pink-700 transition-colors" />
-      {count !== null && count > 0 && (
+      {count !== null && (
         <div className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs font-bold flex items-center justify-center size-5 rounded-full">
           {count}
         </div>

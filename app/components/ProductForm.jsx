@@ -1,5 +1,6 @@
 import {Link, useNavigate} from '@remix-run/react';
 import {useAside} from './Aside';
+import {AddToCartButton} from './AddToCartButton';
 
 /**
  * @param {{
@@ -122,8 +123,27 @@ export function ProductForm({productOptions, selectedVariant}) {
           </div>
         );
       })}
+      <AddToCartButton
+        disabled={!selectedVariant || !selectedVariant.availableForSale}
+        onClick={() => {
+          open('cart');
+        }}
+        lines={
+          selectedVariant
+            ? [
+                {
+                  merchandiseId: selectedVariant.id,
+                  quantity: 1,
+                  selectedVariant,
+                },
+              ]
+            : []
+        }
+      >
+        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+      </AddToCartButton>
 
-      <div className="mt-8 grid grid-cols-2 gap-4">
+      {/* <div className="mt-8 grid grid-cols-2 gap-4">
         <button
           onClick={handleWhatsAppClick}
           disabled={!selectedVariant || !selectedVariant.availableForSale}
@@ -156,7 +176,7 @@ export function ProductForm({productOptions, selectedVariant}) {
           </svg>
           Instagram
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

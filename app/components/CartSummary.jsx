@@ -1,3 +1,4 @@
+import {Link} from '@remix-run/react';
 import {CartForm, Money} from '@shopify/hydrogen';
 import {ArrowRight} from 'lucide-react';
 import {useRef} from 'react';
@@ -14,8 +15,8 @@ export function CartSummary({cart, layout}) {
   return (
     <div aria-labelledby="cart-summary" className={className}>
       {/* <h4 className="font-semibold text-2xl">Totals</h4> */}
-      <dl className="mt-2">
-        <dt className="">Subtotal</dt>
+      <dl>
+        <dt>Subtotal</dt>
         <dd>
           {cart.cost?.subtotalAmount?.amount ? (
             <Money
@@ -29,26 +30,60 @@ export function CartSummary({cart, layout}) {
       </dl>
       <CartDiscounts discountCodes={cart.discountCodes} />
       <CartGiftCard giftCardCodes={cart.appliedGiftCards} />
-      <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
+      <CartCheckoutActions checkoutUrl={cart.checkoutUrl} cart={cart} />
     </div>
   );
 }
 /**
  * @param {{checkoutUrl?: string}}
  */
-function CartCheckoutActions({checkoutUrl}) {
+function CartCheckoutActions({checkoutUrl, cart}) {
   if (!checkoutUrl) return null;
+
+  const handleClick = () => {
+    const {lines} = cart;
+    const totalAmount = lines.nodes.reduce(
+      (sum, line) => sum + parseFloat(line.cost.totalAmount.amount),
+      0,
+    );
+
+    const productDetail = lines.nodes
+      .map(
+        (line, index) =>
+          `${index + 1}. ${line.merchandise.product.title} x${
+            line.quantity
+          } ($${line.merchandise.price.amount}).`,
+      )
+      .join('\n');
+
+    // line.merchandise.selectedOptions [{name: 'Color', value: 'Red'}]
+
+    const message = `Hi, I'm interested in purchasing the following items:\n\nOrder Details:\n\n${productDetail}\n\nTotal: $${totalAmount.toFixed(
+      2,
+    )}\n\n\n\nCan you help me with this?`;
+    //Customer: ${data.name} (${data.email})
+    const encodedMessage = encodeURIComponent(message);
+
+    window.open(
+      `https://wa.me/$+251967285787?text=${encodedMessage}`,
+      '_blank',
+    );
+  };
 
   return (
     <div>
-      <a
-        href={checkoutUrl}
-        target="_self"
-        className="flex items-center gap-2 bg-zinc-950 justify-center py-2 font-semibold w-full flex-1 text-zinc-50"
+      <button
+        type="button"
+        onClick={handleClick}
+        title="Open WhatsApp"
+        // to="/custom-checkout/server"
+        // // href={checkoutUrl}
+        // target="_self"
+        className="flex items-center gap-2 bg-zinc-950 justify-center py-2 font-semibold w-full flex-1 text-zinc-50 cursor-pointer"
       >
         <p>Continue to Checkout </p>
         <ArrowRight />
-      </a>
+      </button>
       <br />
     </div>
   );
