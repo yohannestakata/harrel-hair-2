@@ -14,6 +14,7 @@ import {useState} from 'react';
 import {ParallaxBanner, ParallaxBannerLayer} from 'react-scroll-parallax';
 import {motion} from 'motion/react';
 import {useRef} from 'react';
+import FlowerImg from '../../public/images/flower.png';
 
 /**
  * @param {LoaderFunctionArgs} args
@@ -409,37 +410,7 @@ function SecondFeaturedCollection({collection}) {
   );
 }
 
-function RecommendedProducts({products}) {
-  return (
-    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
-      <Await resolve={products}>
-        {(response) => (
-          <ProductCarousel
-            products={response?.recommendedProducts?.nodes || []}
-            title="Newest Products"
-          />
-        )}
-      </Await>
-    </Suspense>
-  );
-}
-
-function PopularProducts({products}) {
-  return (
-    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
-      <Await resolve={products}>
-        {(response) => (
-          <ProductCarousel
-            products={response?.bestSellingProducts?.nodes || []}
-            title="Most Popular"
-          />
-        )}
-      </Await>
-    </Suspense>
-  );
-}
-
-function ProductCard({product}) {
+function ProductCard({product, index}) {
   const [selectedVariant, setSelectedVariant] = useState(
     product.variants.nodes[0],
   );
@@ -455,24 +426,38 @@ function ProductCard({product}) {
     };
   });
 
+  // Check if this is the first or fourth card (index 0 or 3)
+  const showFlower = index === 0 || index === 3;
+
   return (
-    <Link className="group" to={`/products/${product.handle}`}>
-      <div className="rounded-2xl aspect-[3/4] overflow-hidden">
-        <Image
-          data={selectedVariant.image || product.images.nodes[0]}
-          aspectRatio="3/4"
-          sizes="(min-width: 45em) 20vw, 50vw"
-          className="h-full w-full group-hover:scale-105 duration-200 object-cover"
+    <div className="group relative">
+      <Link to={`/products/${product.handle}`} className="block">
+        <div className="rounded-2xl aspect-[3/4] overflow-hidden relative">
+          <Image
+            data={selectedVariant.image || product.images.nodes[0]}
+            aspectRatio="3/4"
+            sizes="(min-width: 45em) 20vw, 50vw"
+            className="h-full w-full group-hover:scale-105 duration-200 object-cover"
+          />
+          {showFlower && (
+            <div className="absolute -bottom-6 -left-4 w-28 h-28 md:w-32 md:h-32">
+              <img
+                src="/images/flower.png"
+                alt="Decorative flower"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          )}
+        </div>
+        <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-pink-600 group-hover:underline underline-offset-4 uppercase">
+          {product.title}
+        </h4>
+        <Money
+          data={selectedVariant.price}
+          className="text-base md:text-lg italic mt-1 text-pink-600"
         />
-      </div>
-      <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-pink-600 group-hover:underline underline-offset-4 uppercase">
-        {product.title}
-      </h4>
-      <Money
-        data={selectedVariant.price}
-        className="text-base md:text-lg italic mt-1 text-pink-600"
-      />
-    </Link>
+      </Link>
+    </div>
   );
 }
 
@@ -508,8 +493,9 @@ function ProductCarousel({products, title}) {
         <div className="md:hidden relative">
           <button
             onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 rounded-full p-2 text-white"
             aria-label="Scroll left"
+            style={{zIndex: 1}}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -523,20 +509,20 @@ function ProductCarousel({products, title}) {
               scrollbarWidth: 'none',
             }}
           >
-            {products.map((product) => (
+            {products.map((product, index) => (
               <div
                 key={product.id}
                 className="flex-shrink-0 w-3/4 scroll-snap-align-start"
                 style={{flex: '0 0 75%'}}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} index={index} />
               </div>
             ))}
           </div>
 
           <button
             onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 rounded-full p-2 text-white"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 rounded-full p-2 text-white"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-5 h-5" />
@@ -545,12 +531,43 @@ function ProductCarousel({products, title}) {
 
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
       </div>
     </div>
+  );
+}
+
+// Update the PopularProducts and RecommendedProducts components to use the modified ProductCarousel
+function RecommendedProducts({products}) {
+  return (
+    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+      <Await resolve={products}>
+        {(response) => (
+          <ProductCarousel
+            products={response?.recommendedProducts?.nodes || []}
+            title="Newest Products"
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+function PopularProducts({products}) {
+  return (
+    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+      <Await resolve={products}>
+        {(response) => (
+          <ProductCarousel
+            products={response?.bestSellingProducts?.nodes || []}
+            title="Most Popular"
+          />
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
