@@ -13,7 +13,35 @@ import {Link} from '@remix-run/react';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [
+    {title: 'Search | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Search | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Search | Harrel Hair',
+    },
+    {
+      name: 'description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    // Open Graph
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    // Twitter Card
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+  ];
 };
 
 /**

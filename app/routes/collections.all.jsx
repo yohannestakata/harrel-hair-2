@@ -6,7 +6,36 @@ import {json} from '@shopify/remix-oxygen';
 import {useState} from 'react';
 
 export const meta = () => {
-  return [{title: `Harrel Hair | Products`}];
+  return [
+    {title: 'Collections | Harrel Hair'},
+    {
+      name: 'og:title',
+      content: 'Collections | Harrel Hair',
+    },
+    {
+      name: 'twitter:title',
+      content: 'Collections | Harrel Hair',
+    },
+
+    {
+      name: 'description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+    // Open Graph
+    {
+      property: 'og:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+
+    // Twitter Card
+    {
+      name: 'twitter:description',
+      content:
+        "Discover Harrel's premium 100% Remy human hair extensions, virgin bundles, and wigs. Shop Brazilian, Peruvian, and Malaysian hair with free US shipping. Ethically sourced, natural textures, and long-lasting quality. Transform your look today!",
+    },
+  ];
 };
 
 export async function loader(args) {
