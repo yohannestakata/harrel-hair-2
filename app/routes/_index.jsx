@@ -237,13 +237,13 @@ function HeroSection() {
           </ParallaxBannerLayer>
         </ParallaxBanner>
       </div>
-      <div className="bg-gradient-to-l from-black/60 to-black/60 absolute inset-0" />
+      <div className="bg-gradient-to-l from-black/40 to-black/40 absolute inset-0" />
       <div className="text-zinc-50 h-full flex flex-col py-24 relative px-4 justify-between">
         <div>
-          <p className="tracking-widest text-center text-lg sm:text-base uppercase  text-zinc-300 w-full md:w-1/2 mx-auto italic">
+          <p className="tracking-widest text-center text-xl sm:text-2xl uppercase  text-zinc-300 w-full md:w-1/2 mx-auto italic">
             Simply
           </p>
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-8xl font-medium text-center w-full md:w-1/2 mx-auto font-serif uppercase">
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-9xl font-medium text-center w-full md:w-1/2 mx-auto font-serif uppercase">
             Beautiful
           </h1>
         </div>
