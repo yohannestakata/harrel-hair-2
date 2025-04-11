@@ -38,14 +38,14 @@ export function Aside({children, heading, type}) {
 
       {/* Sidebar */}
       <div
-        className={`absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl transition-transform duration-200 ease-in-out ${
+        className={`absolute right-0 top-0 h-full w-full max-w-sm shadow-xl transition-transform duration-200 ease-in-out ${
           expanded ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        } bg-zinc-900 text-zinc-50`}
       >
-        <header className="flex h-16 items-center justify-between border-b border-gray-200 px-5">
+        <header className="flex h-16 items-center justify-between border-b border-zinc-700 px-5">
           <h3 className="text-xl font-medium">{heading}</h3>
           <button
-            className="text-gray-500 hover:text-gray-700 transition-colors"
+            className="text-zinc-400 hover:text-pink-600 transition-colors"
             onClick={close}
             aria-label="Close"
           >
