@@ -45,6 +45,10 @@
   --color-light: #fff;
 }
 
+button {
+  cursor: pointer;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -303,11 +307,12 @@ button.reset:hover:not(:has(> *)) {
 
 .cart-summary-aside {
   background: var(--color-zinc-900);
-  border-top: 1px solid var(--color-dark);
+  border-top: 1px solid var(--color-zinc-600);
   bottom: 0;
   padding-top: 0.75rem;
   position: absolute;
   width: calc(var(--aside-width) - 40px);
+  /* padding: 16px 16px 0px 16px; */
 }
 
 .cart-line-quantity {

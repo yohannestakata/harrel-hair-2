@@ -30,7 +30,7 @@ export function AddToCartButton({
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
-            className="bg-zinc-950 w-full justify-center px-6 py-3 text-zinc-50 flex items-center gap-2 hover:bg-zinc-800 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+            className="bg-pink-600 text-zinc-50 w-full justify-center px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-pink-700 duration-150 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
           >
             <ShoppingBag size={20} />
             {children}

@@ -14,7 +14,7 @@ export function CartLineItem({layout, line}) {
   return (
     <li
       key={id}
-      className="flex gap-4 py-6 border-b border-gray-200 last:border-b-0"
+      className="flex gap-4 py-6 border-b border-zinc-400 last:border-b-0"
     >
       {image && (
         <Link
@@ -46,23 +46,23 @@ export function CartLineItem({layout, line}) {
             >
               <h3 className="font-semibold text-lg">{product.title}</h3>
             </Link>
-            <div className="text-gray-700 mt-2">
+            <div className="text-zinc-400 mt-2">
               <ProductPrice price={line?.cost?.totalAmount} />
             </div>
           </div>
           <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
 
-        {selectedOptions.length > 0 && (
+        {/* {selectedOptions.length > 0 && (
           <ul className="mt-2 space-y-1">
             {selectedOptions.map((option) => (
-              <li key={option.name} className="text-sm text-gray-500">
+              <li key={option.name} className="text-sm text-zinc-400">
                 {option.name}:{' '}
-                <span className="text-gray-700">{option.value}</span>
+                <span className="text-zinc-400">{option.value}</span>
               </li>
             ))}
           </ul>
-        )}
+        )} */}
 
         <CartLineQuantity line={line} />
       </div>
@@ -78,16 +78,18 @@ function CartLineQuantity({line}) {
 
   return (
     <div className="flex items-center mt-2">
-      <small className="mr-3 text-gray-600">Quantity: {quantity}</small>
+      <small className="mr-3 text-zinc-50 font-semibold">
+        Quantity: {quantity}
+      </small>
       <div className="flex items-center space-x-2">
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             aria-label="Decrease quantity"
             disabled={quantity <= 1 || !!isOptimistic}
-            className={`w-6 h-6 flex items-center justify-center border border-black rounded-full ${
+            className={`w-6 h-6 flex items-center justify-center border border-zinc-400 rounded-full ${
               quantity <= 1 || isOptimistic
                 ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-gray-100'
+                : 'hover:bg-zinc-400'
             }`}
           >
             <span>&#8722;</span>
@@ -98,10 +100,10 @@ function CartLineQuantity({line}) {
           <button
             aria-label="Increase quantity"
             disabled={!!isOptimistic}
-            className={`w-6 h-6 flex items-center justify-center border border-black rounded-full ${
+            className={`w-6 h-6 flex items-center justify-center border border-zinc-400 rounded-full ${
               isOptimistic
                 ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-gray-100'
+                : 'hover:bg-zinc-400'
             }`}
           >
             <span>&#43;</span>

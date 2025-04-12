@@ -42,7 +42,7 @@ export function Aside({children, heading, type}) {
           expanded ? 'translate-x-0' : 'translate-x-full'
         } bg-zinc-900 text-zinc-50`}
       >
-        <header className="flex h-16 items-center justify-between border-b border-zinc-700 px-5">
+        <header className="flex h-16 items-center justify-between border-b border-zinc-700">
           <h3 className="text-xl font-medium">{heading}</h3>
           <button
             className="text-zinc-400 hover:text-pink-600 transition-colors"
@@ -52,7 +52,7 @@ export function Aside({children, heading, type}) {
             <X size={24} />
           </button>
         </header>
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto p-5">
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto p">
           {children}
         </main>
       </div>

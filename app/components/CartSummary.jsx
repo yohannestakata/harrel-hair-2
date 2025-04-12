@@ -82,7 +82,7 @@ function CartCheckoutActions({checkoutUrl, cart}) {
         // to="/custom-checkout/server"
         // // href={checkoutUrl}
         // target="_self"
-        className="flex items-center gap-2 bg-zinc-950 justify-center py-2 font-semibold w-full flex-1 text-zinc-50 cursor-pointer"
+        className="flex items-center gap-2 bg-pink-600 text-zinc-50 rounded-lg justify-center py-2 font-semibold w-full flex-1 hover:bg-pink-700 duration-150 cursor-pointer"
       >
         <p>Continue to Checkout </p>
         <ArrowRight />
