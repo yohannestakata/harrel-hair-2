@@ -42,10 +42,7 @@ export const meta = ({data}) => {
       content: `${data?.product.description ?? description}`,
     },
 
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
+
   ];
 };
 
