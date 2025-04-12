@@ -64,10 +64,13 @@ function CartCheckoutActions({checkoutUrl, cart}) {
     //Customer: ${data.name} (${data.email})
     const encodedMessage = encodeURIComponent(message);
 
-    window.open(
-      `https://wa.me/$+251967285787?text=${encodedMessage}`,
-      '_blank',
-    );
+    window.open(`https://wa.me/+251967285787?text=${encodedMessage}`, '_blank');
+    // window.open(
+    //   `https://www.instagram.com/direct/${CLIENT_INSTA_USERNAME}/?text=${encodeURIComponent(
+    //     message,
+    //   )}`,
+    //   '_blank',
+    // );
   };
 
   return (
