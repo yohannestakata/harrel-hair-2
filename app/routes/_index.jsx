@@ -241,7 +241,7 @@ function HeroSection() {
             <div
               className="absolute inset-0 bg-cover bg-center "
               style={{
-                backgroundImage: `url(https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Statics-08.png?v=1744356329)`,
+                backgroundImage: `url(https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Hero_1-08.png?v=1744745471)`,
               }}
             />
           </ParallaxBannerLayer>
@@ -449,12 +449,12 @@ function ProductCard({product, index}) {
             </div>
           )}
         </div>
-        <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-pink-600 group-hover:underline underline-offset-4 uppercase">
+        <h4 className="mt-3 md:mt-4 text-sm md:text-base group-hover:text-[#cb819c] group-hover:underline underline-offset-4 uppercase">
           {product.title}
         </h4>
         <Money
           data={selectedVariant.price}
-          className="text-base md:text-lg italic mt-1 text-pink-600"
+          className="text-base md:text-lg italic mt-1 text-[#cb819c]"
         />
       </Link>
     </div>

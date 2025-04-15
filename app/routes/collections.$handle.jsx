@@ -122,12 +122,12 @@ function ProductCard({product}) {
       </div>
 
       <div className="mt-4 md:mt-6 px-2">
-        <h4 className=" font-medium text-zinc-50 group-hover:text-pink-600 transition-colors duration-200">
+        <h4 className=" font-medium text-zinc-50 group-hover:text-[#cb819c] transition-colors duration-200">
           {product.title}
         </h4>
         <Money
           data={selectedVariant.price}
-          className="text-pink-600 text-base md:text-lg mt-1 md:mt-2 block"
+          className="text-[#cb819c] text-base md:text-lg mt-1 md:mt-2 block"
         />
         {/*
         {colorOptions.length > 0 && (

@@ -282,6 +282,9 @@ export function Layout({children}) {
         <Links />
       </head>
       <body className="bg-zinc-900">
+        <div className="bg-pink-600 text-center py-1 uppercase font-semibold text-sm">
+          Shop more, save more! 20% off 5 bundles!
+        </div>
         <ParallaxProvider>
           {data ? (
             <Analytics.Provider
