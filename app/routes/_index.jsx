@@ -241,7 +241,7 @@ function HeroSection() {
             <div
               className="absolute inset-0 bg-cover bg-center "
               style={{
-                backgroundImage: `url(https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Hero_1-08.png?v=1744745471)`,
+                backgroundImage: `url(https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Hero_t1-08.png?v=1744746542)`,
               }}
             />
           </ParallaxBannerLayer>
