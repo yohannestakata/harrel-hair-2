@@ -46,8 +46,6 @@ export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
  * https://github.com/remix-run/remix/issues/9242
  */
 export function links() {
-  const baseUrl = 'https://www.harrelhair.com/';
-
   return [
     {
       rel: 'preconnect',
@@ -57,10 +55,6 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
-
-    {rel: 'apple-touch-icon', href: '/apple-icon-x3.png', sizes: '180x180'},
-    {rel: 'manifest', href: `${baseUrl}/manifest.json`},
   ];
 }
 
@@ -249,16 +243,35 @@ export function Layout({children}) {
           name="keywords"
           content="Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href="/favicon-32x32.ico"
+          size="32x32"
+        />
+        {/* <link
+          rel="icon"
+          href="/favicon-dark-32x32.ico"
+          media="(prefers-color-scheme: dark)"
+        /> */}
+        <link
+          rel="apple-touch-icon"
+          href="/apple-touch-icon.png"
+          sizes="180x180"
+          type="image/png"
+        />
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Harrel Hair" />
         <meta property="og:url" content={baseUrl} />
-        <meta property="og:image" content={`${baseUrl}/og-image.jpg`} />
+        <meta property="og:image" content="/og-image.png" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={`${baseUrl}/og-image.jpg`} />
+        <meta name="twitter:image" content="/og-image.png" />
 
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
