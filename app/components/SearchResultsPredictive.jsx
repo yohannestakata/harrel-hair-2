@@ -69,7 +69,10 @@ function SearchResultsPredictiveArticles({term, articles, closeSearch}) {
           });
 
           return (
-            <li className="predictive-search-result-item" key={article.id}>
+            <li
+              className="predictive-search-result-item hover:bg-zinc-400"
+              key={article.id}
+            >
               <Link onClick={closeSearch} to={articleUrl}>
                 {article.image?.url && (
                   <Image
@@ -99,8 +102,8 @@ function SearchResultsPredictiveCollections({term, collections, closeSearch}) {
 
   return (
     <div className="predictive-search-result" key="collections">
-      <h5>Collections</h5>
-      <ul>
+      {/* <h5>Collections</h5> */}
+      <ul className="mt-2">
         {collections.map((collection) => {
           const collectionUrl = urlWithTrackingParams({
             baseUrl: `/collections/${collection.handle}`,
@@ -109,7 +112,10 @@ function SearchResultsPredictiveCollections({term, collections, closeSearch}) {
           });
 
           return (
-            <li className="predictive-search-result-item" key={collection.id}>
+            <li
+              className="predictive-search-result-item hover:bg-zinc-700 p-2 rounded-lg"
+              key={collection.id}
+            >
               <Link onClick={closeSearch} to={collectionUrl}>
                 {collection.image?.url && (
                   <Image
@@ -171,7 +177,7 @@ function SearchResultsPredictiveProducts({term, products, closeSearch}) {
 
   return (
     <div className="predictive-search-result" key="products">
-      <h5>Products</h5>
+      {/* <h5>Products</h5> */}
       <ul>
         {products.map((product) => {
           const productUrl = urlWithTrackingParams({
@@ -183,7 +189,10 @@ function SearchResultsPredictiveProducts({term, products, closeSearch}) {
           const price = product?.selectedOrFirstAvailableVariant?.price;
           const image = product?.selectedOrFirstAvailableVariant?.image;
           return (
-            <li className="predictive-search-result-item" key={product.id}>
+            <li
+              className="predictive-search-result-item p-2 rounded-lg hover:bg-zinc-700"
+              key={product.id}
+            >
               <Link to={productUrl} onClick={closeSearch}>
                 {image && (
                   <Image

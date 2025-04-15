@@ -169,7 +169,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
               {/* Search Results Dropdown */}
               {isSearchOpen && searchTerm.trim() && (
-                <div className="absolute right-0 mt-2 w-96 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl overflow-hidden z-20">
+                <div className="absolute right-0 mt-2 w-96 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl overflow-hidden z-20 pl-4">
                   <SearchResultsPredictive>
                     {({items, total, term, state, closeSearch}) => {
                       const {articles, collections, pages, products, queries} =
@@ -201,7 +201,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                           />
                           {products.length > 0 && (
                             <div className="border-b border-zinc-700">
-                              <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                              <h3 className=" pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                                 Products
                               </h3>
                               <SearchResultsPredictive.Products
@@ -214,7 +214,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                           )}
                           {collections.length > 0 && (
                             <div className="border-b border-zinc-700">
-                              <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                              <h3 className="pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                                 Collections
                               </h3>
                               <SearchResultsPredictive.Collections

@@ -268,7 +268,7 @@ export function Layout({children}) {
         </script>
         <Links />
       </head>
-      <body>
+      <body className="bg-zinc-900">
         <ParallaxProvider>
           {data ? (
             <Analytics.Provider
