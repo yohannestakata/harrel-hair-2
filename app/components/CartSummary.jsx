@@ -1,9 +1,7 @@
-import {Link} from '@remix-run/react';
 import {CartForm, Money} from '@shopify/hydrogen';
-import {ArrowRight} from 'lucide-react';
 import {useRef} from 'react';
 
-const CLIENT_PHONE_NUMBER = '1234567890';
+const CLIENT_PHONE_NUMBER = '+12024129495';
 const CLIENT_INSTA_USERNAME = 'your_instagram_username';
 
 /**

@@ -103,7 +103,7 @@ const AboutUs = () => {
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
               <div className="md:flex-1 aspect-video md:aspect-square rounded-xl overflow-hidden shadow-lg">
                 <img
-                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/beauty-natural-5-top.jpg?v=1739558899"
+                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Quality_1.jpg?v=1744742869"
                   alt="Premium quality wigs"
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   loading="lazy"
@@ -130,7 +130,7 @@ const AboutUs = () => {
             <div className="flex flex-col md:flex-row-reverse gap-6 md:gap-8 lg:gap-10">
               <div className="md:flex-1 aspect-video md:aspect-square rounded-xl overflow-hidden shadow-lg">
                 <img
-                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/beauty-natural-2-middle.jpg?v=1739558898"
+                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Servise.jpg?v=1744739721"
                   alt="Personalized wig consultation"
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   loading="lazy"
@@ -157,7 +157,7 @@ const AboutUs = () => {
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
               <div className="md:flex-1 aspect-video md:aspect-square rounded-xl overflow-hidden shadow-lg">
                 <img
-                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/beauty-natural-4-middle.jpg?v=1739558897"
+                  src="https://cdn.shopify.com/s/files/1/0694/3395/0377/files/Confidence_35.jpg?v=1744742132"
                   alt="Confident woman wearing wig"
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   loading="lazy"

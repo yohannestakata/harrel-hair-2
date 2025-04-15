@@ -130,7 +130,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             {/* Mobile Search Button */}
             <button
               onClick={openSearch}
-              className="lg:hidden p-2 rounded-full text-zinc-50 hover:text-pink-600 hover:bg-zinc-800 transition-colors duration-200"
+              className="lg:hidden p-2 rounded-full text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c] transition-colors duration-200"
               aria-label="Search"
             >
               <Search size={20} />
@@ -408,7 +408,11 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   );
 }
 
-function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
+function CollectionsDropdown({
+  publicStoreDomain,
+  primaryDomainUrl,
+  viewport = 'desktop',
+}) {
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -435,33 +439,39 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
   }, [isOpen]);
 
   const handleMouseEnter = () => {
+    if (viewport === 'mobile') return;
     clearTimeout(timeoutRef.current);
     setIsOpen(true);
   };
 
   const handleMouseLeave = () => {
+    if (viewport === 'mobile') return;
     timeoutRef.current = setTimeout(() => {
       setIsOpen(false);
     }, 200);
   };
 
+  const handleClick = () => {
+    if (viewport === 'mobile') {
+      setIsOpen(!isOpen);
+    }
+  };
+
   return (
     <div
-      className="relative group"
+      className={`relative ${viewport === 'desktop' ? 'group' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <NavLink
-        to="/collections"
-        className={({isActive}) =>
-          `flex items-center gap-1 px-3 h-full justify-center font-medium rounded-md transition-colors duration-200 ${
-            isActive
-              ? 'text-zinc-50 bg-pink-600'
-              : 'text-zinc-50 hover:text-zinc-50 hover:bg-pink-600'
-          }`
-        }
-        prefetch="intent"
-        end
+      <button
+        onClick={handleClick}
+        className={`flex items-center gap-1 ${
+          viewport === 'mobile' ? 'w-full px-4 py-3 text-lg' : 'px-3 h-full'
+        } justify-start font-medium rounded-md transition-colors duration-200 ${
+          isOpen && viewport === 'mobile'
+            ? 'text-zinc-50 bg-pink-600'
+            : 'text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c]'
+        }`}
       >
         Collections
         <ChevronDown
@@ -469,15 +479,23 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
             isOpen ? 'rotate-180' : ''
           }`}
         />
-      </NavLink>
+      </button>
 
       {isOpen && (
         <div
-          className="absolute left-0 mt-2 w-56 rounded-md shadow-lg z-10 border border-zinc-700 bg-zinc-800"
+          className={`${
+            viewport === 'mobile'
+              ? 'relative mt-1 w-full shadow-none bg-transparent border-none'
+              : 'absolute left-0 mt-2 w-56 rounded-md shadow-lg z-10 border border-zinc-700 bg-zinc-800'
+          }`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="py-1 max-h-96 overflow-y-auto">
+          <div
+            className={`py-1 max-h-96 overflow-y-auto ${
+              viewport === 'mobile' ? 'space-y-1' : ''
+            }`}
+          >
             {isLoading ? (
               <div className="px-4 py-2 text-center text-zinc-400">
                 Loading...
@@ -487,9 +505,16 @@ function CollectionsDropdown({publicStoreDomain, primaryDomainUrl}) {
                 <Link
                   key={collection.id}
                   to={`/collections/${collection.handle}`}
-                  className="block px-4 py-2 text-sm text-zinc-50 hover:bg-pink-600 hover:text-zinc-50 transition-colors duration-200"
+                  className={`block ${
+                    viewport === 'mobile'
+                      ? 'px-4 py-3 text-lg bg-zinc-800 rounded-md'
+                      : 'px-4 py-2 text-sm'
+                  } text-zinc-50 hover:bg-[#cb819c] hover:text-zinc-950 transition-colors duration-200`}
                   prefetch="intent"
-                  onClick={close}
+                  onClick={() => {
+                    close();
+                    setIsOpen(false);
+                  }}
                 >
                   {collection.title}
                 </Link>
@@ -518,13 +543,14 @@ export function HeaderMenu({
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
-        // Special case for Collections dropdown on desktop
-        if (item.title === 'Collections' && viewport === 'desktop') {
+        // Use Collections dropdown for both desktop and mobile
+        if (item.title === 'Collections') {
           return (
             <CollectionsDropdown
               key={item.id}
               publicStoreDomain={publicStoreDomain}
               primaryDomainUrl={primaryDomainUrl}
+              viewport={viewport}
             />
           );
         }
@@ -545,7 +571,7 @@ export function HeaderMenu({
               } font-medium rounded-md transition-colors duration-200 ${
                 isActive
                   ? 'text-zinc-50 bg-pink-600'
-                  : 'text-zinc-50 hover:text-zinc-50 hover:bg-pink-600'
+                  : 'text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c]'
               }`
             }
             end
@@ -571,8 +597,8 @@ function HeaderCtas({isLoggedIn, cart}) {
         className={({isActive}) =>
           `p-2 rounded-full transition-colors duration-200 ${
             isActive
-              ? 'text-pink-600 bg-zinc-800'
-              : 'text-zinc-50 hover:text-pink-600 hover:bg-zinc-800'
+              ? 'text-zinc-950 bg-[#cb819c]'
+              : 'text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c]'
           }`
         }
       >
@@ -607,7 +633,7 @@ function CartBadge({count}) {
       className="relative p-2 rounded-full hover:bg-zinc-800 transition-colors duration-200 group"
       aria-label="Cart"
     >
-      <ShoppingBag className="text-zinc-50 group-hover:text-pink-600 transition-colors" />
+      <ShoppingBag className="text-zinc-50 group-hover:text-zinc-950 group-hover:bg-[#cb819c] transition-colors" />
       {count !== null && count > 0 && (
         <div className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs font-bold flex items-center justify-center size-5 rounded-full">
           {count}

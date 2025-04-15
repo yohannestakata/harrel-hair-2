@@ -36,13 +36,24 @@
 }
 
 :root {
-  --aside-width: 400px;
-  --cart-aside-summary-height-with-discount: 300px;
-  --cart-aside-summary-height: 317px;
+  --aside-width: 100%;
+  --cart-aside-summary-height-with-discount: 340px;
+  --cart-aside-summary-height: 390px;
   --grid-item-width: 355px;
   --header-height: 64px;
   --color-dark: #000;
   --color-light: #fff;
+  --color-pink-300: #ab344e;
+  --color-pink-400: #ab344e;
+  --color-pink-500: #ab344e;
+  --color-pink-600: #ab344e;
+  --color-pink-700: #ab344e;
+  --color-pink-800: #ab344e;
+}
+
+button:hover {
+  background-color: #cb819c !important;
+  color: black !important;
 }
 
 button {

@@ -237,7 +237,7 @@ function HeroSection() {
     <div className="relative h-[75vh] md:h-[calc(140vh-64px)] overflow-hidden">
       <div className="absolute inset-0">
         <ParallaxBanner style={{width: '100%', height: '100%'}}>
-          <ParallaxBannerLayer speed={-10}>
+          <ParallaxBannerLayer speed={-30}>
             <div
               className="absolute inset-0 bg-cover bg-center "
               style={{
@@ -253,7 +253,7 @@ function HeroSection() {
           <p className="tracking-widest text-center text-xl sm:text-2xl uppercase  text-zinc-300 w-full md:w-1/2 mx-auto italic">
             Simply
           </p>
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-9xl font-medium text-center w-full md:w-1/2 mx-auto font-serif uppercase">
+          <h1 className="text-7xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-9xl font-medium text-center w-full md:w-1/2 mx-auto font-serif uppercase">
             Beautiful
           </h1>
         </div>
@@ -287,7 +287,7 @@ function FirstFeaturedCollection({collection}) {
       {image && (
         <div className="absolute inset-0">
           <ParallaxBanner className="w-full h-full">
-            <ParallaxBannerLayer speed={-10}>
+            <ParallaxBannerLayer speed={-30}>
               <div
                 className="absolute inset-0 bg-cover bg-center h-full w-full"
                 style={{
@@ -354,7 +354,7 @@ function SecondFeaturedCollection({collection}) {
       {image && (
         <div className="absolute inset-0">
           <ParallaxBanner className="w-full h-full">
-            <ParallaxBannerLayer speed={-10}>
+            <ParallaxBannerLayer speed={-30}>
               <div
                 className="absolute inset-0 bg-cover bg-center h-full w-full"
                 style={{
