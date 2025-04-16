@@ -630,10 +630,10 @@ function CartBadge({count}) {
           url: window.location.href || '',
         });
       }}
-      className="relative p-2 rounded-full hover:bg-zinc-800 transition-colors duration-200 group"
+      className="relative p-2 rounded-full  duration-200 group hover:bg-[#cb819c] transition-colors"
       aria-label="Cart"
     >
-      <ShoppingBag className="text-zinc-50 group-hover:text-zinc-950 group-hover:bg-[#cb819c] transition-colors" />
+      <ShoppingBag className="text-zinc-50 group-hover:text-zinc-950 " />
       {count !== null && count > 0 && (
         <div className="absolute -top-1 -right-1 bg-pink-600 text-white text-xs font-bold flex items-center justify-center size-5 rounded-full">
           {count}

@@ -50,11 +50,11 @@
   --color-pink-700: #ab344e;
   --color-pink-800: #ab344e;
 }
-
+/*
 button:hover {
   background-color: #cb819c !important;
   color: black !important;
-}
+} */
 
 button {
   cursor: pointer;

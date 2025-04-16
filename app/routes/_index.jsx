@@ -199,9 +199,8 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center w-full sm:w-auto">
         <User2
           size={32}
-          className="md:h-10 md:w-10"
+          className="md:h-10 md:w-10 text-pink-600"
           strokeWidth={1}
-          color="#c6005c"
         />
         <div className="flex flex-col text-center">
           <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
@@ -215,9 +214,8 @@ function PromoBar() {
       <div className="flex items-center gap-3 flex-col justify-center w-full sm:w-auto">
         <RefreshCw
           size={32}
-          className="md:h-10 md:w-10"
+          className="md:h-10 md:w-10 text-pink-600"
           strokeWidth={1}
-          color="#c6005c"
         />
         <div className="flex flex-col text-center">
           <span className="text-lg md:text-xl uppercase font-serif tracking-widest">
