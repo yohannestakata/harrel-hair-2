@@ -119,12 +119,33 @@ function ProductZoomImage({image, className}) {
     setIsLoadingHiRes(false);
   };
 
+  // Touch handlers for mobile
+  const handleTouchStart = () => {
+    setIsZoomed(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsZoomed(false);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!imageRef.current) return;
+    const touch = e.touches[0];
+    const {left, top, width, height} = imageRef.current.getBoundingClientRect();
+    const x = ((touch.clientX - left) / width) * 100;
+    const y = ((touch.clientY - top) / height) * 100;
+    setZoomPosition({x, y});
+  };
+
   return (
     <div
       className={`relative overflow-hidden ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
       ref={imageRef}
     >
       <img
@@ -228,15 +249,15 @@ export default function Product() {
           dangerouslySetInnerHTML={{__html: JSON.stringify(productSchema)}}
         />
 
-        {/* Image Gallery */}
-        <div className="flex-1 flex flex-col items-start md:flex-row-reverse gap-4 md:gap-6">
-          {/* Main Image */}
-          <div className="flex-1 aspect-[3/4] relative overflow-hidden rounded-lg bg-zinc-800">
+        {/* Image Gallery - Full width on mobile */}
+        <div className="w-full lg:flex-1 flex flex-col items-start md:flex-row-reverse gap-4 md:gap-6">
+          {/* Main Image - Full width with aspect ratio */}
+          <div className="w-full lg:flex-1 aspect-[3/4] relative overflow-hidden rounded-lg bg-zinc-800">
             <ProductZoomImage image={selectedImage} className="w-full h-full" />
           </div>
 
-          {/* Thumbnails */}
-          <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-x-visible md:w-24 pb-2 md:pb-0 scrollbar-hide">
+          {/* Thumbnails - Horizontal scroll on mobile */}
+          <div className="w-full md:w-auto flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-x-visible md:w-24 pb-2 md:pb-0 scrollbar-hide">
             {generalImages.map(({node}) => (
               <button
                 key={node.id}
@@ -258,7 +279,7 @@ export default function Product() {
                     }
                   }
                 }}
-                className={`aspect-[3/4] w-20 md:w-24 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
+                className={`aspect-[3/4] w-16 sm:w-20 md:w-24 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
                   hoveredThumbnail === node.id
                     ? 'border-pink-600 shadow-md'
                     : selectedImage?.id === node.id
@@ -276,8 +297,8 @@ export default function Product() {
           </div>
         </div>
 
-        {/* Product Details */}
-        <div className="flex-1 md:sticky md:top-8 md:self-start text-zinc-50">
+        {/* Product Details - Full width on mobile */}
+        <div className="w-full lg:flex-1 md:sticky md:top-8 md:self-start text-zinc-50">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4 font-medium">
             {title}
           </h1>
