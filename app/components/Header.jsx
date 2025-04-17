@@ -137,7 +137,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
             </button>
 
             {/* Desktop Search Bar */}
-            <div className="hidden lg:block relative">
+            <div className="hidden lg:block relative ">
               <SearchFormPredictive>
                 {({fetchResults, goToSearch, inputRef}) => (
                   <div className="relative">
@@ -262,7 +262,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
       {/* Search Aside */}
       <Aside type="search" heading="Search">
-        <div className="h-full">
+        <div className="h-full p-4">
           <SearchFormPredictive>
             {({fetchResults, goToSearch, inputRef}) => (
               <div className="relative">
