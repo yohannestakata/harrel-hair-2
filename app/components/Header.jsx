@@ -556,7 +556,9 @@ export function HeaderMenu({
 
   return (
     <nav
-      className={`flex ${viewport === 'mobile' ? 'flex-col gap-1' : 'gap-1'}`}
+      className={`flex ${
+        viewport === 'mobile' ? 'flex-col gap-1 p-4' : 'gap-1'
+      }`}
       role="navigation"
     >
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
