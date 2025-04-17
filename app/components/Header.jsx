@@ -360,19 +360,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                           />
                         </div>
                       )}
-                      {/* {pages.length > 0 && (
-                        <div className="border-b border-zinc-700">
-                          <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-                            Pages
-                          </h3>
-                          <SearchResultsPredictive.Pages
-                            pages={pages}
-                            closeSearch={closeSearch}
-                            term={term}
-                            className="p-3 hover:bg-zinc-700"
-                          />
-                        </div>
-                      )} */}
+
                       {articles.length > 0 && (
                         <div className="border-b border-zinc-700">
                           <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
