@@ -47,6 +47,7 @@ function CartCheckoutActions({checkoutUrl, cart}) {
       discountCodes,
       appliedGiftCards,
       totalQuantity,
+      checkoutUrl,
       cost: {
         totalAmount: {amount: totalAmount},
       },
@@ -73,7 +74,7 @@ function CartCheckoutActions({checkoutUrl, cart}) {
       .map((code) => code.code)
       .join(
         ', ',
-      )}\nTotal Quantity: ${totalQuantity}\nTotal Price: $${totalAmount}\n\n\n\nCan you help me with this?`;
+      )}\nTotal Quantity: ${totalQuantity}\nTotal Price: $${totalAmount}\nCheckout URL: ${checkoutUrl}\n\n\n\nCan you help me with this?`;
 
     //Customer: ${data.name} (${data.email})
     return encodeURIComponent(message);
