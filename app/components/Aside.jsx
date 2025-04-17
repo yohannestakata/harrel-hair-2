@@ -29,6 +29,7 @@ export function Aside({children, heading, type}) {
         expanded ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}
       role="dialog"
+      style={{zIndex: 10000}}
     >
       {/* Overlay */}
       <div
@@ -42,7 +43,7 @@ export function Aside({children, heading, type}) {
           expanded ? 'translate-x-0' : 'translate-x-full'
         } bg-zinc-900 text-zinc-50`}
       >
-        <header className="flex h-16 items-center justify-between border-b mt-16 px-6 border-zinc-700">
+        <header className="flex h-16 items-center justify-between border-b px-6 border-zinc-700">
           <h3 className="text-xl font-medium">{heading}</h3>
           <button
             className="text-zinc-400 hover:text-pink-600 transition-colors"
@@ -52,9 +53,7 @@ export function Aside({children, heading, type}) {
             <X size={24} />
           </button>
         </header>
-        <main className="h-[calc(100vh-4rem)] overflow-y-auto mt-6">
-          {children}
-        </main>
+        <main className="h-[calc(100vh-4rem)] overflow-y-auto">{children}</main>
       </div>
     </div>
   );

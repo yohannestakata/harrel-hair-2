@@ -41,8 +41,8 @@
 
 :root {
   --aside-width: 100%;
-  --cart-aside-summary-height-with-discount: 340px;
-  --cart-aside-summary-height: 420px;
+  --cart-aside-summary-height-with-discount: 500px;
+  --cart-aside-summary-height: 353px;
   --grid-item-width: 355px;
   --header-height: 64px;
   --color-dark: #000;
