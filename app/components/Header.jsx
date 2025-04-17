@@ -142,7 +142,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                 {({fetchResults, goToSearch, inputRef}) => (
                   <div className="relative">
                     <input
-                      autoComplete="off"
+                      autoComplete="none"
                       name="q"
                       onChange={(e) => handleSearchChange(e, fetchResults)}
                       onFocus={() => searchTerm.trim() && setIsSearchOpen(true)}
@@ -169,7 +169,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
               {/* Search Results Dropdown */}
               {isSearchOpen && searchTerm.trim() && (
-                <div className="absolute right-0 mt-2 w-96 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl overflow-hidden z-20 pl-4">
+                <div className="absolute right-0 mt-2 w-96 bg-zinc-800 border border-zinc-700 rounded-xl shadow-xl overflow-hidden z-20">
                   <SearchResultsPredictive>
                     {({items, total, term, state, closeSearch}) => {
                       const {articles, collections, pages, products, queries} =
@@ -177,7 +177,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
                       if (state === 'loading' && term.current) {
                         return (
-                          <div className="p-4 flex justify-center">
+                          <div className="p-4 flex justify-center ">
                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-pink-500"></div>
                           </div>
                         );
@@ -193,7 +193,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                       }
 
                       return (
-                        <div className="max-h-[60vh] overflow-y-auto">
+                        <div className="max-h-[60vh] overflow-y-auto p-4">
                           <SearchResultsPredictive.Queries
                             queries={queries}
                             queriesDatalistId={queriesDatalistId}
@@ -201,7 +201,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                           />
                           {products.length > 0 && (
                             <div className="border-b border-zinc-700">
-                              <h3 className=" pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                              <h3 className=" pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                                 Products
                               </h3>
                               <SearchResultsPredictive.Products
@@ -225,7 +225,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                               />
                             </div>
                           )}
-                          {pages.length > 0 && (
+                          {/* {pages.length > 0 && (
                             <div className="border-b border-zinc-700">
                               <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                                 Pages
@@ -237,7 +237,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                                 className="p-3 hover:bg-zinc-700"
                               />
                             </div>
-                          )}
+                          )} */}
                           {articles.length > 0 && (
                             <div className="border-b border-zinc-700">
                               <h3 className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
@@ -251,15 +251,14 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
                               />
                             </div>
                           )}
-                          {term.current && total ? (
-                            <Link
-                              onClick={closeSearch}
-                              to={`${SEARCH_ENDPOINT}?q=${term.current}`}
-                              className="block p-3 bg-zinc-700 text-pink-400 font-medium hover:bg-zinc-600 transition-colors text-center"
-                            >
-                              View all {total} results for <q>{term.current}</q>
-                            </Link>
-                          ) : null}
+
+                          <Link
+                            onClick={closeSearch}
+                            to={`${SEARCH_ENDPOINT}?q=${term.current}`}
+                            className="block p-3 bg-pink-600 text-zinc-50 font-medium hover:opacity-90 transition-opacity duration-150 text-center rounded-lg mt-4"
+                          >
+                            View all {total} results for <q>{term.current}</q>
+                          </Link>
                         </div>
                       );
                     }}
@@ -425,7 +424,14 @@ function CollectionsDropdown({
       try {
         const response = await fetch('/api/collections');
         const data = await response.json();
-        setCollections(data.collections.nodes);
+        // Ensure we only set collections if we got valid data with images
+        if (data?.collections?.nodes) {
+          setCollections(
+            data.collections.nodes.filter(
+              (collection) => collection.image?.url, // Only include collections with images
+            ),
+          );
+        }
       } catch (error) {
         console.error('Error fetching collections:', error);
       } finally {
@@ -463,52 +469,70 @@ function CollectionsDropdown({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
-        onClick={handleClick}
-        className={`flex items-center gap-1 ${
-          viewport === 'mobile' ? 'w-full px-4 py-3 text-lg' : 'px-3 h-full'
-        } justify-start font-medium rounded-md transition-colors duration-200 ${
-          isOpen && viewport === 'mobile'
-            ? 'text-zinc-50 bg-pink-600'
-            : 'text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c]'
-        }`}
-      >
-        Collections
-        <ChevronDown
-          className={`w-4 h-4 ml-1 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
+      <div className="flex items-center">
+        <NavLink
+          to="/collections"
+          className={({isActive}) =>
+            `flex items-center gap-1 ${
+              viewport === 'mobile' ? 'w-full px-4 py-3 text-lg' : 'px-3 h-full'
+            } justify-start font-medium rounded-md transition-colors duration-200 ${
+              isActive
+                ? 'text-zinc-50 bg-pink-600'
+                : 'text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c]'
+            }`
+          }
+          prefetch="intent"
+          end
+        >
+          Collections
+        </NavLink>
+        <button
+          onClick={handleClick}
+          className={`${
+            viewport === 'mobile' ? 'px-4 py-3' : 'px-1 h-full'
+          } text-zinc-50 hover:text-zinc-950 hover:bg-[#cb819c] rounded-md transition-colors duration-200`}
+          aria-label="Toggle collections dropdown"
+        >
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-200 ${
+              isOpen ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+      </div>
 
       {isOpen && (
         <div
           className={`${
             viewport === 'mobile'
               ? 'relative mt-1 w-full shadow-none bg-transparent border-none'
-              : 'absolute left-0 mt-2 w-56 rounded-md shadow-lg z-10 border border-zinc-700 bg-zinc-800'
+              : 'absolute left-0 mt-2 w-64 rounded-md shadow-lg z-10 border border-zinc-700 bg-zinc-800'
           }`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div
             className={`py-1 max-h-96 overflow-y-auto ${
-              viewport === 'mobile' ? 'space-y-1' : ''
+              viewport === 'mobile' ? 'space-y-1' : 'divide-y divide-zinc-700'
             }`}
           >
             {isLoading ? (
               <div className="px-4 py-2 text-center text-zinc-400">
-                Loading...
+                Loading collections...
+              </div>
+            ) : collections.length === 0 ? (
+              <div className="px-4 py-2 text-center text-zinc-400">
+                No collections found
               </div>
             ) : (
               collections.map((collection) => (
                 <Link
                   key={collection.id}
                   to={`/collections/${collection.handle}`}
-                  className={`block ${
+                  className={`flex items-center gap-3 ${
                     viewport === 'mobile'
                       ? 'px-4 py-3 text-lg bg-zinc-800 rounded-md'
-                      : 'px-4 py-2 text-sm'
+                      : 'px-3 py-3 text-sm' // Increased padding for better spacing
                   } text-zinc-50 hover:bg-[#cb819c] hover:text-zinc-950 transition-colors duration-200`}
                   prefetch="intent"
                   onClick={() => {
@@ -516,7 +540,25 @@ function CollectionsDropdown({
                     setIsOpen(false);
                   }}
                 >
-                  {collection.title}
+                  {collection.image?.url ? (
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-zinc-700">
+                      <img
+                        src={collection.image.url}
+                        alt={collection.image.altText || collection.title}
+                        className="w-full h-full object-cover"
+                        width={32}
+                        height={32}
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center">
+                      <ShoppingBag className="w-4 h-4 text-zinc-400" />
+                    </div>
+                  )}
+                  <span className="truncate font-semibold">
+                    {collection.title}
+                  </span>
                 </Link>
               ))
             )}

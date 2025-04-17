@@ -35,26 +35,44 @@ export async function loader(args) {
  * @param {LoaderFunctionArgs}
  */
 async function loadCriticalData({context}) {
+  // First, try to get the specific "Bundles" collection
+  const bundlesCollection = await context.storefront
+    .query(BUNDLES_COLLECTION_QUERY, {
+      variables: {
+        handle: 'bundles',
+      },
+    })
+    .catch(() => null);
+
+  // Then get the most recently updated collections
   const {collections} = await context.storefront.query(
     FEATURED_COLLECTIONS_QUERY,
   );
 
-  // Fallback if there are fewer than three collections
-  if (collections.nodes.length < 3) {
+  // If we found the Bundles collection, use it as the first featured collection
+  if (bundlesCollection?.collection) {
+    return {
+      firstFeaturedCollection: bundlesCollection.collection,
+      secondFeaturedCollection: collections.nodes[0] || null,
+      heroCollection: collections.nodes[1] || null,
+    };
+  }
+
+  // Fallback if Bundles collection not found
+  if (collections.nodes.length < 2) {
     return {
       firstFeaturedCollection: collections.nodes[0] || null,
-      secondFeaturedCollection: collections.nodes[1] || null,
+      secondFeaturedCollection: null,
       heroCollection: null,
     };
   }
 
   return {
-    heroCollection: collections.nodes[0],
-    firstFeaturedCollection: collections.nodes[1],
-    secondFeaturedCollection: collections.nodes[2],
+    firstFeaturedCollection: collections.nodes[0],
+    secondFeaturedCollection: collections.nodes[1],
+    heroCollection: collections.nodes[2] || null,
   };
 }
-
 /**
  * Load data for rendering content below the fold. This data is deferred and will be
  * fetched after the initial page load. If it's unavailable, the page should still 200.
@@ -568,7 +586,6 @@ function PopularProducts({products}) {
     </Suspense>
   );
 }
-
 const FEATURED_COLLECTIONS_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
     id
@@ -603,6 +620,42 @@ const FEATURED_COLLECTIONS_QUERY = `#graphql
       nodes {
         ...FeaturedCollection
       }
+    }
+  }
+`;
+
+const BUNDLES_COLLECTION_QUERY = `#graphql
+  fragment FeaturedCollection on Collection {
+    id
+    title
+    description
+    descriptionHtml
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+    handle
+    products(first: 2) {
+      nodes {
+        images(first: 1) {
+          nodes {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
+  }
+  query BundlesCollection($handle: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      ...FeaturedCollection
     }
   }
 `;

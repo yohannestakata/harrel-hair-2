@@ -41,8 +41,6 @@ export const meta = ({data}) => {
       name: 'twitter:description',
       content: `${data?.product.description ?? description}`,
     },
-
-
   ];
 };
 
@@ -98,7 +96,6 @@ function ProductZoomImage({image, className}) {
     const y = ((e.clientY - top) / height) * 100;
     setZoomPosition({x, y});
 
-    // Load hi-res image when mouse moves to new position
     if (isZoomed && !hiResLoaded && !isLoadingHiRes) {
       setIsLoadingHiRes(true);
       const hiResImg = new Image();
@@ -113,7 +110,7 @@ function ProductZoomImage({image, className}) {
   const handleMouseEnter = () => {
     zoomTimeoutRef.current = setTimeout(() => {
       setIsZoomed(true);
-    }, 300); // Small delay before zooming
+    }, 300);
   };
 
   const handleMouseLeave = () => {
@@ -131,9 +128,9 @@ function ProductZoomImage({image, className}) {
       ref={imageRef}
     >
       <img
-        src={`${image.url}&width=800`} // Medium resolution for initial load
+        src={`${image.url}&width=800`}
         alt={image.altText || 'Product Image'}
-        className={`w-full h-full object-contain transition-transform duration-300 ${
+        className={`w-full aspect-[3/4] object-contain transition-transform duration-300 ${
           isZoomed ? 'scale-150' : 'scale-100'
         }`}
         style={{
@@ -142,9 +139,9 @@ function ProductZoomImage({image, className}) {
       />
       {hiResLoaded && isZoomed && (
         <img
-          src={`${image.url}&width=2000`} // High resolution when zoomed
+          src={`${image.url}&width=2000`}
           alt={image.altText || 'Product Image (Zoomed)'}
-          className="absolute inset-0 w-full h-full object-contain scale-150"
+          className="absolute inset-0 w-full aspect-[3/4] object-contain scale-150"
           style={{
             transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
           }}
@@ -232,9 +229,9 @@ export default function Product() {
         />
 
         {/* Image Gallery */}
-        <div className="flex-1 flex flex-col md:flex-row-reverse gap-4 md:gap-6">
+        <div className="flex-1 flex flex-col items-start md:flex-row-reverse gap-4 md:gap-6">
           {/* Main Image */}
-          <div className="flex-1 aspect-square relative overflow-hidden rounded-lg bg-zinc-800">
+          <div className="flex-1 aspect-[3/4] relative overflow-hidden rounded-lg bg-zinc-800">
             <ProductZoomImage image={selectedImage} className="w-full h-full" />
           </div>
 
@@ -261,7 +258,7 @@ export default function Product() {
                     }
                   }
                 }}
-                className={`size-20 md:size-24 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
+                className={`aspect-[3/4] w-20 md:w-24 overflow-hidden border-2 rounded-md cursor-pointer transition-all ${
                   hoveredThumbnail === node.id
                     ? 'border-pink-600 shadow-md'
                     : selectedImage?.id === node.id
@@ -289,14 +286,12 @@ export default function Product() {
             compareAtPrice={selectedVariant?.compareAtPrice}
             className="text-xl md:text-2xl text-pink-600"
           />
-
           <div className="mt-6 md:mt-8">
             <p className="font-medium text-lg">Description</p>
             <div className="mt-3 text-zinc-300 text-base md:text-lg">
               <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
             </div>
           </div>
-
           <div className="mt-8 md:mt-10">
             <ProductForm
               productOptions={productOptions}

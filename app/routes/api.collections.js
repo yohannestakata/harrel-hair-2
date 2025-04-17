@@ -5,6 +5,10 @@ const COLLECTIONS_QUERY = `#graphql
     id
     title
     handle
+    image {
+      url(transform: {maxWidth: 100, maxHeight: 100})
+      altText
+    }
   }
   query StoreCollections {
     collections(first: 20, sortKey: UPDATED_AT, reverse: true) {

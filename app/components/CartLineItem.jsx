@@ -14,7 +14,7 @@ export function CartLineItem({layout, line}) {
   return (
     <li
       key={id}
-      className="flex gap-4 py-6 border-b border-zinc-400 last:border-b-0"
+      className="flex gap-4 py-4 border-b border-zinc-700 last:border-b-0 hover:bg-zinc-800/50 transition-colors px-2 rounded-lg"
     >
       {image && (
         <Link
@@ -30,39 +30,41 @@ export function CartLineItem({layout, line}) {
             height={100}
             loading="lazy"
             width={100}
-            className="rounded-xl object-cover w-24 h-24"
+            className="rounded-lg object-cover w-20 h-20 border border-zinc-700 hover:border-pink-600 transition-colors"
           />
         </Link>
       )}
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col gap-2">
         <div className="flex justify-between gap-2">
           <div>
             <Link
               prefetch="intent"
               to={lineItemUrl}
               onClick={() => layout === 'aside' && close()}
-              className="hover:text-pink-700 transition-colors"
+              className="hover:text-pink-500 transition-colors"
             >
-              <h3 className="font-semibold text-lg">{product.title}</h3>
+              <h3 className="font-medium text-base text-zinc-100 line-clamp-1">
+                {product.title}
+              </h3>
             </Link>
-            <div className="text-zinc-400 mt-2">
+            <div className="text-pink-500 mt-1">
               <ProductPrice price={line?.cost?.totalAmount} />
             </div>
           </div>
           <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
 
-        {/* {selectedOptions.length > 0 && (
-          <ul className="mt-2 space-y-1">
+        {selectedOptions.length > 0 && (
+          <ul className="mt-1 space-y-1">
             {selectedOptions.map((option) => (
-              <li key={option.name} className="text-sm text-zinc-400">
-                {option.name}:{' '}
-                <span className="text-zinc-400">{option.value}</span>
+              <li key={option.name} className="text-xs text-zinc-400">
+                <span className="text-zinc-500">{option.name}:</span>{' '}
+                <span className="text-zinc-300">{option.value}</span>
               </li>
             ))}
           </ul>
-        )} */}
+        )}
 
         <CartLineQuantity line={line} />
       </div>
@@ -77,22 +79,20 @@ function CartLineQuantity({line}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="flex items-center mt-2">
-      <small className="mr-3 text-zinc-50 font-semibold">
-        Quantity: {quantity}
-      </small>
+    <div className="flex items-center justify-between mt-2">
+      <small className="text-zinc-400 text-sm">Qty: {quantity}</small>
       <div className="flex items-center space-x-2">
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             aria-label="Decrease quantity"
             disabled={quantity <= 1 || !!isOptimistic}
-            className={`w-6 h-6 flex items-center justify-center border border-zinc-400 rounded-full ${
+            className={`w-7 h-7 flex items-center justify-center border border-zinc-600 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors ${
               quantity <= 1 || isOptimistic
-                ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-zinc-400'
+                ? 'opacity-50 cursor-not-allowed hover:bg-zinc-800'
+                : ''
             }`}
           >
-            <span>&#8722;</span>
+            <span className="text-zinc-300">−</span>
           </button>
         </CartLineUpdateButton>
 
@@ -100,13 +100,13 @@ function CartLineQuantity({line}) {
           <button
             aria-label="Increase quantity"
             disabled={!!isOptimistic}
-            className={`w-6 h-6 flex items-center justify-center border border-zinc-400 rounded-full ${
+            className={`w-7 h-7 flex items-center justify-center border border-zinc-600 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors ${
               isOptimistic
-                ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-zinc-400'
+                ? 'opacity-50 cursor-not-allowed hover:bg-zinc-800'
+                : ''
             }`}
           >
-            <span>&#43;</span>
+            <span className="text-zinc-300">+</span>
           </button>
         </CartLineUpdateButton>
       </div>
@@ -124,11 +124,12 @@ function CartLineRemoveButton({lineIds, disabled}) {
       <button
         disabled={disabled}
         type="submit"
-        className={`text-sm text-gray-500 hover:text-pink-700 cursor-pointer transition-colors ${
+        className={`p-1 rounded-full hover:bg-zinc-700 transition-colors ${
           disabled ? 'opacity-50 cursor-not-allowed' : ''
         }`}
+        aria-label="Remove item"
       >
-        <Trash size={16} />
+        <Trash size={16} className="text-zinc-400 hover:text-pink-500" />
       </button>
     </CartForm>
   );
