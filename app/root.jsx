@@ -55,6 +55,7 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
+    {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
 }
 
@@ -137,8 +138,13 @@ function loadDeferredData({context}) {
       console.error(error);
       return null;
     });
+  const cartPromise = cart.get().catch((error) => {
+    console.error('Cart fetch failed:', error);
+    return null;
+  });
+
   return {
-    cart: cart.get(),
+    cart: cartPromise,
     isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
@@ -244,7 +250,6 @@ export function Layout({children}) {
           content="Human hair extensions, Virgin hair bundles, Remy human hair, Brazilian hair extensions, Human hair wigs, Clip-in hair extensions, Straight human hair, Curly human hair"
         />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link
           rel="icon"
           type="image/x-icon"
