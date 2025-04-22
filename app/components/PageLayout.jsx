@@ -10,6 +10,7 @@ import {
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
 import {CartError} from './CartError';
+import {CartLoading} from './CartLoading';
 
 /**
  * @param {PageLayoutProps}
@@ -51,7 +52,7 @@ export function PageLayout({
 function CartAside({cart}) {
   return (
     <Aside type="cart" heading="CART">
-      <Suspense fallback={<p>Loading cart ...</p>}>
+      <Suspense fallback={<CartLoading />}>
         <Await resolve={cart} errorElement={<CartError />}>
           {(cart) => {
             return <CartMain cart={cart} layout="aside" />;
