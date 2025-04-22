@@ -42,26 +42,40 @@ function CartCheckoutActions({checkoutUrl, cart}) {
   if (!checkoutUrl) return null;
 
   const calcSummary = () => {
-    const {lines} = cart;
-    const totalAmount = lines.nodes.reduce(
-      (sum, line) => sum + parseFloat(line.cost.totalAmount.amount),
-      0,
-    );
+    const {
+      lines,
+      discountCodes,
+      appliedGiftCards,
+      totalQuantity,
+      checkoutUrl,
+      cost: {
+        totalAmount: {amount: totalAmount},
+      },
+    } = cart;
 
     const productDetail = lines.nodes
       .map(
         (line, index) =>
-          `${index + 1}. ${line.merchandise.product.title} x${
-            line.quantity
-          } ($${line.merchandise.price.amount}).`,
+          `${index + 1}.\n  -> Product: ${
+            line.merchandise.product.title
+          }.\n  -> Quantity: ${line.quantity}.\n  -> Price: $${
+            line.merchandise.price.amount
+          }.\n  -> Selected Options: ${line.merchandise.selectedOptions
+            .map((option) => `${option.name}: ${option.value}`)
+            .join(', ')}.`,
       )
       .join('\n');
 
     // line.merchandise.selectedOptions [{name: 'Color', value: 'Red'}]
 
-    const message = `Hi, I'm interested in purchasing the following items:\n\nOrder Details:\n\n${productDetail}\n\nTotal: $${totalAmount.toFixed(
-      2,
-    )}\n\n\n\nCan you help me with this?`;
+    const message = `Hi, I'm interested in purchasing the following items:\n\nOrder Details:\n\n${productDetail}\n\nApplied Gift Card: ${appliedGiftCards
+      .map((code) => code.code)
+      .join(', ')}\nDiscount Codes: ${discountCodes
+      .map((code) => code.code)
+      .join(
+        ', ',
+      )}\nTotal Quantity: ${totalQuantity}\nTotal Price: $${totalAmount}\nCheckout URL: ${checkoutUrl}\n\n\n\nCan you help me with this?`;
+
     //Customer: ${data.name} (${data.email})
     return encodeURIComponent(message);
   };
@@ -175,7 +189,7 @@ function CartDiscounts({discountCodes}) {
           />
           <button
             type="submit"
-            className="border border-border  hover:bg-zinc-950 hover:text-zinc-50 text-sm px-4 py-2 rounded-lg flex justify-center items-center cursor-pointer duration-200"
+            className="border border-border hover:bg-zinc-950 hover:text-zinc-50 text-sm px-4 py-2 rounded-lg flex justify-center items-center cursor-pointer duration-200"
           >
             Apply
           </button>

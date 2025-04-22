@@ -114,7 +114,12 @@ function formatOptionName(name) {
 
 function CartLineQuantity({line}) {
   if (!line || typeof line?.quantity === 'undefined') return null;
-  const {id: lineId, quantity, isOptimistic} = line;
+  const {
+    id: lineId,
+    quantity,
+    isOptimistic,
+    merchandise: {quantityAvailable},
+  } = line;
   const prevQuantity = Math.max(1, quantity - 1);
   const nextQuantity = quantity + 1;
 
@@ -139,9 +144,9 @@ function CartLineQuantity({line}) {
         <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
           <button
             aria-label="Increase quantity"
-            disabled={!!isOptimistic}
+            disabled={!!isOptimistic || quantity >= quantityAvailable}
             className={`w-7 h-7 flex items-center justify-center border border-zinc-600 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors ${
-              isOptimistic
+              isOptimistic || quantity >= quantityAvailable
                 ? 'opacity-50 cursor-not-allowed hover:bg-zinc-800'
                 : ''
             }`}

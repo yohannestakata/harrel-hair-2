@@ -32,7 +32,7 @@ export function CartMain({layout, cart: originalCart}) {
             ))}
           </ul>
         </div>
-        {cartHasItems && <CartSummary cart={cart} layout={layout} />}
+        {cartHasItems ? <CartSummary cart={cart} layout={layout} /> : null}
       </div>
     </div>
   );

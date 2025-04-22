@@ -1,5 +1,5 @@
 import {Await, Link} from '@remix-run/react';
-import {Suspense, useId} from 'react';
+import {Suspense, useId, useState, useEffect} from 'react';
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
@@ -9,8 +9,8 @@ import {
   SearchFormPredictive,
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
-import {useState} from 'react';
-import {useEffect} from 'react';
+import {CartError} from './CartError';
+import {CartLoading} from './CartLoading';
 
 /**
  * @param {PageLayoutProps}
@@ -246,18 +246,18 @@ function FooterSkeleton() {
   );
 }
 
-function CartLoading() {
-  return (
-    <div className="p-4 space-y-4">
-      <div className="h-6 w-1/2 bg-zinc-700 rounded animate-pulse"></div>
-      <div className="space-y-2">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-16 bg-zinc-700 rounded animate-pulse"></div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// function CartLoading() {
+//   return (
+//     <div className="p-4 space-y-4">
+//       <div className="h-6 w-1/2 bg-zinc-700 rounded animate-pulse"></div>
+//       <div className="space-y-2">
+//         {[...Array(3)].map((_, i) => (
+//           <div key={i} className="h-16 bg-zinc-700 rounded animate-pulse"></div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 function SearchLoading() {
   return (
@@ -320,18 +320,18 @@ function ErrorFallback({component}) {
   );
 }
 
-function CartError() {
-  const error = useAsyncError();
-  console.error('Cart error:', error);
-  return (
-    <div className="p-4">
-      <p className="text-red-500">Failed to load cart</p>
-      <Link to="/cart" className="text-blue-400 underline">
-        View cart page
-      </Link>
-    </div>
-  );
-}
+// function CartError() {
+//   const error = useAsyncError();
+//   console.error('Cart error:', error);
+//   return (
+//     <div className="p-4">
+//       <p className="text-red-500">Failed to load cart</p>
+//       <Link to="/cart" className="text-blue-400 underline">
+//         View cart page
+//       </Link>
+//     </div>
+//   );
+// }
 
 /**
  * @typedef {Object} PageLayoutProps
