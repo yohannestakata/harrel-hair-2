@@ -11,6 +11,14 @@ export function CartLineItem({layout, line}) {
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const {close} = useAside();
 
+  // Filter out meaningless options and format remaining ones
+  const displayOptions = selectedOptions
+    .filter((option) => !isDefaultOption(option))
+    .map((option) => ({
+      ...option,
+      name: formatOptionName(option.name),
+    }));
+
   return (
     <li
       key={id}
@@ -47,6 +55,9 @@ export function CartLineItem({layout, line}) {
               <h3 className="font-medium text-base text-zinc-100 line-clamp-1">
                 {product.title}
               </h3>
+              {product.vendor && (
+                <p className="text-xs text-zinc-400">{product.vendor}</p>
+              )}
             </Link>
             <div className="text-pink-500 mt-1">
               <ProductPrice price={line?.cost?.totalAmount} />
@@ -55,15 +66,17 @@ export function CartLineItem({layout, line}) {
           <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
 
-        {selectedOptions.length > 0 && (
+        {displayOptions.length > 0 ? (
           <ul className="mt-1 space-y-1">
-            {selectedOptions.map((option) => (
+            {displayOptions.map((option) => (
               <li key={option.name} className="text-xs text-zinc-400">
-                <span className="text-zinc-500">{option.name}:</span>{' '}
+                <span className="text-zinc-500 capitalize">{option.name}:</span>{' '}
                 <span className="text-zinc-300">{option.value}</span>
               </li>
             ))}
           </ul>
+        ) : (
+          <p className="text-xs text-zinc-500 mt-1">Standard version</p>
         )}
 
         <CartLineQuantity line={line} />
@@ -72,15 +85,42 @@ export function CartLineItem({layout, line}) {
   );
 }
 
+// Helper functions for option processing
+function isDefaultOption(option) {
+  const defaultPatterns = [
+    {name: 'Title', value: 'Default Title'},
+    {name: 'title', value: 'default title'},
+    // Add other default patterns if needed
+  ];
+
+  return defaultPatterns.some(
+    (pattern) =>
+      option.name.toLowerCase() === pattern.name.toLowerCase() &&
+      option.value.toLowerCase() === pattern.value.toLowerCase(),
+  );
+}
+
+function formatOptionName(name) {
+  // Format option names to be more human-readable
+  const nameMap = {
+    size: 'Size',
+    color: 'Color',
+    material: 'Material',
+    // Add other mappings as needed
+  };
+
+  return nameMap[name.toLowerCase()] || name;
+}
+
 function CartLineQuantity({line}) {
   if (!line || typeof line?.quantity === 'undefined') return null;
   const {id: lineId, quantity, isOptimistic} = line;
-  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
-  const nextQuantity = Number((quantity + 1).toFixed(0));
+  const prevQuantity = Math.max(1, quantity - 1);
+  const nextQuantity = quantity + 1;
 
   return (
     <div className="flex items-center justify-between mt-2">
-      <small className="text-zinc-400 text-sm">Qty: {quantity}</small>
+      <small className="text-zinc-400 text-sm">Quantity: {quantity}</small>
       <div className="flex items-center space-x-2">
         <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button

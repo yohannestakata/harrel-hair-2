@@ -322,7 +322,7 @@ function FirstFeaturedCollection({collection}) {
             {/* Hide on mobile, show on md and up */}
             {products.slice(0, 1).map((product) => (
               <div
-                key={product.id}
+                key={product.images.nodes[0]?.id}
                 className="hidden md:block w-full aspect-[4/5] rounded-2xl overflow-hidden"
               >
                 {product.images.nodes[0] && (
@@ -389,7 +389,7 @@ function SecondFeaturedCollection({collection}) {
             {/* Hide on mobile, show on md and up */}
             {products.slice(0, 1).map((product) => (
               <div
-                key={product.id}
+                key={product.images.nodes[0]?.id}
                 className="hidden md:block w-full aspect-[4/5] rounded-2xl overflow-hidden"
               >
                 {product.images.nodes[0] && (
