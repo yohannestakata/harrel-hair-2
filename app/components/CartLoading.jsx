@@ -6,7 +6,6 @@ export function CartLoading() {
 
   useEffect(() => {
     const timer = setTimeout(() => setShowTimeout(true), 5000);
-    const timer = setTimeout(() => setShowTimeout(true), 5000);
     return () => clearTimeout(timer);
   }, []);
 
