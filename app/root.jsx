@@ -85,7 +85,7 @@ export async function loader(args) {
       gaTrackingId: env.PUBLIC_GA_ID,
     },
     consent: {
-      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN || 'checkout.shopify.com',
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
       withPrivacyBanner: false,
       // localize the privacy banner
@@ -273,17 +273,17 @@ export function Layout({children}) {
         <meta property="og:url" content={baseUrl} />
         <meta property="og:image" content="/og-image.png" />
         <meta property="og:locale" content="en_US" />
-
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="/og-image.png" />
-
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         {/* Structured Data */}
-        <script type="application/ld+json" id="organization_schema">
-          {JSON.stringify(organizationSchema)}
-        </script>
+        <script
+          type="application/ld+json"
+          id="organization_schema"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}}
+        />
         <Links />
       </head>
       <body className="bg-zinc-900">
